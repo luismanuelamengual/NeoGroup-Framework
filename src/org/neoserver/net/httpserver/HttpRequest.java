@@ -3,12 +3,15 @@ package org.neoserver.net.httpserver;
 
 import java.net.URI;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class HttpRequest {
+    
+    private static final String URI_SEPARATOR = "/";
     
     public static final String METHOD_GET = "GET";
     public static final String METHOD_PUT = "PUT";
@@ -49,6 +52,12 @@ public class HttpRequest {
     
     public String getPath() {
         return uri.getRawPath();
+    }
+    
+    public List<String> getPathParts() {
+        String path = getPath().substring(1);
+        String[] pathTokens = path.split(URI_SEPARATOR);
+        return Arrays.asList(pathTokens);
     }
     
     public Map<String,String> getParameters() {
