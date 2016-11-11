@@ -1,5 +1,5 @@
 
-package org.neoserver.http;
+package org.neoserver.net.httpserver;
 
 import java.util.ArrayList;
 import java.util.Collections;

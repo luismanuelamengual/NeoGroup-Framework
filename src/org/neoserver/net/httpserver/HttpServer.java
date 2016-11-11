@@ -1,5 +1,5 @@
 
-package org.neoserver.http;
+package org.neoserver.net.httpserver;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import org.neoserver.http.context.Context;
+import org.neoserver.net.httpserver.context.Context;
 
 public class HttpServer {
 
@@ -58,6 +58,12 @@ public class HttpServer {
                 HttpRequest request = new HttpRequest(exchange.getRequestMethod(), headers, exchange.getRequestURI(), requestBytes);
                 
                 HttpResponse response = context.onContext(request);
+                
+                if (!response.getHeaders().isEmpty()) {
+                    for (HttpHeader header : response.getHeaders()) {
+                        exchange.getResponseHeaders().add(header.getName(), header.getValue());
+                    }
+                }
                 
                 byte[] responseBody = response.getBody();
                 exchange.sendResponseHeaders(response.getResponseCode(), responseBody.length);
