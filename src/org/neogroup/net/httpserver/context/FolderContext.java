@@ -5,6 +5,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import org.neogroup.net.httpserver.HttpHeader;
 import org.neogroup.net.httpserver.HttpRequest;
 import org.neogroup.net.httpserver.HttpResponse;
@@ -12,15 +13,9 @@ import org.neogroup.net.httpserver.HttpResponse;
 public class FolderContext extends Context {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
-    
-//    private static final String START_CONTEXT = "^";
-//    private static final String END_CONTEXT = ".*";
-//    private static final String URI_FOLDER_SEPARATOR = "/";
-//    private static final String[] FORBIDDEN_CHARACTERS = {"..", "~"};
-//    private static final String FILE_EXTENSION_REGEX = "\\.(?=[^\\.]+$)";
-//    private static final String FOLDER_DEFAULT_HTML_DOCUMENT = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
-//    private static final String FOLDER_DEFAULT_HTML_BODY = "<table>%s</table>";
-//    private static final String FOLDER_DEFAULT_HTML_ROW = "<tr><th><a href=\"%s\">%s</a></th></tr>";
+    private static final String FOLDER_HTML_DOCUMENT_TEMPLATE = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
+    private static final String FOLDER_HTML_LIST_TEMPLATE = "<ul style=\"list-style-type: none;\">%s</ul>";
+    private static final String FOLDER_HTML_ITEM_TEMPLATE = "<li><a href=\"%s\">%s</a></li>";
     
     private final Path folder;
     
@@ -43,35 +38,36 @@ public class FolderContext extends Context {
         String path = request.getPath().substring(getPath().length());
         String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
         
-        Path filesPath = folder.toAbsolutePath();
+        Path filePath = folder.toAbsolutePath();
         for(String element : pathElements) {
-            filesPath = filesPath.resolve(element);
+            filePath = filePath.resolve(element);
         }
         
         HttpResponse response = new HttpResponse();
-        
-        File file = filesPath.toFile();
+        File file = filePath.toFile();
         if(file.exists()) {
             if (file.isDirectory()) {
-//                StringBuilder list = new StringBuilder();
-//                for(File subFile : file.listFiles()) {
-//                    list.append(String.format(FOLDER_DEFAULT_HTML_ROW,
-//                            path.relativize(baseFolder).resolve(request.getContext()).resolve(subFile.getName()).toString(),
-//                            subFile.getName()));
-//                }
-//                String htmlBody = String.format(FOLDER_DEFAULT_HTML_BODY, list.toString());
-//                String document = String.format(FOLDER_DEFAULT_HTML_DOCUMENT, file.getName(), htmlBody);
-//                byte[] body = document.getBytes();
-//                response.setReasonPhrase(file.getName());
-//                response.addHeader(new HttpHeader(HttpHeader.CONTENT_LENGTH, Integer.toString(body.length)));
-//                response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.HTML));
-//                response.setResponseCode(HttpResponseCode.OK);
-//                response.setBody(body);
+                StringBuilder list = new StringBuilder();
+                File[] subFiles = file.listFiles();
+                Arrays.sort(subFiles);
+                for (File subFile : subFiles) {
+                    String subFileLink = filePath.relativize(folder).resolve(request.getPath()).resolve(subFile.getName()).toString();
+                    String subFileName = subFile.getName();
+                    if (subFile.isDirectory()) {
+                        subFileName += "/";
+                    }
+                    list.append(String.format(FOLDER_HTML_ITEM_TEMPLATE, subFileLink, subFileName));
+                }
+                String htmlBody = String.format(FOLDER_HTML_LIST_TEMPLATE, list.toString());
+                String document = String.format(FOLDER_HTML_DOCUMENT_TEMPLATE, file.getName(), htmlBody);
+                byte[] body = document.getBytes();
+                response.addHeader(new HttpHeader("Content-type", "text/html"));
+                response.setBody(body);
             } 
             else {
-                String mimeType = Files.probeContentType(filesPath);
+                String mimeType = Files.probeContentType(filePath);
                 response.addHeader(new HttpHeader("Content-type", mimeType));
-                response.setBody(Files.readAllBytes(filesPath));
+                response.setBody(Files.readAllBytes(filePath));
             }
         } else {
             throw new IllegalArgumentException("File \"" + path.toString() + "\" not found !!");
