@@ -14,6 +14,6 @@ public abstract class Context {
     public String getPath() {
         return path;
     }
- 
-    public abstract HttpResponse onContext (HttpRequest request);
+    
+    public abstract HttpResponse onContext (HttpRequest request) throws Exception;
 }

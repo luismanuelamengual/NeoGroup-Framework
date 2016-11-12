@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,42 +37,71 @@ public class HttpServer {
         
         server.createContext(context.getPath(), new HttpHandler() {
             @Override
-            public void handle(HttpExchange exchange) throws IOException {
+            public void handle(HttpExchange exchange) {
         
-                List<HttpHeader> headers = new ArrayList<>();
-                Headers requestHeaders = exchange.getRequestHeaders();
-                for (String name : requestHeaders.keySet()) {
-                    headers.add(new HttpHeader(name, requestHeaders.get(name)));
-                }
-                
-                InputStream inputStream = exchange.getRequestBody();
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 try {
-                    int read = inputStream.read();
-                    while (read != -1) {
-                        byteArrayOutputStream.write(read);
-                        read = inputStream.read();
+                    HttpRequest request = createRequest (exchange);
+                    HttpResponse response = null;
+                    try {
+                        response = context.onContext(request);
                     }
-                } catch (IOException e) {}
-                byte[] requestBytes = byteArrayOutputStream.toByteArray();
-                
-                HttpRequest request = new HttpRequest(exchange.getRequestMethod(), headers, exchange.getRequestURI(), requestBytes);
-                
-                HttpResponse response = context.onContext(request);
-                
-                if (!response.getHeaders().isEmpty()) {
-                    for (HttpHeader header : response.getHeaders()) {
-                        exchange.getResponseHeaders().add(header.getName(), header.getValue());
+                    catch (Exception ex) {
+                        response = createDefaulErrorResponse(ex);
                     }
+                    sendResponse (exchange, response);
                 }
-                
-                byte[] responseBody = response.getBody();
-                exchange.sendResponseHeaders(response.getResponseCode(), responseBody.length);
-                OutputStream os = exchange.getResponseBody();
-                os.write(responseBody);
-                os.close();
+                catch (Exception ex) {}
             }
         });
+    }
+    
+    protected HttpRequest createRequest (HttpExchange exchange) throws Exception {
+        
+        List<HttpHeader> headers = new ArrayList<>();
+        Headers requestHeaders = exchange.getRequestHeaders();
+        for (String name : requestHeaders.keySet()) {
+            headers.add(new HttpHeader(name, requestHeaders.get(name)));
+        }
+
+        InputStream inputStream = exchange.getRequestBody();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        int read = inputStream.read();
+        while (read != -1) {
+            byteArrayOutputStream.write(read);
+            read = inputStream.read();
+        }
+        byte[] requestBytes = byteArrayOutputStream.toByteArray();
+
+        return new HttpRequest(exchange.getRequestMethod(), headers, exchange.getRequestURI(), requestBytes);
+    }
+    
+    protected void sendResponse (HttpExchange exchange, HttpResponse response) throws Exception {
+        
+        if (!response.getHeaders().isEmpty()) {
+            for (HttpHeader header : response.getHeaders()) {
+                exchange.getResponseHeaders().add(header.getName(), header.getValue());
+            }
+        }
+
+        byte[] responseBody = response.getBody();
+        exchange.sendResponseHeaders(response.getResponseCode(), responseBody.length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(responseBody);
+        os.close();
+    }
+    
+    private HttpResponse createDefaulErrorResponse(Throwable throwable) {
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printer = new PrintStream(out);
+        throwable.printStackTrace(printer);
+        byte[] body = out.toByteArray();
+        
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponse.RESPONSE_CODE_INTERNAL_SERVER_ERROR);
+        response.addHeader(new HttpHeader("Content-type", "text/plain"));
+        response.setBody(body);
+        return response;
     }
     
     public void start () {

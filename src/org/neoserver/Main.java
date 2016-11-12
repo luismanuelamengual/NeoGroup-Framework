@@ -14,7 +14,7 @@ public class Main {
     
     public static void main(String[] args) throws Exception {
         
-        HttpServer server = new HttpServer(1409);
+        HttpServer server = new HttpServer(1408);
         server.addContext(new FolderContext("resources", "/home/luis/git/sitrack-frontend/public"));
         server.addContext(new Context("/") {
             @Override
@@ -22,8 +22,6 @@ public class Main {
                 
                 HttpResponse response = new HttpResponse(TEXT.getBytes());
                 response.addHeader(new HttpHeader("Path", request.getPath()));
-//                response.addHeader(new HttpHeader("Query", request.getQuery()));
-//                response.addHeader(new HttpHeader("Method", request.getMethod()));
                 return response;
             }
         });

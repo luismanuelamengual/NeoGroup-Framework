@@ -38,7 +38,7 @@ public class FolderContext extends Context {
     }
     
     @Override
-    public HttpResponse onContext(HttpRequest request) {
+    public HttpResponse onContext(HttpRequest request) throws Exception {
         
         String path = request.getPath().substring(getPath().length());
         String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
@@ -69,15 +69,12 @@ public class FolderContext extends Context {
 //                response.setBody(body);
             } 
             else {
-                try {
-                    String mimeType = Files.probeContentType(filesPath);
-                    response.addHeader(new HttpHeader("Content-type", mimeType));
-                    response.setBody(Files.readAllBytes(filesPath));
-                }
-                catch (Exception ex) {}
+                String mimeType = Files.probeContentType(filesPath);
+                response.addHeader(new HttpHeader("Content-type", mimeType));
+                response.setBody(Files.readAllBytes(filesPath));
             }
         } else {
-            throw new IllegalArgumentException("File not found !!");
+            throw new IllegalArgumentException("File \"" + path.toString() + "\" not found !!");
         }
 
         return response;
