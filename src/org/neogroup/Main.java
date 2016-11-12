@@ -1,12 +1,12 @@
 
-package org.neoserver;
+package org.neogroup;
 
-import org.neoserver.net.httpserver.HttpHeader;
-import org.neoserver.net.httpserver.HttpRequest;
-import org.neoserver.net.httpserver.HttpResponse;
-import org.neoserver.net.httpserver.HttpServer;
-import org.neoserver.net.httpserver.context.Context;
-import org.neoserver.net.httpserver.context.FolderContext;
+import org.neogroup.net.httpserver.HttpHeader;
+import org.neogroup.net.httpserver.HttpRequest;
+import org.neogroup.net.httpserver.HttpResponse;
+import org.neogroup.net.httpserver.HttpServer;
+import org.neogroup.net.httpserver.context.Context;
+import org.neogroup.net.httpserver.context.FolderContext;
 
 public class Main {
     

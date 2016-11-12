@@ -1,5 +1,5 @@
 
-package org.neoserver.net.httpserver;
+package org.neogroup.net.httpserver;
 
 import java.net.URI;
 import java.net.URLDecoder;

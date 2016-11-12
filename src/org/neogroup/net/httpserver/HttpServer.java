@@ -1,5 +1,5 @@
 
-package org.neoserver.net.httpserver;
+package org.neogroup.net.httpserver;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import org.neoserver.net.httpserver.context.Context;
+import org.neogroup.net.httpserver.context.Context;
 
 public class HttpServer {
 

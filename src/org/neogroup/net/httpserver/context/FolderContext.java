@@ -1,13 +1,13 @@
 
-package org.neoserver.net.httpserver.context;
+package org.neogroup.net.httpserver.context;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.neoserver.net.httpserver.HttpHeader;
-import org.neoserver.net.httpserver.HttpRequest;
-import org.neoserver.net.httpserver.HttpResponse;
+import org.neogroup.net.httpserver.HttpHeader;
+import org.neogroup.net.httpserver.HttpRequest;
+import org.neogroup.net.httpserver.HttpResponse;
 
 public class FolderContext extends Context {
 

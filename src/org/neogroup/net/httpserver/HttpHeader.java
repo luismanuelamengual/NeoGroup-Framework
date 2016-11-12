@@ -1,5 +1,5 @@
 
-package org.neoserver.net.httpserver;
+package org.neogroup.net.httpserver;
 
 import java.util.List;
 
@@ -13,14 +13,14 @@ public class HttpHeader {
 
     public HttpHeader(String name, List<String> values) {
         this.name = name;
-        StringBuilder value = new StringBuilder();
+        StringBuilder valueBuilder = new StringBuilder();
         for (int i = 0; i < values.size(); i++) {
             if (i > 0) {
-                value.append(HEADER_VALUES_SEPARATOR);
+                valueBuilder.append(HEADER_VALUES_SEPARATOR);
             }
-            value.append(values.get(i));
+            valueBuilder.append(values.get(i));
         }
-        this.value = value.toString();
+        this.value = valueBuilder.toString();
     }
     
     public HttpHeader(String name, String value) {
