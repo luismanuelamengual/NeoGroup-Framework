@@ -7,8 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import org.neogroup.encoding.MimeType;
 import org.neogroup.net.httpserver.HttpHeader;
 import org.neogroup.net.httpserver.HttpRequest;
 import org.neogroup.net.httpserver.HttpResponse;
@@ -16,25 +15,18 @@ import org.neogroup.net.httpserver.HttpResponse;
 public class FolderContext extends Context {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
-    private static final String FILE_EXTENSION_REGEX = "\\.(?=[^\\.]+$)";
     private static final String FOLDER_HTML_DOCUMENT_TEMPLATE = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
     private static final String FOLDER_HTML_LIST_TEMPLATE = "<ul style=\"list-style-type: none;\">%s</ul>";
     private static final String FOLDER_HTML_ITEM_TEMPLATE = "<li><a href=\"%s\">%s</a></li>";
     
-    private static final Map<String,String> mimeTypes;
-    
-    static {
-        mimeTypes = new HashMap<>();
-    }
-    
     private final Path folder;
     
-    public FolderContext(String name, String folder) {
-        this(name, Paths.get(folder));
+    public FolderContext(String path, String folder) {
+        this(path, Paths.get(folder));
     }
     
-    public FolderContext(String name, Path folder) {
-        super("/" + name + "/");
+    public FolderContext(String path, Path folder) {
+        super(path);
         this.folder = folder;
     }
 
@@ -71,11 +63,11 @@ public class FolderContext extends Context {
                 String htmlBody = String.format(FOLDER_HTML_LIST_TEMPLATE, list.toString());
                 String document = String.format(FOLDER_HTML_DOCUMENT_TEMPLATE, file.getName(), htmlBody);
                 byte[] body = document.getBytes();
-                response.addHeader(new HttpHeader("Content-type", "text/html"));
+                response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML));
                 response.setBody(body);
             } 
             else {
-                response.addHeader(new HttpHeader("Content-type", getMimeType(file)));
+                response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.getMimeType(file)));
                 try { 
                     response.setBody(Files.readAllBytes(filePath)); 
                 } 
@@ -88,22 +80,5 @@ public class FolderContext extends Context {
         }
 
         return response;
-    }
-    
-    private String getMimeType (File file) {
-        
-        String[] nameExtension = file.getName().split(FILE_EXTENSION_REGEX);
-        String extension = nameExtension.length == 2 ? nameExtension[1] : "bin";
-        String mimeType = mimeTypes.get(extension);
-        if (mimeType == null) {
-            try {
-                mimeType = Files.probeContentType(file.toPath());
-            }
-            catch (Exception ex) {
-                mimeType = "application/octet-stream";
-            }
-            mimeTypes.put(extension, mimeType);
-        }
-        return mimeType;
     }
 }

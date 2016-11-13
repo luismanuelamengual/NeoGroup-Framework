@@ -13,6 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import org.neogroup.encoding.MimeType;
 import org.neogroup.net.httpserver.context.Context;
 
 public class HttpServer {
@@ -102,7 +103,7 @@ public class HttpServer {
         
         HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponse.RESPONSE_CODE_INTERNAL_SERVER_ERROR);
-        response.addHeader(new HttpHeader("Content-type", "text/plain"));
+        response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN));
         response.setBody(body);
         return response;
     }

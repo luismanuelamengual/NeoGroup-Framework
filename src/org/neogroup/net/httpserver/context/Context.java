@@ -2,6 +2,7 @@ package org.neogroup.net.httpserver.context;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import org.neogroup.encoding.MimeType;
 import org.neogroup.net.httpserver.HttpHeader;
 import org.neogroup.net.httpserver.HttpRequest;
 import org.neogroup.net.httpserver.HttpResponse;
@@ -28,7 +29,7 @@ public abstract class Context {
         
         HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponse.RESPONSE_CODE_INTERNAL_SERVER_ERROR);
-        response.addHeader(new HttpHeader("Content-type", "text/plain"));
+        response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN));
         response.setBody(body);
         return response;
     }

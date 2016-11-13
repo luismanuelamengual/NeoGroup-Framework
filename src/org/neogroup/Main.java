@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         
         HttpServer server = new HttpServer(1408);
-        server.addContext(new FolderContext("resources", "/home/luis/git/sitrack-frontend/public"));
+        server.addContext(new FolderContext("/resources/", "/home/luis/git/TennisFederation/public"));
         server.addContext(new Context("/") {
             @Override
             public HttpResponse onContext(HttpRequest request) {
