@@ -45,12 +45,15 @@ public class HttpServer {
                     try {
                         response = context.onContext(request);
                     }
-                    catch (Exception ex) {
-                        response = createDefaulErrorResponse(ex);
+                    catch (Throwable ex) {
+                        response = context.onError (request, ex);
+                        if (response == null) {
+                            response = createDefaulErrorResponse(ex);
+                        }
                     }
                     sendResponse (exchange, response);
                 }
-                catch (Exception ex) {}
+                catch (Throwable ex) {}
             }
         });
     }
