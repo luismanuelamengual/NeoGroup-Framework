@@ -1,9 +1,9 @@
 
-package org.neogroup.net.httpserver.context;
+package org.neogroup.net.http.context;
 
 import java.util.List;
-import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.net.httpserver.HttpResponse;
+import org.neogroup.net.http.HttpRequest;
+import org.neogroup.net.http.HttpResponse;
 
 public abstract class RestContext<T> extends Context {
 

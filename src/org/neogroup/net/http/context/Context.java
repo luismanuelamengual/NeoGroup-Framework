@@ -1,11 +1,11 @@
-package org.neogroup.net.httpserver.context;
+package org.neogroup.net.http.context;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import org.neogroup.encoding.MimeType;
-import org.neogroup.net.httpserver.HttpHeader;
-import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.net.httpserver.HttpResponse;
+import org.neogroup.net.http.HttpHeader;
+import org.neogroup.net.http.HttpRequest;
+import org.neogroup.net.http.HttpResponse;
 
 public abstract class Context {
     
