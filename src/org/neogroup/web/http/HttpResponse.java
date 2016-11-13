@@ -1,5 +1,5 @@
 
-package org.neogroup.net.http;
+package org.neogroup.web.http;
 
 import java.util.ArrayList;
 import java.util.Collections;
