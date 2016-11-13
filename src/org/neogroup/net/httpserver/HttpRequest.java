@@ -55,7 +55,7 @@ public class HttpRequest {
     }
     
     public List<String> getPathParts() {
-        String path = getPath().substring(1);
+        String path = getPath();
         String[] pathTokens = path.split(URI_SEPARATOR);
         return Arrays.asList(pathTokens);
     }
