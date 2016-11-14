@@ -1,5 +1,5 @@
 
-package org.neogroup.web.http;
+package org.neogroup.websparks.http;
 
 import java.net.URI;
 import java.net.URLDecoder;

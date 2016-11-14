@@ -1,12 +1,12 @@
 
 package org.neogroup;
 
-import org.neogroup.web.http.HttpHeader;
-import org.neogroup.web.http.HttpRequest;
-import org.neogroup.web.http.HttpResponse;
-import org.neogroup.web.http.HttpServer;
-import org.neogroup.web.http.context.Context;
-import org.neogroup.web.http.context.FolderContext;
+import org.neogroup.websparks.http.HttpHeader;
+import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpServer;
+import org.neogroup.websparks.http.context.Context;
+import org.neogroup.websparks.http.context.FolderContext;
 
 public class Main {
     
@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         
         HttpServer server = new HttpServer(1408);
-        server.addContext(new FolderContext("/resources/", "/home/luis/git/TennisFederation/public"));
+        server.addContext(new FolderContext("/resources/", "/home/luis/git/sitrack-frontend/public"));
         server.addContext(new Context("/") {
             @Override
             public HttpResponse onContext(HttpRequest request) {

@@ -1,5 +1,5 @@
 
-package org.neogroup.web.encoding;
+package org.neogroup.websparks.encoding;
 
 import java.io.File;
 import java.nio.file.Files;

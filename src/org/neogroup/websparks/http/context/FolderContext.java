@@ -1,5 +1,5 @@
 
-package org.neogroup.web.http.context;
+package org.neogroup.websparks.http.context;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,10 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import org.neogroup.web.encoding.MimeType;
-import org.neogroup.web.http.HttpHeader;
-import org.neogroup.web.http.HttpRequest;
-import org.neogroup.web.http.HttpResponse;
+import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.http.HttpHeader;
+import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpResponse;
 
 public class FolderContext extends Context {
 

@@ -1,5 +1,5 @@
 
-package org.neogroup.web.http;
+package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -13,8 +13,8 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import org.neogroup.web.encoding.MimeType;
-import org.neogroup.web.http.context.Context;
+import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.http.context.Context;
 
 public class HttpServer {
 
@@ -39,7 +39,7 @@ public class HttpServer {
         server.createContext(context.getPath(), new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) {
-        
+                
                 try {
                     HttpRequest request = createRequest (exchange);
                     HttpResponse response = null;
