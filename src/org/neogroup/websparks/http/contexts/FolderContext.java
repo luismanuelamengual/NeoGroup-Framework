@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.http.context;
+package org.neogroup.websparks.http.contexts;
 
 import java.io.File;
 import java.io.IOException;

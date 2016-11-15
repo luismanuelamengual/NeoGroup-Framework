@@ -5,8 +5,8 @@ import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpServer;
-import org.neogroup.websparks.http.context.Context;
-import org.neogroup.websparks.http.context.FolderContext;
+import org.neogroup.websparks.http.contexts.Context;
+import org.neogroup.websparks.http.contexts.FolderContext;
 
 public class Main {
     
@@ -26,5 +26,7 @@ public class Main {
             }
         });
         server.start();
+
+//        Application app = new Application();
     }
 }

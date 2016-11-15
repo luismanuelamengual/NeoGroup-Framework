@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.http.context;
+package org.neogroup.websparks.http.contexts;
 
 import java.util.List;
 import org.neogroup.websparks.http.HttpRequest;

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import org.neogroup.websparks.encoding.MimeType;
-import org.neogroup.websparks.http.context.Context;
+import org.neogroup.websparks.http.contexts.Context;
 
 public class HttpServer {
 
