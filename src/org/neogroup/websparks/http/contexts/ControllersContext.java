@@ -7,6 +7,7 @@ import java.util.Map;
 import org.neogroup.websparks.Controller;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 
@@ -55,26 +56,33 @@ public class ControllersContext extends Context {
     @Override
     public void onContext (HttpRequest request, HttpResponse response) {
         
-        try {
-            String controllerPath = getControllerPath(request);
-            Controller controller = controllers.get(controllerPath);
-            if (controller == null) {
-                throw new Exception ("Controller with path \"" + controllerPath + "\" not found !!");
-            }
-            
+        String controllerPath = getControllerPath(request);
+        Controller controller = controllers.get(controllerPath);
+        if (controller == null) {
+            onNotFound (request, response, "Controller with path \"" + controllerPath + "\" not found !!");
+        }
+        else {
+
             String controllerAction = getControllerAction(request);
             Method controllerMethod = controllerActions.get(controller).get(controllerAction);
             if (controllerMethod == null) {
-                throw new Exception ("Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
+                onNotFound (request, response, "Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
             }
             
-            controllerMethod.invoke(controller);
-        }
-        catch (Exception ex) {
-            onError(request, response, ex);
+            try {
+                controllerMethod.invoke(controller);
+            }
+            catch (Throwable ex) {
+                onError(request, response, ex.getCause());
+            }
         }
     }
-
+    
+    protected void onNotFound (HttpRequest request, HttpResponse response, String msg) {
+        response.setResponseCode(HttpResponseCode.NOT_FOUND);
+        response.writeBody(msg);
+    }
+    
     private String getControllerPath (HttpRequest request) {
         String context = request.getPath();
         return context.substring(0, context.lastIndexOf(CONTEXT_PATH_SEPARATOR) + 1);
