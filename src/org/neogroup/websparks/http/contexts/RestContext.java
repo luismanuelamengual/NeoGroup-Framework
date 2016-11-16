@@ -1,8 +1,8 @@
 
 package org.neogroup.websparks.http.contexts;
 
-import java.io.IOException;
 import java.util.List;
+import org.neogroup.websparks.http.HttpMethod;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
@@ -19,16 +19,16 @@ public abstract class RestContext<T> extends Context {
         
         List<T> resources = null;
         switch (method) {
-            case HttpRequest.METHOD_GET:  
+            case HttpMethod.GET:  
                 resources = getResources(request);
                 break;
-            case HttpRequest.METHOD_PUT:
+            case HttpMethod.PUT:
                 resources = createResources(request, decodeResources(request.getBody()));
                 break;
-            case HttpRequest.METHOD_POST:
+            case HttpMethod.POST:
                 resources = updateResources(request, decodeResources(request.getBody()));
                 break;
-            case HttpRequest.METHOD_DELETE:  
+            case HttpMethod.DELETE:  
                 resources = deleteResources(request);
                 break;
         }

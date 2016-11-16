@@ -5,7 +5,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpMethod;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
@@ -13,5 +13,5 @@ public @interface RouteAction {
 
     public String name() default "";
     
-    public String method() default HttpRequest.METHOD_GET;
+    public String method() default HttpMethod.GET;
 }
