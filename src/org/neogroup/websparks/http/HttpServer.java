@@ -3,6 +3,8 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +81,13 @@ public class HttpServer {
     }
     
     protected void onError(HttpRequest request,  HttpResponse response, Throwable throwable) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printer = new PrintStream(out);
+        throwable.printStackTrace(printer);
+        byte[] body = out.toByteArray();
         
+        response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
+        response.writeBody(body);
     }
     
     public void start () {

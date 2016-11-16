@@ -1,7 +1,9 @@
 
 package org.neogroup.websparks.http.contexts;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import org.neogroup.websparks.Controller;
@@ -10,6 +12,7 @@ import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
+import org.neogroup.websparks.routing.RouteParam;
 
 public class ControllersContext extends Context {
 
@@ -70,10 +73,26 @@ public class ControllersContext extends Context {
             }
             
             try {
-                controllerMethod.invoke(controller);
+                Object[] parameters = null;
+                Parameter[] controllerMethodParameters = controllerMethod.getParameters();
+                if (controllerMethodParameters.length > 0) {
+                    parameters = new Object[controllerMethodParameters.length];
+                    for (int i = 0; i < controllerMethodParameters.length; i++) {
+                        Parameter controllerMethodParameter = controllerMethodParameters[i];
+                        RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
+                        if (routeParamAnnotation != null) {
+                            String parameterName = routeParamAnnotation.value();
+                            parameters[i] = request.getParameter(parameterName);
+                        }
+                        else {
+                            parameters[i] = null;
+                        }
+                    }
+                }
+                controllerMethod.invoke(controller, parameters);
             }
             catch (Throwable ex) {
-                onError(request, response, ex.getCause());
+                onError(request, response, ex instanceof InvocationTargetException? ex.getCause() : ex);
             }
         }
     }

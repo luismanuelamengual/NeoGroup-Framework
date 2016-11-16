@@ -17,6 +17,8 @@ public class HttpRequest {
     private static final String URI_SEPARATOR = "/";
     
     private final HttpExchange exchange;
+    private Map<String,String> parameters;
+    private byte[] body;
     
     public HttpRequest(HttpExchange exchange) {
         this.exchange = exchange;
@@ -28,16 +30,19 @@ public class HttpRequest {
 
     public byte[] getBody() {
         
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try {
-            InputStream inputStream = exchange.getRequestBody();
-            int read = inputStream.read();
-            while (read != -1) {
-                byteArrayOutputStream.write(read);
-                read = inputStream.read();
-            }
-        } catch (Exception ex) {};
-        return byteArrayOutputStream.toByteArray();
+        if (body == null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            try {
+                InputStream inputStream = exchange.getRequestBody();
+                int read = inputStream.read();
+                while (read != -1) {
+                    byteArrayOutputStream.write(read);
+                    read = inputStream.read();
+                }
+            } catch (Exception ex) {};
+            body = byteArrayOutputStream.toByteArray();
+        }
+        return body;
     }
     
     public URI getUri() {
@@ -63,27 +68,33 @@ public class HttpRequest {
     }
     
     public Map<String,String> getParameters() {
-    
-        Map<String,String> parameters = new HashMap<>();
-        try {
-            String query = getQuery() ;
-            if (query != null) {
-                String pairs[] = query.split("[&]");
-                for (String pair : pairs) {
-                    String param[] = pair.split("[=]");
-                    String key = null;
-                    String value = null;
-                    if (param.length > 0) {
-                        key = URLDecoder.decode(param[0], System.getProperty("file.encoding"));
+        
+        if (parameters == null) {
+            parameters = new HashMap<>();
+            try {
+                String query = getQuery() ;
+                if (query != null) {
+                    String pairs[] = query.split("[&]");
+                    for (String pair : pairs) {
+                        String param[] = pair.split("[=]");
+                        String key = null;
+                        String value = null;
+                        if (param.length > 0) {
+                            key = URLDecoder.decode(param[0], System.getProperty("file.encoding"));
+                        }
+                        if (param.length > 1) {
+                            value = URLDecoder.decode(param[1], System.getProperty("file.encoding"));
+                        }
+                        parameters.put(key, value);
                     }
-                    if (param.length > 1) {
-                        value = URLDecoder.decode(param[1], System.getProperty("file.encoding"));
-                    }
-                    parameters.put(key, value);
                 }
             }
+            catch (Exception ex) {}
         }
-        catch (Exception ex) {}
         return parameters;
+    }
+    
+    public String getParameter (String name) {
+        return getParameters().get(name);
     }
 }
