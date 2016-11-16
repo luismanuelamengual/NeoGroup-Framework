@@ -1,13 +1,54 @@
 
 package org.neogroup.websparks.controllers;
 
-import org.neogroup.websparks.Application;
+import com.sun.net.httpserver.Headers;
+import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpServer;
 
 public class Controller {
 
-    private Application application;    
+    protected HttpRequest getRequest() {
+        return HttpServer.getCurrentRequest();
+    }
     
-    public Controller(Application application) {
-        this.application = application;
+    protected HttpResponse getResponse() {
+        return HttpServer.getCurrentResponse();
+    }
+    
+    public int getResponseCode() {
+        return getResponse().getResponseCode();
+    }
+
+    public void setResponseCode(int responseCode) {
+        getResponse().setResponseCode(responseCode);
+    }
+    
+    protected Headers getHeaders() {
+        return getResponse().getHeaders();
+    }
+    
+    protected void addHeader (String headerName, String headerValue) {
+        getResponse().addHeader(headerName, headerValue);
+    }
+    
+    protected void writeContent(String body) {
+        getResponse().writeBody(body);
+    }
+    
+    protected void writeContent(byte[] body) {
+        getResponse().writeBody(body);
+    }
+    
+    protected void write (String text) {
+        getResponse().write(text);
+    }
+    
+    protected void write (byte[] bytes) {
+        getResponse().write(bytes);
+    }
+    
+    protected void flush () {
+        getResponse().flush();
     }
 }

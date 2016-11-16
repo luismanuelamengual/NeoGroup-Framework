@@ -1,6 +1,7 @@
 
 package org.neogroup.websparks.http.contexts;
 
+import java.io.IOException;
 import java.util.List;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
@@ -12,7 +13,7 @@ public abstract class RestContext<T> extends Context {
     }
 
     @Override
-    public HttpResponse onContext(HttpRequest request) {
+    public void onContext(HttpRequest request, HttpResponse response) {
         
         String method = request.getMethod();
         
@@ -32,11 +33,9 @@ public abstract class RestContext<T> extends Context {
                 break;
         }
         
-        HttpResponse response = new HttpResponse();
         if (resources != null && !resources.isEmpty()) {
-            response.setBody(encodeResources(resources));
+            response.writeBody(encodeResources(resources));
         }
-        return response;
     }
     
     protected abstract List<T> decodeResources (byte[] content);

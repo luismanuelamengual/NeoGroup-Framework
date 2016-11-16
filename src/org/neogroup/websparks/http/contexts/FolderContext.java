@@ -35,7 +35,7 @@ public class FolderContext extends Context {
     }
     
     @Override
-    public HttpResponse onContext(HttpRequest request) {
+    public void onContext(HttpRequest request, HttpResponse response) {
         
         String path = request.getPath().substring(getPath().length());
         String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
@@ -45,9 +45,10 @@ public class FolderContext extends Context {
             filePath = filePath.resolve(element);
         }
         
-        HttpResponse response = new HttpResponse();
         File file = filePath.toFile();
         if(file.exists()) {
+            byte[] body = null;
+            
             if (file.isDirectory()) {
                 StringBuilder list = new StringBuilder();
                 File[] subFiles = file.listFiles();
@@ -62,23 +63,23 @@ public class FolderContext extends Context {
                 }
                 String htmlBody = String.format(FOLDER_HTML_LIST_TEMPLATE, list.toString());
                 String document = String.format(FOLDER_HTML_DOCUMENT_TEMPLATE, file.getName(), htmlBody);
-                byte[] body = document.getBytes();
-                response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML));
-                response.setBody(body);
+                body = document.getBytes();
+                response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML);
             } 
             else {
-                response.addHeader(new HttpHeader(HttpHeader.CONTENT_TYPE, MimeType.getMimeType(file)));
+                response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.getMimeType(file));
                 try { 
-                    response.setBody(Files.readAllBytes(filePath)); 
+                    body = Files.readAllBytes(filePath); 
                 } 
                 catch (IOException ex) {
                     throw new RuntimeException("Error reading file \"" + file.getName() + "\" !!");
                 }
             }
-        } else {
+            
+            response.writeBody(body);
+        } 
+        else {
             throw new IllegalArgumentException("File \"" + file.getName() + "\" not found !!");
         }
-
-        return response;
     }
 }

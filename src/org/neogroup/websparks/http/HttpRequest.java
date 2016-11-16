@@ -1,10 +1,13 @@
 
 package org.neogroup.websparks.http;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,40 +21,44 @@ public class HttpRequest {
     public static final String METHOD_POST = "POST";
     public static final String METHOD_DELETE = "DELETE";
     
-    private final String method;
-    private final List<HttpHeader> headers;
-    private final URI uri;
-    private final byte[] body;
- 
-    public HttpRequest(String method, List<HttpHeader> headers, URI uri, byte[] body) {
-        this.method = method;
-        this.headers = headers;
-        this.uri = uri;
-        this.body = body;
+    private final HttpExchange exchange;
+    
+    public HttpRequest(HttpExchange exchange) {
+        this.exchange = exchange;
     }
 
     public String getMethod() {
-        return method;
+        return exchange.getRequestMethod();
     }
 
     public byte[] getBody() {
-        return body;
+        
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        try {
+            InputStream inputStream = exchange.getRequestBody();
+            int read = inputStream.read();
+            while (read != -1) {
+                byteArrayOutputStream.write(read);
+                read = inputStream.read();
+            }
+        } catch (Exception ex) {};
+        return byteArrayOutputStream.toByteArray();
     }
     
     public URI getUri() {
-        return uri;
+        return exchange.getRequestURI();
     }
 
-    public List<HttpHeader> getHeaders() {
-        return Collections.unmodifiableList(headers);
+    public Headers getHeaders() {
+        return exchange.getRequestHeaders();
     }
     
     public String getQuery() {
-        return uri.getRawQuery();
+        return exchange.getRequestURI().getRawQuery();
     }
     
     public String getPath() {
-        return uri.getRawPath();
+        return exchange.getRequestURI().getRawPath();
     }
     
     public List<String> getPathParts() {
@@ -64,7 +71,7 @@ public class HttpRequest {
     
         Map<String,String> parameters = new HashMap<>();
         try {
-            String query = uri.getRawQuery();
+            String query = getQuery() ;
             if (query != null) {
                 String pairs[] = query.split("[&]");
                 for (String pair : pairs) {

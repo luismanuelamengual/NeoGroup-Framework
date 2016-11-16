@@ -27,30 +27,34 @@ public class ControllersContext extends Context {
         controllerActions = new HashMap<>();
     }
 
-    public void registerController (Controller controller) {
+    public void registerController (Class<? extends Controller> controllerClass) {
         
-        Class<? extends Controller> controllerClass = controller.getClass();
         Route routeAnnotation = controllerClass.getAnnotation(Route.class);
         if (routeAnnotation != null) {
             String routePath = routeAnnotation.path();
-            controllers.put(routePath, controller);
-            
-            Map<String, Method> actions = new HashMap<>();
-            for (Method method : controllerClass.getMethods()) {
-                RouteAction routeActionAnnotation = method.getAnnotation(RouteAction.class);
-                if (routeActionAnnotation != null) {
-                    String routeAction = routeActionAnnotation.name();
-                    actions.put(routeAction, method);
+            try {
+                Controller controller = controllerClass.newInstance();
+                controllers.put(routePath, controller);
+
+                Map<String, Method> actions = new HashMap<>();
+                for (Method method : controllerClass.getMethods()) {
+                    RouteAction routeActionAnnotation = method.getAnnotation(RouteAction.class);
+                    if (routeActionAnnotation != null) {
+                        String routeAction = routeActionAnnotation.name();
+                        actions.put(routeAction, method);
+                    }
                 }
+                controllerActions.put(controller, actions);
             }
-            controllerActions.put(controller, actions);
+            catch (Exception ex) {
+                throw new RuntimeException("Could not create instance of controller !!", ex);
+            }
         }
     }
     
     @Override
-    public HttpResponse onContext (HttpRequest request) {
+    public void onContext (HttpRequest request, HttpResponse response) {
         
-        HttpResponse response = null;
         try {
             String controllerPath = getControllerPath(request);
             Controller controller = controllers.get(controllerPath);
@@ -64,12 +68,11 @@ public class ControllersContext extends Context {
                 throw new Exception ("Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
             }
             
-            response = (HttpResponse)controllerMethod.invoke(controller, request);
+            controllerMethod.invoke(controller);
         }
         catch (Exception ex) {
-            response = onError(request, ex);
+            onError(request, response, ex);
         }
-        return response;
     }
 
     private String getControllerPath (HttpRequest request) {

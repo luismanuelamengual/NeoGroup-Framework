@@ -52,12 +52,7 @@ public class Application {
         
         int port = properties.getInt(Properties.SERVER_PORT_PROPERTY_NAME, DEFAULT_PORT);
         int maxThreads = properties.getInt(Properties.SERVER_MAX_THREADS_PROPERTY_NAME, DEFAULT_MAX_THREADS);
-        try {
-            this.server = new HttpServer(port, maxThreads);
-        }
-        catch (IOException ex) {
-            throw new RuntimeException("Unable to execute web server !!", ex);
-        }
+        this.server = new HttpServer(port, maxThreads);
         
         controllersContext = new ControllersContext();
         server.addContext(controllersContext);
@@ -75,19 +70,19 @@ public class Application {
         server.addContext(context);
     }
     
-    public final void registerController (Class<? extends Controller> controllerClass) {
-        
-        Controller controller = null;
-        try {
-            controller = controllerClass.getDeclaredConstructor(Application.class).newInstance(this);
-        }
-        catch (Exception ex) {}
-        
-        if (controller != null) {
-            controllers.put(controllerClass, controller);
-            controllersContext.registerController(controller);
-        }
-    }
+//    public final void registerController (Class<? extends Controller> controllerClass) {
+//        
+//        Controller controller = null;
+//        try {
+//            controller = controllerClass.getDeclaredConstructor(Application.class).newInstance(this);
+//        }
+//        catch (Exception ex) {}
+//        
+//        if (controller != null) {
+//            controllers.put(controllerClass, controller);
+//            controllersContext.registerController(controller);
+//        }
+//    }
     
     public final Controller getController (Class<? extends Controller> controllerClass) {
         return controllers.get(controllerClass);

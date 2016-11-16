@@ -1,11 +1,19 @@
 
 package org.neogroup.websparks.http;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HttpResponse {
+    
+    public static final String SERVER_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
+    public static final String SERVER_NAME = "WebSparks";
     
     public static final int RESPONSE_CODE_CONTINUE = 100;
     public static final int RESPONSE_CODE_SWITCHING_PROTOCOLS = 101;
@@ -47,28 +55,22 @@ public class HttpResponse {
     public static final int RESPONSE_CODE_GATEWAY_TIMEOUT = 504;
     public static final int RESPONSE_CODE_HTTP_VERSION_NOT_SUPPORTED = 505;
     
-    private final List<HttpHeader> headers;
+    private static DateFormat dateFormatter;
+    
+    static {
+        dateFormatter = new SimpleDateFormat(SERVER_DATE_FORMAT);
+    }
+    
+    private final HttpExchange exchange;
     private int responseCode;
-    private byte[] body;
+    private boolean headersSent;
+    
+    public HttpResponse(HttpExchange exchange) {        
+        this.exchange = exchange;
+        this.responseCode = RESPONSE_CODE_OK;
+        this.headersSent = false;
+    }
 
-    public HttpResponse() {
-        this(RESPONSE_CODE_OK);
-    }
-    
-    public HttpResponse(int responseCode) {
-        this(responseCode, null);
-    }
-    
-    public HttpResponse(byte[] body) {
-        this(RESPONSE_CODE_OK, body);
-    }
-    
-    public HttpResponse(int responseCode, byte[] body) {
-        this.responseCode = responseCode;
-        this.body = body;
-        headers = new ArrayList<>();
-    }
-    
     public int getResponseCode() {
         return responseCode;
     }
@@ -76,20 +78,76 @@ public class HttpResponse {
     public void setResponseCode(int responseCode) {
         this.responseCode = responseCode;
     }
-
-    public byte[] getBody() {
-        return body;
-    }
-
-    public void setBody(byte[] body) {
-        this.body = body;
-    }
-
-    public List<HttpHeader> getHeaders() {
-        return Collections.unmodifiableList(headers);
+    
+    public Headers getHeaders() {
+        return exchange.getResponseHeaders();
     }
     
-    public void addHeader (HttpHeader header) {
-        this.headers.add(header);
+    public void addHeader (String headerName, String headerValue) {
+        exchange.getResponseHeaders().add(headerName, headerValue);
+    }
+    
+    public void clearHeaders () {
+        exchange.getResponseHeaders().clear();
+    }
+    
+    private void sendHeaders () {
+        sendHeaders(-1);
+    }
+    
+    private void sendHeaders (long contentLength) {
+        if (!headersSent) {
+            addHeader("Server", SERVER_NAME);
+            addHeader("Date", dateFormatter.format(new Date()));
+            try {
+                exchange.sendResponseHeaders(responseCode, contentLength);
+            } 
+            catch (IOException ex) {
+                throw new RuntimeException("Error sending http headers", ex);
+            }
+            headersSent = true;
+        }
+    }
+    
+    public void send () {
+        sendHeaders();
+        try { exchange.getResponseBody().close(); } catch (Exception ex) {}
+    }
+    
+    public void writeBody(String body) {
+        HttpResponse.this.writeBody(body.getBytes());
+    }
+    
+    public void writeBody(byte[] body) {
+        sendHeaders(body.length);
+        try {
+            exchange.getResponseBody().write(body);
+        } 
+        catch (IOException ex) {
+            throw new RuntimeException("Error writing http body", ex);
+        }
+    }
+    
+    public void write (String text) {
+        write(text.getBytes());
+    }
+    
+    public void write (byte[] bytes) {
+        sendHeaders(0);
+        try {
+            exchange.getResponseBody().write(bytes);
+        } 
+        catch (IOException ex) {
+            throw new RuntimeException("Error writing http text", ex);
+        }
+    }
+    
+    public void flush () {
+        try {
+            exchange.getResponseBody().flush();
+        } 
+        catch (IOException ex) {
+            throw new RuntimeException("Error flushing http contents", ex);
+        }
     }
 }
