@@ -4,7 +4,7 @@ package org.neogroup.websparks.http.contexts;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import org.neogroup.websparks.controllers.Controller;
+import org.neogroup.websparks.Controller;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.routing.Route;

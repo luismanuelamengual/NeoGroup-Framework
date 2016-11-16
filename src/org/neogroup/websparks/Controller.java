@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.controllers;
+package org.neogroup.websparks;
 
 import com.sun.net.httpserver.Headers;
 import org.neogroup.websparks.http.HttpRequest;
