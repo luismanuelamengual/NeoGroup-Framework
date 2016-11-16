@@ -7,6 +7,8 @@ import java.util.Map;
 
 public abstract class MimeType {
     
+    private static final String FILE_EXTENSION_REGEX = "\\.(?=[^\\.]+$)";
+    
     public static final String APPLICATION_ACAD = "application/acad";
     public static final String APPLICATION_ARJ = "application/arj";
     public static final String APPLICATION_BASE64 = "application/base64";
@@ -1176,8 +1178,8 @@ public abstract class MimeType {
     }
     
     public static String getMimeType (String filename) {
-        int index = filename.indexOf(".");
-        String extension = index >= 0 ? filename.substring(index+1) : MimeType.BIN;
+        String[] nameExtension = filename.split(FILE_EXTENSION_REGEX);
+        String extension = nameExtension.length == 2 ? nameExtension[1] : MimeType.BIN;
         return mimeTypes.get(extension);
     }
 }
