@@ -46,7 +46,7 @@ public class ControllersContext extends Context {
                 for (Method method : controllerClass.getMethods()) {
                     RouteAction routeActionAnnotation = method.getAnnotation(RouteAction.class);
                     if (routeActionAnnotation != null) {
-                        String routeAction = routeActionAnnotation.name();
+                        String routeAction = routeActionAnnotation.value();
                         actions.put(routeAction, method);
                     }
                 }

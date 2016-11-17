@@ -21,6 +21,7 @@ public class HttpResponse {
     
     private final HttpExchange exchange;
     private int responseCode;
+    private byte[] body;
     private boolean headersSent;
     
     public HttpResponse() {
@@ -41,6 +42,14 @@ public class HttpResponse {
         this.responseCode = responseCode;
     }
     
+    public void setBody(String body) {
+        setBody(body.getBytes());
+    }
+    
+    public void setBody(byte[] body) {
+        this.body = body;
+    }
+    
     public Headers getHeaders() {
         return exchange.getResponseHeaders();
     }
@@ -54,7 +63,7 @@ public class HttpResponse {
     }
     
     private void sendHeaders () {
-        sendHeaders(-1);
+        sendHeaders(body != null? body.length : -1);
     }
     
     private void sendHeaders (long contentLength) {
@@ -73,21 +82,11 @@ public class HttpResponse {
     
     public void send () {
         sendHeaders();
-        try { exchange.getResponseBody().close(); } catch (Exception ex) {}
-    }
-    
-    public void setBody(String body) {
-        setBody(body.getBytes());
-    }
-    
-    public void setBody(byte[] body) {
-        sendHeaders(body.length);
-        try {
-            exchange.getResponseBody().write(body);
-        } 
-        catch (IOException ex) {
-            throw new RuntimeException("Error writing http body", ex);
+        if (body != null) {
+            try { exchange.getResponseBody().write(body); } catch (IOException ex) {}
         }
+        try { exchange.getResponseBody().flush(); } catch (Exception ex) {}
+        try { exchange.getResponseBody().close(); } catch (Exception ex) {}
     }
     
     public void write (String text) {
