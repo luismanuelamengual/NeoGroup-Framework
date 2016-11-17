@@ -74,37 +74,37 @@ public class ControllersContext extends Context {
             if (controllerMethod == null) {
                 response = onNotFound (request, "Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
             }
-            
-            try {
-                Object[] parameters = null;
-                Parameter[] controllerMethodParameters = controllerMethod.getParameters();
-                if (controllerMethodParameters.length > 0) {
-                    parameters = new Object[controllerMethodParameters.length];
-                    for (int i = 0; i < controllerMethodParameters.length; i++) {
-                        Parameter controllerMethodParameter = controllerMethodParameters[i];
-                        RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
-                        if (routeParamAnnotation != null) {
-                            String parameterName = routeParamAnnotation.value();
-                            parameters[i] = request.getParameter(parameterName);
-                        }
-                        else {
-                            parameters[i] = null;
+            else {
+                try {
+                    Object[] parameters = null;
+                    Parameter[] controllerMethodParameters = controllerMethod.getParameters();
+                    if (controllerMethodParameters.length > 0) {
+                        parameters = new Object[controllerMethodParameters.length];
+                        for (int i = 0; i < controllerMethodParameters.length; i++) {
+                            Parameter controllerMethodParameter = controllerMethodParameters[i];
+                            RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
+                            if (routeParamAnnotation != null) {
+                                String parameterName = routeParamAnnotation.value();
+                                parameters[i] = request.getParameter(parameterName);
+                            }
+                            else {
+                                parameters[i] = null;
+                            }
                         }
                     }
+                    Object controllerResponse = controllerMethod.invoke(controller, parameters);
+                    if (controllerResponse instanceof HttpResponse) {
+                        response = (HttpResponse)controllerResponse;
+                    }
+                    else {
+                        response = new HttpResponse();
+                        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
+                        response.setBody(controllerResponse.toString());
+                    }
                 }
-                Object controllerResponse = controllerMethod.invoke(controller, parameters);
-                if (controllerResponse instanceof HttpResponse) {
-                    response = (HttpResponse)controllerResponse;
+                catch (Throwable ex) {
+                    response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);
                 }
-                else {
-                    response = new HttpResponse();
-                    response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
-                    response.setBody(controllerResponse.toString());
-                }
-                
-            }
-            catch (Throwable ex) {
-                response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);
             }
         }
         return response;

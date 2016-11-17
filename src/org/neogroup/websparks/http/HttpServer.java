@@ -72,14 +72,17 @@ public class HttpServer {
         });
     }
     
+    public void removeContext (Context context) {
+        server.removeContext(context.getPath());
+    }
+    
     protected HttpResponse onError(HttpRequest request, Throwable throwable) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
         
-        HttpResponse response = new HttpResponse();
-        response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
+        HttpResponse response = new HttpResponse(HttpResponseCode.INTERNAL_SERVER_ERROR);
         response.setBody(body);
         return response;
     }

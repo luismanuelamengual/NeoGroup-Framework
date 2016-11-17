@@ -14,6 +14,9 @@ import java.util.Map;
 
 public class HttpRequest {
     
+    private static final String QUERY_PARAMETERS_REGEX = "[&]";
+    private static final String QUERY_PARAMETER_VALUES_REGEX = "[=]";
+    private static final String FILE_ENCODING_SYSTEM_PROPERTY_NAME = "file.encoding";
     private static final String URI_SEPARATOR = "/";
     
     private final HttpExchange exchange;
@@ -74,16 +77,16 @@ public class HttpRequest {
             try {
                 String query = getQuery() ;
                 if (query != null) {
-                    String pairs[] = query.split("[&]");
+                    String pairs[] = query.split(QUERY_PARAMETERS_REGEX);
                     for (String pair : pairs) {
-                        String param[] = pair.split("[=]");
+                        String param[] = pair.split(QUERY_PARAMETER_VALUES_REGEX);
                         String key = null;
                         String value = null;
                         if (param.length > 0) {
-                            key = URLDecoder.decode(param[0], System.getProperty("file.encoding"));
+                            key = URLDecoder.decode(param[0], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
                         }
                         if (param.length > 1) {
-                            value = URLDecoder.decode(param[1], System.getProperty("file.encoding"));
+                            value = URLDecoder.decode(param[1], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
                         }
                         parameters.put(key, value);
                     }
