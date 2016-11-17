@@ -7,6 +7,8 @@ import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 import org.neogroup.websparks.Controller;
+import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpResponseCode;
@@ -57,19 +59,20 @@ public class ControllersContext extends Context {
     }
     
     @Override
-    public void onContext (HttpRequest request, HttpResponse response) {
+    public HttpResponse onContext (HttpRequest request) {
         
         String controllerPath = getControllerPath(request);
         Controller controller = controllers.get(controllerPath);
+        HttpResponse response = null;
         if (controller == null) {
-            onNotFound (request, response, "Controller with path \"" + controllerPath + "\" not found !!");
+            response = onNotFound (request, "Controller with path \"" + controllerPath + "\" not found !!");
         }
         else {
 
             String controllerAction = getControllerAction(request);
             Method controllerMethod = controllerActions.get(controller).get(controllerAction);
             if (controllerMethod == null) {
-                onNotFound (request, response, "Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
+                response = onNotFound (request, "Action \"" + controllerAction + "\" not found in controller \"" + controller.toString() + "\" !!");
             }
             
             try {
@@ -89,17 +92,29 @@ public class ControllersContext extends Context {
                         }
                     }
                 }
-                controllerMethod.invoke(controller, parameters);
+                Object controllerResponse = controllerMethod.invoke(controller, parameters);
+                if (controllerResponse instanceof HttpResponse) {
+                    response = (HttpResponse)controllerResponse;
+                }
+                else {
+                    response = new HttpResponse();
+                    response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
+                    response.setBody(controllerResponse.toString());
+                }
+                
             }
             catch (Throwable ex) {
-                onError(request, response, ex instanceof InvocationTargetException? ex.getCause() : ex);
+                response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);
             }
         }
+        return response;
     }
     
-    protected void onNotFound (HttpRequest request, HttpResponse response, String msg) {
+    protected HttpResponse onNotFound (HttpRequest request, String msg) {
+        HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.NOT_FOUND);
-        response.writeBody(msg);
+        response.setBody(msg);
+        return response;
     }
     
     private String getControllerPath (HttpRequest request) {

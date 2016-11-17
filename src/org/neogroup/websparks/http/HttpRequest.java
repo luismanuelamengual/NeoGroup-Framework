@@ -20,8 +20,8 @@ public class HttpRequest {
     private Map<String,String> parameters;
     private byte[] body;
     
-    public HttpRequest(HttpExchange exchange) {
-        this.exchange = exchange;
+    public HttpRequest() {
+        this.exchange = HttpServer.getCurrentHttpExchange();
     }
 
     public String getMethod() {

@@ -14,22 +14,16 @@ import org.neogroup.websparks.http.contexts.Context;
 public class HttpServer {
 
     private final com.sun.net.httpserver.HttpServer server;
-    private static Map<Long, HttpRequest> requests;
-    private static Map<Long, HttpResponse> responses;
+    private static Map<Long, HttpExchange> exchanges;
     
     static {
-        requests = new HashMap<>();
-        responses = new HashMap<>();
+        exchanges = new HashMap<>();
     }
     
-    public static HttpRequest getCurrentRequest () {
-        return requests.get(Thread.currentThread().getId());
+    public static HttpExchange getCurrentHttpExchange () {
+        return exchanges.get(Thread.currentThread().getId());
     }
-    
-    public static HttpResponse getCurrentResponse () {
-        return responses.get(Thread.currentThread().getId());
-    }
-    
+        
     public HttpServer(int port) {
         this(port, 0);
     }
@@ -56,38 +50,38 @@ public class HttpServer {
             public void handle(HttpExchange exchange) {
                 
                 long currentThreadId = Thread.currentThread().getId();
-                HttpRequest request = new HttpRequest(exchange);
-                HttpResponse response = new HttpResponse(exchange);
-                requests.put(currentThreadId, request);
-                responses.put(currentThreadId, response);
+                exchanges.put(currentThreadId, exchange);
+                HttpRequest request = new HttpRequest();
+                HttpResponse response = null;
                 try {    
-                    context.onContext(request, response);
+                    response = context.onContext(request);
                 }
                 catch (Throwable ex) {
                     try {
-                        context.onError (request, response, ex);
+                        response = context.onError (request, ex);
                     }
                     catch (Throwable ex2) {
-                        onError(request, response, ex);
+                        response = onError(request, ex);
                     }
                 }
                 finally {
                     try { response.send(); } catch (Exception ex) {}
-                    requests.remove(currentThreadId);
-                    responses.remove(currentThreadId);
+                    exchanges.remove(currentThreadId);
                 }
             }
         });
     }
     
-    protected void onError(HttpRequest request,  HttpResponse response, Throwable throwable) {
+    protected HttpResponse onError(HttpRequest request, Throwable throwable) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
         
+        HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
-        response.writeBody(body);
+        response.setBody(body);
+        return response;
     }
     
     public void start () {

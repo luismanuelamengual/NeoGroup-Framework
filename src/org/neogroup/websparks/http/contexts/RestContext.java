@@ -13,7 +13,7 @@ public abstract class RestContext<T> extends Context {
     }
 
     @Override
-    public void onContext(HttpRequest request, HttpResponse response) {
+    public HttpResponse onContext(HttpRequest request) {
         
         String method = request.getMethod();
         
@@ -33,9 +33,11 @@ public abstract class RestContext<T> extends Context {
                 break;
         }
         
+        HttpResponse response = new HttpResponse();
         if (resources != null && !resources.isEmpty()) {
-            response.writeBody(encodeResources(resources));
+            response.setBody(encodeResources(resources));
         }
+        return response;
     }
     
     protected abstract List<T> decodeResources (byte[] content);

@@ -35,7 +35,7 @@ public class FolderContext extends Context {
     }
     
     @Override
-    public void onContext(HttpRequest request, HttpResponse response) {
+    public HttpResponse onContext(HttpRequest request) {
         
         String path = request.getPath().substring(getPath().length());
         String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
@@ -45,6 +45,7 @@ public class FolderContext extends Context {
             filePath = filePath.resolve(element);
         }
         
+        HttpResponse response = new HttpResponse();
         File file = filePath.toFile();
         if(file.exists()) {
             byte[] body = null;
@@ -76,10 +77,11 @@ public class FolderContext extends Context {
                 }
             }
             
-            response.writeBody(body);
+            response.setBody(body);
         } 
         else {
             throw new IllegalArgumentException("File \"" + file.getName() + "\" not found !!");
         }
+        return response;
     }
 }

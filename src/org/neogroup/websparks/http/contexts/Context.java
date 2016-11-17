@@ -19,15 +19,17 @@ public abstract class Context {
         return path;
     }
     
-    public abstract void onContext (HttpRequest request, HttpResponse response);
+    public abstract HttpResponse onContext (HttpRequest request);
     
-    public void onError (HttpRequest request, HttpResponse response, Throwable throwable) {
+    public HttpResponse onError (HttpRequest request, Throwable throwable) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
         
+        HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
-        response.writeBody(body);
+        response.setBody(body);
+        return response;
     }
 }

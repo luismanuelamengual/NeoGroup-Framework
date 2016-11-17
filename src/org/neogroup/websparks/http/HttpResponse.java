@@ -23,9 +23,13 @@ public class HttpResponse {
     private int responseCode;
     private boolean headersSent;
     
-    public HttpResponse(HttpExchange exchange) {        
-        this.exchange = exchange;
-        this.responseCode = HttpResponseCode.OK;
+    public HttpResponse() {
+        this(HttpResponseCode.OK);
+    }
+    
+    public HttpResponse(int responseCode) {
+        this.exchange = HttpServer.getCurrentHttpExchange();
+        this.responseCode = responseCode;
         this.headersSent = false;
     }
 
@@ -72,11 +76,11 @@ public class HttpResponse {
         try { exchange.getResponseBody().close(); } catch (Exception ex) {}
     }
     
-    public void writeBody(String body) {
-        HttpResponse.this.writeBody(body.getBytes());
+    public void setBody(String body) {
+        setBody(body.getBytes());
     }
     
-    public void writeBody(byte[] body) {
+    public void setBody(byte[] body) {
         sendHeaders(body.length);
         try {
             exchange.getResponseBody().write(body);
