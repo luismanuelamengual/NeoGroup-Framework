@@ -58,7 +58,7 @@ public class FolderContext extends Context {
                     String subFileLink = filePath.relativize(folder).resolve(request.getPath()).resolve(subFile.getName()).toString();
                     String subFileName = subFile.getName();
                     if (subFile.isDirectory()) {
-                        subFileName += "/";
+                        subFileName += File.separator;
                     }
                     list.append(String.format(FOLDER_HTML_ITEM_TEMPLATE, subFileLink, subFileName));
                 }
