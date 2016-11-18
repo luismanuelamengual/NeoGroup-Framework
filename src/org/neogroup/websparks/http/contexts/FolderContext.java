@@ -73,14 +73,14 @@ public class FolderContext extends Context {
                     body = Files.readAllBytes(filePath); 
                 } 
                 catch (IOException ex) {
-                    throw new RuntimeException("Error reading file \"" + file.getName() + "\" !!");
+                    throw new RuntimeException("Error reading file \"" + file + "\" !!");
                 }
             }
             
             response.setBody(body);
         } 
         else {
-            throw new IllegalArgumentException("File \"" + file.getName() + "\" not found !!");
+            throw new IllegalArgumentException("File \"" + file + "\" not found !!");
         }
         return response;
     }
