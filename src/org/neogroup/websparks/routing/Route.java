@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Route {
 
-    public String path() default "/";
+    String path() default "/";
 }

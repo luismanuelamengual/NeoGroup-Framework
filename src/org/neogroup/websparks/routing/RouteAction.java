@@ -11,7 +11,7 @@ import org.neogroup.websparks.http.HttpMethod;
 @Target(ElementType.METHOD)
 public @interface RouteAction {
 
-    public String value() default "";
+    String value() default "";
     
-    public String method() default HttpMethod.GET;
+    String method() default HttpMethod.GET;
 }

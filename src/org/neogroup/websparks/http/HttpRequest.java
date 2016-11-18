@@ -42,7 +42,10 @@ public class HttpRequest {
                     byteArrayOutputStream.write(read);
                     read = inputStream.read();
                 }
-            } catch (Exception ex) {};
+            }
+            catch (Exception ex) {
+                throw new RuntimeException("Error reading request body !!");
+            }
             body = byteArrayOutputStream.toByteArray();
         }
         return body;
@@ -92,7 +95,9 @@ public class HttpRequest {
                     }
                 }
             }
-            catch (Exception ex) {}
+            catch (Exception ex) {
+                throw new RuntimeException("Error reading request parameters !!");
+            }
         }
         return parameters;
     }
