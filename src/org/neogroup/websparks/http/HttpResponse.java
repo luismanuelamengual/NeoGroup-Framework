@@ -4,6 +4,7 @@ package org.neogroup.websparks.http;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.neogroup.websparks.http.contexts.ContextInstance;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -21,7 +22,7 @@ public class HttpResponse {
     
     private final HttpExchange exchange;
     private int responseCode;
-    private byte[] body;
+    private ByteArrayOutputStream body;
     private boolean headersSent;
     
     public HttpResponse() {
@@ -31,6 +32,7 @@ public class HttpResponse {
     public HttpResponse(int responseCode) {
         this.exchange = ContextInstance.getInstance().getExchange();
         this.responseCode = responseCode;
+        this.body = new ByteArrayOutputStream();
         this.headersSent = false;
     }
 
@@ -47,7 +49,8 @@ public class HttpResponse {
     }
     
     public void setBody(byte[] body) {
-        this.body = body;
+        this.body.reset();
+        try { this.body.write(body); } catch (Exception ex) {}
     }
     
     public Headers getHeaders() {
@@ -73,17 +76,16 @@ public class HttpResponse {
     }
     
     public void write (byte[] bytes) {
-        sendHeaders(0);
-        try { exchange.getResponseBody().write(bytes); } catch (IOException ex) {}
+        try { this.body.write(bytes); } catch (Exception ex) {}
     }
     
     public void flush () {
         sendHeaders(0);
-        try { exchange.getResponseBody().flush(); } catch (Exception ex) {}
+        writeContents();
     }
 
     private void sendHeaders () {
-        sendHeaders(body != null? body.length : -1);
+        sendHeaders(body != null? body.size() : -1);
     }
 
     private void sendHeaders (long contentLength) {
@@ -95,12 +97,13 @@ public class HttpResponse {
     }
 
     private void writeContents () {
-        if (body != null) {
-            try { exchange.getResponseBody().write(body); } catch (IOException ex) {}
-        }
+        try { body.writeTo(exchange.getResponseBody()); } catch (IOException ex) {}
+        try { exchange.getResponseBody().flush(); } catch (Exception ex) {}
+        body.reset();
     }
 
     private void closeConnection () {
         try { exchange.getResponseBody().close(); } catch (Exception ex) {}
+        try { body.close(); } catch (Exception ex) {}
     }
 }

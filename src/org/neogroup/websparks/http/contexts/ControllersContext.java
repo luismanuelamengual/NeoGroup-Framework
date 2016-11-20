@@ -1,20 +1,18 @@
 
 package org.neogroup.websparks.http.contexts;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.HashMap;
-import java.util.Map;
 import org.neogroup.websparks.Controller;
-import org.neogroup.websparks.encoding.MimeType;
-import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 import org.neogroup.websparks.routing.RouteParam;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControllersContext extends Context {
 

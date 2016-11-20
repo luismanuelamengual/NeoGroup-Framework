@@ -10,10 +10,10 @@ public class RootController extends Controller {
     
     @RouteAction
     public void indexAction () {
-
-        setResponseCode(500);
-        setResponseContents("supers");
-        //write("super ultrich");
-        //write("rama");
+        //setResponseCode(500);
+        //setResponseContents("supers");
+        write("super ultrich");
+        flush();
+        write("rama");
     }
 }
