@@ -3,6 +3,7 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.neogroup.websparks.http.contexts.ContextInstance;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -11,7 +12,6 @@ import java.util.Date;
 public class HttpResponse {
     
     public static final String SERVER_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
-    public static final String SERVER_NAME = "WebSparks";
     
     private static DateFormat dateFormatter;
     
@@ -29,7 +29,7 @@ public class HttpResponse {
     }
     
     public HttpResponse(int responseCode) {
-        this.exchange = HttpServer.getCurrentHttpExchange();
+        this.exchange = ContextInstance.getInstance().getExchange();
         this.responseCode = responseCode;
         this.headersSent = false;
     }
@@ -61,32 +61,11 @@ public class HttpResponse {
     public void clearHeaders () {
         exchange.getResponseHeaders().clear();
     }
-    
-    private void sendHeaders () {
-        sendHeaders(body != null? body.length : -1);
-    }
-    
-    private void sendHeaders (long contentLength) {
-        if (!headersSent) {
-            addHeader(HttpHeader.SERVER, SERVER_NAME);
-            addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
-            try {
-                exchange.sendResponseHeaders(responseCode, contentLength);
-            } 
-            catch (IOException ex) {
-                throw new RuntimeException("Error sending http headers", ex);
-            }
-            headersSent = true;
-        }
-    }
-    
+
     public void send () {
         sendHeaders();
-        if (body != null) {
-            try { exchange.getResponseBody().write(body); } catch (IOException ex) {}
-        }
-        try { exchange.getResponseBody().flush(); } catch (Exception ex) {}
-        try { exchange.getResponseBody().close(); } catch (Exception ex) {}
+        writeContents();
+        closeConnection();
     }
     
     public void write (String text) {
@@ -95,20 +74,33 @@ public class HttpResponse {
     
     public void write (byte[] bytes) {
         sendHeaders(0);
-        try {
-            exchange.getResponseBody().write(bytes);
-        } 
-        catch (IOException ex) {
-            throw new RuntimeException("Error writing http text", ex);
-        }
+        try { exchange.getResponseBody().write(bytes); } catch (IOException ex) {}
     }
     
     public void flush () {
-        try {
-            exchange.getResponseBody().flush();
-        } 
-        catch (IOException ex) {
-            throw new RuntimeException("Error flushing http contents", ex);
+        sendHeaders(0);
+        try { exchange.getResponseBody().flush(); } catch (Exception ex) {}
+    }
+
+    private void sendHeaders () {
+        sendHeaders(body != null? body.length : -1);
+    }
+
+    private void sendHeaders (long contentLength) {
+        if (!headersSent) {
+            addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
+            try { exchange.sendResponseHeaders(responseCode, contentLength); } catch (IOException ex) {}
+            headersSent = true;
         }
+    }
+
+    private void writeContents () {
+        if (body != null) {
+            try { exchange.getResponseBody().write(body); } catch (IOException ex) {}
+        }
+    }
+
+    private void closeConnection () {
+        try { exchange.getResponseBody().close(); } catch (Exception ex) {}
     }
 }

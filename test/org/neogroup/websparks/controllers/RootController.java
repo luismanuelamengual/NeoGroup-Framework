@@ -2,7 +2,6 @@
 package org.neogroup.websparks.controllers;
 
 import org.neogroup.websparks.Controller;
-import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 
@@ -10,10 +9,11 @@ import org.neogroup.websparks.routing.RouteAction;
 public class RootController extends Controller {
     
     @RouteAction
-    public HttpResponse indexAction () {
-        
-        HttpResponse response = new HttpResponse();
-        response.setBody("MainAction !!");
-        return response;
+    public void indexAction () {
+
+        setResponseCode(500);
+        setResponseContents("supers");
+        //write("super ultrich");
+        //write("rama");
     }
 }

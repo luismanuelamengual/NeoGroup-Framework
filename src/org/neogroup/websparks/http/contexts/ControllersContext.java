@@ -92,15 +92,9 @@ public class ControllersContext extends Context {
                             }
                         }
                     }
-                    Object controllerResponse = controllerMethod.invoke(controller, parameters);
-                    if (controllerResponse instanceof HttpResponse) {
-                        response = (HttpResponse)controllerResponse;
-                    }
-                    else {
-                        response = new HttpResponse();
-                        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
-                        response.setBody(controllerResponse.toString());
-                    }
+
+                    controllerMethod.invoke(controller, parameters);
+                    response = ContextInstance.getInstance().getResponse();
                 }
                 catch (Throwable ex) {
                     response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);

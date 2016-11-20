@@ -3,27 +3,17 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.neogroup.websparks.http.contexts.Context;
+import org.neogroup.websparks.http.contexts.ContextInstance;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.Executors;
-import org.neogroup.websparks.http.contexts.Context;
 
 public class HttpServer {
 
     private final com.sun.net.httpserver.HttpServer server;
-    private static Map<Long, HttpExchange> exchanges;
-    
-    static {
-        exchanges = new HashMap<>();
-    }
-    
-    public static HttpExchange getCurrentHttpExchange () {
-        return exchanges.get(Thread.currentThread().getId());
-    }
-        
+
     public HttpServer(int port) {
         this(port, 0);
     }
@@ -48,10 +38,9 @@ public class HttpServer {
         server.createContext(context.getPath(), new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) {
-                
-                long currentThreadId = Thread.currentThread().getId();
-                exchanges.put(currentThreadId, exchange);
-                HttpRequest request = new HttpRequest();
+
+                ContextInstance instance = ContextInstance.createInstance(exchange);
+                HttpRequest request = instance.getRequest();
                 HttpResponse response = null;
                 try {    
                     response = context.onContext(request);
@@ -66,7 +55,7 @@ public class HttpServer {
                 }
                 finally {
                     try { response.send(); } catch (Exception ex) {}
-                    exchanges.remove(currentThreadId);
+                    ContextInstance.destroyInstance();
                 }
             }
         });
