@@ -4,6 +4,8 @@ package org.neogroup.websparks.http;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
+import org.neogroup.websparks.properties.Properties;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -91,6 +93,7 @@ public class HttpResponse {
     private void sendHeaders (long contentLength) {
         if (!headersSent) {
             addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
+            addHeader(HttpHeader.SERVER, Properties.get(Properties.SERVER_NAME_PROPERTY));
             try { exchange.sendResponseHeaders(responseCode, contentLength); } catch (IOException ex) {}
             headersSent = true;
         }
