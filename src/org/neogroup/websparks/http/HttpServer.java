@@ -3,8 +3,8 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.neogroup.websparks.http.contexts.Context;
-import org.neogroup.websparks.http.contexts.ContextInstance;
+import org.neogroup.websparks.http.contexts.HttpContext;
+import org.neogroup.websparks.http.contexts.HttpContextInstance;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
@@ -33,13 +33,13 @@ public class HttpServer {
         }
     }
     
-    public void addContext (Context context) {
+    public void addContext (HttpContext context) {
         
         server.createContext(context.getPath(), new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) {
 
-                ContextInstance instance = ContextInstance.createInstance(exchange);
+                HttpContextInstance instance = HttpContextInstance.createInstance(exchange);
                 HttpRequest request = instance.getRequest();
                 HttpResponse response = null;
                 try {    
@@ -55,13 +55,13 @@ public class HttpServer {
                 }
                 finally {
                     try { response.send(); } catch (Exception ex) {}
-                    ContextInstance.destroyInstance();
+                    HttpContextInstance.destroyInstance();
                 }
             }
         });
     }
     
-    public void removeContext (Context context) {
+    public void removeContext (HttpContext context) {
         server.removeContext(context.getPath());
     }
     

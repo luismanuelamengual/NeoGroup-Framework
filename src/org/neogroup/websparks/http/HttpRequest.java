@@ -3,7 +3,7 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import org.neogroup.websparks.http.contexts.ContextInstance;
+import org.neogroup.websparks.http.contexts.HttpContextInstance;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URI;
@@ -25,7 +25,7 @@ public class HttpRequest {
     private byte[] body;
     
     public HttpRequest() {
-        this.exchange = ContextInstance.getInstance().getExchange();
+        this.exchange = HttpContextInstance.getInstance().getExchange();
     }
 
     public String getMethod() {

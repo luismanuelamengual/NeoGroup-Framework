@@ -14,18 +14,18 @@ import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ControllersContext extends Context {
+public class HttpControllersContext extends HttpContext {
 
     private static final String CONTEXT_PATH_SEPARATOR = "/";
     
     private final Map<String, Controller> controllers;
     private final Map<Controller, Map<String, Method>> controllerActions;
     
-    public ControllersContext() {
+    public HttpControllersContext() {
         this("/"); 
     }
     
-    public ControllersContext(String path) {
+    public HttpControllersContext(String path) {
         super(path);
         controllers = new HashMap<>();
         controllerActions = new HashMap<>();
@@ -92,7 +92,7 @@ public class ControllersContext extends Context {
                     }
 
                     controllerMethod.invoke(controller, parameters);
-                    response = ContextInstance.getInstance().getResponse();
+                    response = HttpContextInstance.getInstance().getResponse();
                 }
                 catch (Throwable ex) {
                     response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);

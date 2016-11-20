@@ -12,7 +12,7 @@ import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-public class FolderContext extends Context {
+public class HttpFolderContext extends HttpContext {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
     private static final String FOLDER_HTML_DOCUMENT_TEMPLATE = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
@@ -21,11 +21,11 @@ public class FolderContext extends Context {
     
     private final Path folder;
     
-    public FolderContext(String path, String folder) {
+    public HttpFolderContext(String path, String folder) {
         this(path, Paths.get(folder));
     }
     
-    public FolderContext(String path, Path folder) {
+    public HttpFolderContext(String path, Path folder) {
         super(path);
         this.folder = folder;
     }

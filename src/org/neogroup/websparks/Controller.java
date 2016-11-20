@@ -3,16 +3,16 @@ package org.neogroup.websparks;
 
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
-import org.neogroup.websparks.http.contexts.ContextInstance;
+import org.neogroup.websparks.http.contexts.HttpContextInstance;
 
 public class Controller {
 
     protected HttpRequest getRequest() {
-        return ContextInstance.getInstance().getRequest();
+        return HttpContextInstance.getInstance().getRequest();
     }
 
     protected HttpResponse getResponse() {
-        return ContextInstance.getInstance().getResponse();
+        return HttpContextInstance.getInstance().getResponse();
     }
 
     protected void setResponseCode (int responseCode) {

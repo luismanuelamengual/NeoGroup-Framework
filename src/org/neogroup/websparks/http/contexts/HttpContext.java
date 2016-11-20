@@ -7,11 +7,11 @@ import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpResponseCode;
 
-public abstract class Context {
+public abstract class HttpContext {
     
     private final String path;
 
-    public Context(String path) {
+    public HttpContext(String path) {
         this.path = path;
     }
 

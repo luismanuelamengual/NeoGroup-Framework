@@ -6,9 +6,9 @@ import org.neogroup.websparks.http.HttpMethod;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-public abstract class RestContext<T> extends Context {
+public abstract class HttpRestContext<T> extends HttpContext {
 
-    public RestContext(String path) {
+    public HttpRestContext(String path) {
         super(path);
     }
 

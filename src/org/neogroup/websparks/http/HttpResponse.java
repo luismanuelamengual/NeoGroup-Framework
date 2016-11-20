@@ -3,7 +3,7 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import org.neogroup.websparks.http.contexts.ContextInstance;
+import org.neogroup.websparks.http.contexts.HttpContextInstance;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -30,7 +30,7 @@ public class HttpResponse {
     }
     
     public HttpResponse(int responseCode) {
-        this.exchange = ContextInstance.getInstance().getExchange();
+        this.exchange = HttpContextInstance.getInstance().getExchange();
         this.responseCode = responseCode;
         this.body = new ByteArrayOutputStream();
         this.headersSent = false;

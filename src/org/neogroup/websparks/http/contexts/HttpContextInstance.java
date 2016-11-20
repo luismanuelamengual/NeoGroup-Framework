@@ -8,16 +8,16 @@ import org.neogroup.websparks.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ContextInstance {
+public class HttpContextInstance {
 
-    private final static Map<Long, ContextInstance> instances;
+    private final static Map<Long, HttpContextInstance> instances;
 
     static {
         instances = new HashMap<>();
     }
 
-    public static ContextInstance createInstance (HttpExchange exchange) {
-        ContextInstance instance = new ContextInstance(exchange);
+    public static HttpContextInstance createInstance (HttpExchange exchange) {
+        HttpContextInstance instance = new HttpContextInstance(exchange);
         instances.put(Thread.currentThread().getId(), instance);
         return instance;
     }
@@ -26,7 +26,7 @@ public class ContextInstance {
         instances.remove(Thread.currentThread().getId());
     }
 
-    public static ContextInstance getInstance() {
+    public static HttpContextInstance getInstance() {
         return instances.get(Thread.currentThread().getId());
     }
 
@@ -34,7 +34,7 @@ public class ContextInstance {
     private HttpRequest request;
     private HttpResponse response;
 
-    private ContextInstance (HttpExchange exchange) {
+    private HttpContextInstance(HttpExchange exchange) {
         this.exchange = exchange;
     }
 
