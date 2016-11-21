@@ -17,7 +17,7 @@ public class Main {
 
         HttpServer server = new HttpServer(1408);
         server.addContext(controllersContext);
-        server.addContext(new HttpFolderContext("/resources/", "/home/luis/git/sitrackfrontend/public"));
+        server.addContext(new HttpFolderContext("/resources/", "/home/luis/git/TennisFederation/public"));
         server.start();
     }
 }

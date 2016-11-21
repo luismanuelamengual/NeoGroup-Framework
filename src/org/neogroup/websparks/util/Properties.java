@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.properties;
+package org.neogroup.websparks.util;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,6 +10,7 @@ public class Properties extends java.util.Properties {
     public static final String MAIN_PROPERTIES_FILE = "websparks.properties";
 
     public static final String SERVER_NAME_PROPERTY = "server_name";
+    public static final String SERVER_VERSION_PROPERTY = "server_version";
 
     private static final Properties instance;
 

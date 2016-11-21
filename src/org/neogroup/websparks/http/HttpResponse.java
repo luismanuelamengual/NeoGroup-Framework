@@ -4,7 +4,7 @@ package org.neogroup.websparks.http;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
-import org.neogroup.websparks.properties.Properties;
+import org.neogroup.websparks.util.Properties;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

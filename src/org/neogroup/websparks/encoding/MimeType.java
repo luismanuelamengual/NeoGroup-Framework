@@ -1180,6 +1180,10 @@ public abstract class MimeType {
     public static String getMimeType (String filename) {
         String[] nameExtension = filename.split(FILE_EXTENSION_REGEX);
         String extension = nameExtension.length == 2 ? nameExtension[1] : MimeType.BIN;
-        return mimeTypes.get(extension);
+        String mimeType =  mimeTypes.get(extension);
+        if (mimeType == null) {
+            mimeType = TEXT_PLAIN;
+        }
+        return mimeType;
     }
 }

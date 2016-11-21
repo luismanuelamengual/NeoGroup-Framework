@@ -5,6 +5,8 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.neogroup.websparks.http.contexts.HttpContext;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
+import org.neogroup.websparks.util.Logger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
