@@ -8,11 +8,15 @@ import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 import org.neogroup.websparks.routing.RouteParam;
+import org.neogroup.websparks.util.Scanner;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class HttpControllersContext extends HttpContext {
 
@@ -22,13 +26,20 @@ public class HttpControllersContext extends HttpContext {
     private final Map<Controller, Map<String, Method>> controllerActions;
     
     public HttpControllersContext() {
-        this("/"); 
+        this("/");
     }
-    
+
     public HttpControllersContext(String path) {
+        this(path, true);
+    }
+
+    public HttpControllersContext(String path, boolean autoRegisterControllers) {
         super(path);
         controllers = new HashMap<>();
         controllerActions = new HashMap<>();
+        if (autoRegisterControllers) {
+            registerControllers();
+        }
     }
 
     public void registerController (Class<? extends Controller> controllerClass) {
@@ -53,6 +64,20 @@ public class HttpControllersContext extends HttpContext {
             catch (Exception ex) {
                 throw new RuntimeException("Could not create instance of controller !!", ex);
             }
+        }
+    }
+
+    private void registerControllers () {
+
+        Scanner controllersScanner = new Scanner();
+        Set<Class> controllerClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
+            @Override
+            public boolean accept(Class clazz) {
+                return Controller.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
+            }
+        });
+        for (Class controllerClass : controllerClasses) {
+            registerController(controllerClass);
         }
     }
     

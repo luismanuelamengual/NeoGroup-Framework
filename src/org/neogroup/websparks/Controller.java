@@ -5,7 +5,7 @@ import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
 
-public class Controller {
+public abstract class Controller {
 
     protected HttpRequest getRequest() {
         return HttpContextInstance.getInstance().getRequest();
