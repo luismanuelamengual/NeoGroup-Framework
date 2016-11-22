@@ -9,11 +9,8 @@ import org.neogroup.websparks.routing.RouteAction;
 public class RootController extends Controller {
     
     @RouteAction
-    public void indexAction () {
-        //setResponseCode(500);
-        //setResponseContents("supers");
-        write("super ultrich");
-        flush();
-        write("rama");
+    public String indexAction () {
+
+        return "holach";
     }
 }

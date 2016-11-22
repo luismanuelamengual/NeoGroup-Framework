@@ -3,9 +3,9 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.neogroup.websparks.encoding.MimeType;
 import org.neogroup.websparks.http.contexts.HttpContext;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
-import org.neogroup.websparks.util.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -72,8 +72,8 @@ public class HttpServer {
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
-        
         HttpResponse response = new HttpResponse(HttpResponseCode.INTERNAL_SERVER_ERROR);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
         response.setBody(body);
         return response;
     }

@@ -99,28 +99,37 @@ public class HttpControllersContext extends HttpContext {
             }
             else {
                 try {
-                    Object[] parameters = null;
-                    Parameter[] controllerMethodParameters = controllerMethod.getParameters();
-                    if (controllerMethodParameters.length > 0) {
-                        parameters = new Object[controllerMethodParameters.length];
-                        for (int i = 0; i < controllerMethodParameters.length; i++) {
-                            Parameter controllerMethodParameter = controllerMethodParameters[i];
-                            RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
-                            if (routeParamAnnotation != null) {
-                                String parameterName = routeParamAnnotation.value();
-                                parameters[i] = request.getParameter(parameterName);
-                            }
-                            else {
-                                parameters[i] = null;
+                    response = controller.onBeforeAction(controllerAction, request);
+                    if (response == null) {
+
+                        Object[] parameters = null;
+                        Parameter[] controllerMethodParameters = controllerMethod.getParameters();
+                        if (controllerMethodParameters.length > 0) {
+                            parameters = new Object[controllerMethodParameters.length];
+                            for (int i = 0; i < controllerMethodParameters.length; i++) {
+                                Parameter controllerMethodParameter = controllerMethodParameters[i];
+                                RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
+                                if (routeParamAnnotation != null) {
+                                    String parameterName = routeParamAnnotation.value();
+                                    parameters[i] = request.getParameter(parameterName);
+                                }
+                                else {
+                                    parameters[i] = null;
+                                }
                             }
                         }
-                    }
 
-                    controllerMethod.invoke(controller, parameters);
-                    response = HttpContextInstance.getInstance().getResponse();
+                        Object actionResponse = controllerMethod.invoke(controller, parameters);
+                        response = controller.onAfterAction(controllerAction, request, actionResponse);
+                    }
                 }
                 catch (Throwable ex) {
-                    response = onError(request, ex instanceof InvocationTargetException? ex.getCause() : ex);
+                    try {
+                        response = controller.onError(controllerAction, request, ex instanceof InvocationTargetException ? ex.getCause() : ex);
+                    }
+                    catch (Throwable onErrorEx) {
+                        throw onErrorEx;
+                    }
                 }
             }
         }

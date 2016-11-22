@@ -1,10 +1,9 @@
 package org.neogroup.websparks.http.contexts;
 
 import com.sun.net.httpserver.HttpExchange;
-import org.neogroup.websparks.encoding.MimeType;
-import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +51,6 @@ public class HttpContextInstance {
     public HttpResponse getResponse() {
         if (response == null) {
             response = new HttpResponse();
-            response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML);
         }
         return response;
     }

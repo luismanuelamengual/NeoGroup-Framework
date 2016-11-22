@@ -3,6 +3,7 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.neogroup.websparks.encoding.MimeType;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
 import org.neogroup.websparks.util.Properties;
 
@@ -92,6 +93,9 @@ public class HttpResponse {
 
     private void sendHeaders (long contentLength) {
         if (!headersSent) {
+            if (!getHeaders().containsKey(HttpHeader.CONTENT_TYPE)) {
+                addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML);
+            }
             addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
             addHeader(HttpHeader.SERVER, Properties.get(Properties.SERVER_NAME_PROPERTY));
             try { exchange.sendResponseHeaders(responseCode, contentLength); } catch (IOException ex) {}
@@ -108,5 +112,6 @@ public class HttpResponse {
     private void closeConnection () {
         try { exchange.getResponseBody().close(); } catch (Exception ex) {}
         try { body.close(); } catch (Exception ex) {}
+        exchange.close();
     }
 }

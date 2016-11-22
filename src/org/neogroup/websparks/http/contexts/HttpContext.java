@@ -3,6 +3,9 @@ package org.neogroup.websparks.http.contexts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+
+import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.http.HttpResponseCode;
@@ -26,8 +29,8 @@ public abstract class HttpContext {
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
-        
         HttpResponse response = new HttpResponse();
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
         response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
         response.setBody(body);
         return response;
