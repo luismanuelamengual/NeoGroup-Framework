@@ -1,21 +1,18 @@
 
 package org.neogroup.websparks.http.contexts;
 
-import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.util.MimeTypes;
 import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 import org.neogroup.websparks.util.encoding.GZIPCompression;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 public class HttpFolderContext extends HttpContext {
 
@@ -70,10 +67,10 @@ public class HttpFolderContext extends HttpContext {
                 String htmlBody = String.format(FOLDER_HTML_LIST_TEMPLATE, list.toString());
                 String document = String.format(FOLDER_HTML_DOCUMENT_TEMPLATE, file.getName(), htmlBody);
                 body = document.getBytes();
-                response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML);
+                response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_HTML);
             } 
             else {
-                response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.getMimeType(file));
+                response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.getMimeType(file));
 
                 try { 
                     body = Files.readAllBytes(filePath);

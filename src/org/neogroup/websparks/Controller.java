@@ -1,7 +1,7 @@
 
 package org.neogroup.websparks;
 
-import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.util.MimeTypes;
 import org.neogroup.websparks.http.HttpHeader;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
@@ -40,7 +40,7 @@ public abstract class Controller {
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
         HttpResponse response = new HttpResponse();
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
         response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
         response.setBody(body);
         return response;

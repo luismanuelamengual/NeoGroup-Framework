@@ -3,7 +3,7 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.util.MimeTypes;
 import org.neogroup.websparks.http.contexts.HttpContext;
 import org.neogroup.websparks.http.contexts.HttpContextInstance;
 
@@ -73,7 +73,7 @@ public class HttpServer {
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
         HttpResponse response = new HttpResponse(HttpResponseCode.INTERNAL_SERVER_ERROR);
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_PLAIN);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
         response.setBody(body);
         return response;
     }
