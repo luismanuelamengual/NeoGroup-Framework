@@ -1,16 +1,21 @@
 
 package org.neogroup.websparks.http.contexts;
 
+import org.neogroup.websparks.encoding.MimeType;
+import org.neogroup.websparks.http.HttpHeader;
+import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.util.encoding.GZIPCompression;
+
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
-import org.neogroup.websparks.encoding.MimeType;
-import org.neogroup.websparks.http.HttpHeader;
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
+import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 public class HttpFolderContext extends HttpContext {
 
@@ -69,11 +74,26 @@ public class HttpFolderContext extends HttpContext {
             } 
             else {
                 response.addHeader(HttpHeader.CONTENT_TYPE, MimeType.getMimeType(file));
+
                 try { 
-                    body = Files.readAllBytes(filePath); 
+                    body = Files.readAllBytes(filePath);
                 } 
                 catch (IOException ex) {
                     throw new RuntimeException("Error reading file \"" + file + "\" !!");
+                }
+
+                String acceptedEncoding = request.getHeaders().getFirst(HttpHeader.ACCEPT_ENCODING);
+                if (acceptedEncoding != null) {
+
+                    if (acceptedEncoding.indexOf(HttpHeader.GZIP_CONTENT_ENCODING) >= 0) {
+                        try {
+                            response.addHeader(HttpHeader.CONTENT_ENCODING, HttpHeader.GZIP_CONTENT_ENCODING);
+                            response.addHeader(HttpHeader.VARY, HttpHeader.ACCEPT_ENCODING);
+                            body = GZIPCompression.compress(body);
+                        } catch (IOException ex) {
+                            throw new RuntimeException("Error compressing file \"" + file + "\" !!");
+                        }
+                    }
                 }
             }
             

@@ -97,7 +97,7 @@ public class HttpResponse {
                 addHeader(HttpHeader.CONTENT_TYPE, MimeType.TEXT_HTML);
             }
             addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
-            addHeader(HttpHeader.SERVER, Properties.get(Properties.SERVER_NAME_PROPERTY));
+            addHeader(HttpHeader.SERVER, Properties.get(Properties.SERVER_NAME_PROPERTY) + " " + Properties.get(Properties.SERVER_VERSION_PROPERTY));
             try { exchange.sendResponseHeaders(responseCode, contentLength); } catch (IOException ex) {}
             headersSent = true;
         }

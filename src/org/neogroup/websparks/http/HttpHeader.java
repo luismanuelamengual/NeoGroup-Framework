@@ -3,6 +3,7 @@ package org.neogroup.websparks.http;
 
 public interface HttpHeader {
 
+    //Header names
     String ACCEPT = "Accept";
     String ACCEPT_CHARSET = "Accept-Charset";
     String ACCEPT_ENCODING = "Accept-Encoding";
@@ -24,9 +25,14 @@ public interface HttpHeader {
     String USER_AGENT = "User-Agent";
     String CONTENT_TYPE = "Content-Type";
     String CONTENT_LENGTH = "Content-Length";
+    String CONTENT_ENCODING = "Content-Encoding";
     String SERVER = "Server";
     String DATE = "Date";
     String LAST_MODIFIED = "Last-Modified";
     String CONNECTION = "Connection";
     String LOCATION = "Location";
+    String VARY = "Vary";
+
+    //Header Values
+    String GZIP_CONTENT_ENCODING = "gzip";
 }
