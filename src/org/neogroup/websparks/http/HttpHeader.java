@@ -35,4 +35,5 @@ public interface HttpHeader {
 
     //Header Values
     String GZIP_CONTENT_ENCODING = "gzip";
+    String APPLICATION_FORM_URL_ENCODED = "application/x-www-form-urlencoded";
 }

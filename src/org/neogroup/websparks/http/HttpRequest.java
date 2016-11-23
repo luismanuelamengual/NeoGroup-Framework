@@ -78,26 +78,10 @@ public class HttpRequest {
         
         if (parameters == null) {
             parameters = new HashMap<>();
-            try {
-                String query = getQuery() ;
-                if (query != null) {
-                    String pairs[] = query.split(QUERY_PARAMETERS_REGEX);
-                    for (String pair : pairs) {
-                        String param[] = pair.split(QUERY_PARAMETER_VALUES_REGEX);
-                        String key = null;
-                        String value = null;
-                        if (param.length > 0) {
-                            key = URLDecoder.decode(param[0], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
-                        }
-                        if (param.length > 1) {
-                            value = URLDecoder.decode(param[1], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
-                        }
-                        parameters.put(key, value);
-                    }
-                }
-            }
-            catch (Exception ex) {
-                throw new RuntimeException("Error reading request parameters !!");
+            appendParametersFromQuery(getQuery());
+            String requestContentType = getHeaders().getFirst(HttpHeader.CONTENT_TYPE);
+            if (requestContentType != null && requestContentType.equals(HttpHeader.APPLICATION_FORM_URL_ENCODED)) {
+                appendParametersFromQuery(new String(getBody()));
             }
         }
         return parameters;
@@ -105,5 +89,33 @@ public class HttpRequest {
     
     public String getParameter (String name) {
         return getParameters().get(name);
+    }
+
+    public boolean hasParameter (String name) {
+        return getParameters().containsKey(name);
+    }
+
+    private void appendParametersFromQuery (String query) {
+
+        try {
+            if (query != null) {
+                String pairs[] = query.split(QUERY_PARAMETERS_REGEX);
+                for (String pair : pairs) {
+                    String param[] = pair.split(QUERY_PARAMETER_VALUES_REGEX);
+                    String key = null;
+                    String value = null;
+                    if (param.length > 0) {
+                        key = URLDecoder.decode(param[0], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
+                    }
+                    if (param.length > 1) {
+                        value = URLDecoder.decode(param[1], System.getProperty(FILE_ENCODING_SYSTEM_PROPERTY_NAME));
+                    }
+                    parameters.put(key, value);
+                }
+            }
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Error reading request parameters !!");
+        }
     }
 }
