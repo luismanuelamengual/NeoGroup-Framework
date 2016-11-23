@@ -9,6 +9,7 @@ import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 import org.neogroup.websparks.routing.RouteParam;
 import org.neogroup.websparks.util.Scanner;
+import org.neogroup.websparks.util.Scanner.ClassFilter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -70,7 +71,7 @@ public class HttpControllersContext extends HttpContext {
     private void registerControllers () {
 
         Scanner controllersScanner = new Scanner();
-        Set<Class> controllerClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
+        Set<Class> controllerClasses = controllersScanner.findClasses(new ClassFilter() {
             @Override
             public boolean accept(Class clazz) {
                 return Controller.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
@@ -108,13 +109,17 @@ public class HttpControllersContext extends HttpContext {
                             parameters = new Object[controllerMethodParameters.length];
                             for (int i = 0; i < controllerMethodParameters.length; i++) {
                                 Parameter controllerMethodParameter = controllerMethodParameters[i];
-                                RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
-                                if (routeParamAnnotation != null) {
-                                    String parameterName = routeParamAnnotation.value();
-                                    parameters[i] = request.getParameter(parameterName);
+                                if (HttpRequest.class.isAssignableFrom(controllerMethodParameter.getType())) {
+                                    parameters[i] = request;
                                 }
                                 else {
-                                    parameters[i] = null;
+                                    RouteParam routeParamAnnotation = controllerMethodParameter.getAnnotation(RouteParam.class);
+                                    if (routeParamAnnotation != null) {
+                                        String parameterName = routeParamAnnotation.value();
+                                        parameters[i] = request.getParameter(parameterName);
+                                    } else {
+                                        parameters[i] = null;
+                                    }
                                 }
                             }
                         }

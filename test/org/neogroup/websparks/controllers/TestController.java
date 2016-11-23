@@ -2,7 +2,9 @@
 package org.neogroup.websparks.controllers;
 
 import org.neogroup.websparks.Controller;
+import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.routing.Route;
 import org.neogroup.websparks.routing.RouteAction;
 import org.neogroup.websparks.routing.RouteParam;
@@ -16,21 +18,15 @@ public class TestController extends Controller {
     }
 
     @RouteAction("pipo")
-    public String pipoAction (@RouteParam("name")String name) {
+    public String pipoAction (@RouteParam("name")String name, @RouteParam("lastName")String lastName) {
 
         StringBuilder response = new StringBuilder();
         response.append("Name: ");
         response.append(name);
         response.append("<br>");
         response.append("LastName: ");
-        response.append(getParameter("lastName"));
+        response.append(lastName);
         return response.toString();
-    }
-
-    @RouteAction("tito")
-    public void titoAction () {
-        setResponseCode(404);
-        print("hi Titoch !!");
     }
 
     @RouteAction("rama")
@@ -46,5 +42,14 @@ public class TestController extends Controller {
     public void errorAction () {
 
         int a = 10 / 0;
+    }
+
+    @RouteAction("lara")
+    public HttpResponse laraAction (HttpRequest request) {
+
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponseCode.NOT_FOUND);
+        response.setBody("Rama = " + request.getParameter("rama"));
+        return response;
     }
 }

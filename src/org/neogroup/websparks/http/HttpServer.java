@@ -5,7 +5,6 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import org.neogroup.websparks.util.MimeTypes;
 import org.neogroup.websparks.http.contexts.HttpContext;
-import org.neogroup.websparks.http.contexts.HttpContextInstance;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -41,8 +40,8 @@ public class HttpServer {
             @Override
             public void handle(HttpExchange exchange) {
 
-                HttpContextInstance instance = HttpContextInstance.createInstance(exchange);
-                HttpRequest request = instance.getRequest();
+                HttpContext.setCurrentExchange(exchange);
+                HttpRequest request = new HttpRequest();
                 HttpResponse response = null;
                 try {    
                     response = context.onContext(request);
@@ -57,7 +56,7 @@ public class HttpServer {
                 }
                 finally {
                     try { response.send(); } catch (Exception ex) {}
-                    HttpContextInstance.destroyInstance();
+                    HttpContext.setCurrentExchange(null);
                 }
             }
         });

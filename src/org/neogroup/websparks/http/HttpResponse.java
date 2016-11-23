@@ -3,8 +3,8 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import org.neogroup.websparks.http.contexts.HttpContext;
 import org.neogroup.websparks.util.MimeTypes;
-import org.neogroup.websparks.http.contexts.HttpContextInstance;
 import org.neogroup.websparks.util.Properties;
 
 import java.io.ByteArrayOutputStream;
@@ -33,7 +33,7 @@ public class HttpResponse {
     }
     
     public HttpResponse(int responseCode) {
-        this.exchange = HttpContextInstance.getInstance().getExchange();
+        this.exchange = HttpContext.getCurrentExchange();
         this.responseCode = responseCode;
         this.body = new ByteArrayOutputStream();
         this.headersSent = false;
