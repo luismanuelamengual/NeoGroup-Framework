@@ -6,14 +6,14 @@ import org.neogroup.websparks.http.HttpMethod;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-public abstract class HttpRestContext<T> extends HttpContext {
+public abstract class RestContext<T> extends Context {
 
-    public HttpRestContext(String path) {
+    public RestContext(String path) {
         super(path);
     }
 
     @Override
-    public HttpResponse onContext(HttpRequest request) {
+    public void onContext(HttpRequest request, HttpResponse response) {
         
         String method = request.getMethod();
         
@@ -32,12 +32,10 @@ public abstract class HttpRestContext<T> extends HttpContext {
                 resources = deleteResources(request);
                 break;
         }
-        
-        HttpResponse response = new HttpResponse();
+
         if (resources != null && !resources.isEmpty()) {
             response.setBody(encodeResources(resources));
         }
-        return response;
     }
     
     protected abstract List<T> decodeResources (byte[] content);

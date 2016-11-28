@@ -4,9 +4,7 @@ package org.neogroup.websparks.http;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import org.neogroup.websparks.Application;
-import org.neogroup.websparks.http.contexts.HttpContext;
 import org.neogroup.websparks.util.MimeTypes;
-import org.neogroup.websparks.util.Properties;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -28,14 +26,10 @@ public class HttpResponse {
     private int responseCode;
     private ByteArrayOutputStream body;
     private boolean headersSent;
-    
-    public HttpResponse() {
-        this(HttpResponseCode.OK);
-    }
-    
-    public HttpResponse(int responseCode) {
-        this.exchange = HttpContext.getCurrentExchange();
-        this.responseCode = responseCode;
+
+    public HttpResponse(HttpExchange exchange) {
+        this.exchange = exchange;
+        this.responseCode = HttpResponseCode.OK;
         this.body = new ByteArrayOutputStream();
         this.headersSent = false;
     }

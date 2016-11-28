@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-public class HttpFolderContext extends HttpContext {
+public class FolderContext extends Context {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
     private static final String FOLDER_HTML_DOCUMENT_TEMPLATE = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
@@ -23,11 +23,11 @@ public class HttpFolderContext extends HttpContext {
     
     private final Path folder;
     
-    public HttpFolderContext(String path, String folder) {
+    public FolderContext(String path, String folder) {
         this(path, Paths.get(folder));
     }
     
-    public HttpFolderContext(String path, Path folder) {
+    public FolderContext(String path, Path folder) {
         super(path);
         this.folder = folder;
     }
@@ -37,7 +37,7 @@ public class HttpFolderContext extends HttpContext {
     }
     
     @Override
-    public HttpResponse onContext(HttpRequest request) {
+    public void onContext(HttpRequest request, HttpResponse response) {
         
         String path = request.getPath().substring(getPath().length());
         String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
@@ -46,8 +46,7 @@ public class HttpFolderContext extends HttpContext {
         for(String element : pathElements) {
             filePath = filePath.resolve(element);
         }
-        
-        HttpResponse response = new HttpResponse();
+
         File file = filePath.toFile();
         if(file.exists()) {
             byte[] body = null;
@@ -99,6 +98,5 @@ public class HttpFolderContext extends HttpContext {
         else {
             throw new IllegalArgumentException("File \"" + file + "\" not found !!");
         }
-        return response;
     }
 }

@@ -3,8 +3,8 @@ package org.neogroup.websparks.http;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.util.MimeTypes;
-import org.neogroup.websparks.http.contexts.HttpContext;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -34,47 +34,44 @@ public class HttpServer {
         }
     }
     
-    public void addContext (HttpContext context) {
+    public void addContext (Context context) {
         
         server.createContext(context.getPath(), new HttpHandler() {
             @Override
             public void handle(HttpExchange exchange) {
 
-                HttpContext.setCurrentExchange(exchange);
-                HttpRequest request = new HttpRequest();
-                HttpResponse response = null;
+                HttpRequest request = new HttpRequest(exchange);
+                HttpResponse response = new HttpResponse(exchange);
                 try {    
-                    response = context.onContext(request);
+                    context.onContext(request, response);
                 }
                 catch (Throwable ex) {
                     try {
-                        response = context.onError (request, ex);
+                        context.onError (request, response, ex);
                     }
                     catch (Throwable ex2) {
-                        response = onError(request, ex);
+                        onError(request, response, ex);
                     }
                 }
                 finally {
                     try { response.send(); } catch (Exception ex) {}
-                    HttpContext.setCurrentExchange(null);
                 }
             }
         });
     }
     
-    public void removeContext (HttpContext context) {
+    public void removeContext (Context context) {
         server.removeContext(context.getPath());
     }
     
-    protected HttpResponse onError(HttpRequest request, Throwable throwable) {
+    protected void onError(HttpRequest request, HttpResponse response, Throwable throwable) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
-        HttpResponse response = new HttpResponse(HttpResponseCode.INTERNAL_SERVER_ERROR);
+        response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
         response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
         response.setBody(body);
-        return response;
     }
     
     public void start () {

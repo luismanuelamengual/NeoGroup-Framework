@@ -3,8 +3,8 @@ package org.neogroup.websparks;
 
 import org.neogroup.websparks.actions.WebAction;
 import org.neogroup.websparks.http.*;
-import org.neogroup.websparks.http.contexts.HttpContext;
-import org.neogroup.websparks.http.contexts.HttpFolderContext;
+import org.neogroup.websparks.http.contexts.Context;
+import org.neogroup.websparks.http.contexts.FolderContext;
 import org.neogroup.websparks.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
@@ -24,11 +24,10 @@ public class Application {
         this.routes = new HashMap<>();
 
         this.server = new HttpServer(1408);
-        this.server.addContext(new HttpContext("/") {
+        this.server.addContext(new Context("/") {
             @Override
-            public HttpResponse onContext(HttpRequest request) {
+            public void onContext(HttpRequest request, HttpResponse response) {
 
-                HttpResponse response = new HttpResponse();
                 Class<? extends WebAction> actionClass = resolveRoute(request.getPath());
 
                 try {
@@ -55,13 +54,12 @@ public class Application {
                     }
                     catch (Throwable ex) {}
                 }
-                return response;
             }
         });
     }
 
     public void registerResourcesContext (String contextPath, String folder) {
-        this.server.addContext(new HttpFolderContext(contextPath, folder));
+        this.server.addContext(new FolderContext(contextPath, folder));
     }
 
     public void registerRoute (String route, Class<? extends WebAction> action) {
