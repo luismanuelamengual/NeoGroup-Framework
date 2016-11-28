@@ -1,8 +1,6 @@
 
 package org.neogroup.websparks.http;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
 import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.util.MimeTypes;
 
@@ -36,27 +34,17 @@ public class HttpServer {
     
     public void addContext (Context context) {
         
-        server.createContext(context.getPath(), new HttpHandler() {
-            @Override
-            public void handle(HttpExchange exchange) {
+        server.createContext(context.getPath(), exchange -> {
 
-                HttpRequest request = new HttpRequest(exchange);
-                HttpResponse response = new HttpResponse(exchange);
-                try {    
-                    context.onContext(request, response);
-                }
-                catch (Throwable ex) {
-                    try {
-                        context.onError (request, response, ex);
-                    }
-                    catch (Throwable ex2) {
-                        onError(request, response, ex);
-                    }
-                }
-                finally {
-                    try { response.send(); } catch (Exception ex) {}
-                }
+            HttpRequest request = new HttpRequest(exchange);
+            HttpResponse response = new HttpResponse(exchange);
+            try {
+                context.onContext(request, response);
             }
+            catch (Throwable ex) {
+                try { onError(request, response, ex); } catch (Throwable ex2) {}
+            }
+            try { response.send(); } catch (Exception ex) {}
         });
     }
     
