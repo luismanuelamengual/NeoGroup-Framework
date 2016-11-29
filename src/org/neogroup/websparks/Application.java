@@ -2,13 +2,13 @@
 package org.neogroup.websparks;
 
 import org.neogroup.websparks.actions.WebAction;
-import org.neogroup.websparks.http.*;
+import org.neogroup.websparks.http.HttpRequest;
+import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpResponseCode;
+import org.neogroup.websparks.http.HttpServer;
 import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.http.contexts.FolderContext;
-import org.neogroup.websparks.util.MimeTypes;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,33 +27,26 @@ public class Application {
             public void onContext(HttpRequest request, HttpResponse response) {
 
                 Class<? extends WebAction> actionClass = resolveRoute(request.getPath());
-
-                try {
-                    if (actionClass != null) {
+                if (actionClass != null) {
+                    try {
                         Constructor<? extends WebAction> constructor = actionClass.getDeclaredConstructor(Application.class, HttpRequest.class, HttpResponse.class);
                         WebAction action = constructor.newInstance(Application.this, request, response);
                         action.execute();
                     }
-                    else {
-                        response.setResponseCode(HttpResponseCode.NOT_FOUND);
-                        response.setBody("Path \"" + request.getPath() + "\" not found !!");
+                    catch (Throwable ex) {
+                        throw new RuntimeException("Error executing action !!");
                     }
                 }
-                catch (Throwable throwable) {
-
-                    try {
-                        ByteArrayOutputStream out = new ByteArrayOutputStream();
-                        PrintStream printer = new PrintStream(out);
-                        throwable.printStackTrace(printer);
-                        byte[] body = out.toByteArray();
-                        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
-                        response.setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
-                        response.setBody(body);
-                    }
-                    catch (Throwable ex) {}
+                else {
+                    onRouteNotFound (request, response);
                 }
             }
         });
+    }
+
+    protected void onRouteNotFound (HttpRequest request, HttpResponse response) {
+        response.setResponseCode(HttpResponseCode.NOT_FOUND);
+        response.setBody("Path \"" + request.getPath() + "\" not found !!");
     }
 
     public void registerResourcesContext (String contextPath, String folder) {

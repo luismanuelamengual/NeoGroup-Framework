@@ -11,7 +11,7 @@ public class TestAction extends WebAction {
     }
 
     @Override
-    public void onAction() throws Exception {
+    public void execute() {
         setResponseCode(404);
         print ("hola ...<br>");
         print ("mundeli !!!!");
