@@ -15,8 +15,6 @@ import java.util.Map;
 
 public class Application {
 
-    public static final String APP_NAME = "WebSparks";
-
     private final HttpServer server;
     private final Map<String, Class<? extends WebAction>> routes;
 

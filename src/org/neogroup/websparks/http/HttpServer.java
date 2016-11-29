@@ -11,6 +11,8 @@ import java.util.concurrent.Executors;
 
 public class HttpServer {
 
+    public static final String SERVER_NAME = "WebSparks";
+
     private final com.sun.net.httpserver.HttpServer server;
 
     public HttpServer(int port) {
