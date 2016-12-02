@@ -6,40 +6,40 @@ import java.util.Map;
 
 public class Application {
 
-    private final Map<Class<? extends Command>, Controller> controllers;
+    private final Map<Class<? extends Command>, Processor> processors;
 
     public Application () {
-        controllers = new HashMap<>();
+        processors = new HashMap<>();
     }
 
-    public void registerController (Class<? extends Controller> controllerClass) {
+    public void registerProcessor(Class<? extends Processor> processorClass) {
         try {
-            Controller controller = controllerClass.newInstance();
+            Processor controller = processorClass.newInstance();
             controller.setApplication(this);
-            registerController(controller);
+            registerProcessor(controller);
         }
         catch (Throwable ex) {
-            throw new RuntimeException("Error registering controller \"" + controllerClass + "\"");
+            throw new RuntimeException("Error registering controller \"" + processorClass + "\"");
         }
     }
 
     public Object executeCommand (Command command) {
-        Controller controller = getController(command);
+        Processor controller = getController(command);
         return controller.execute(command);
     }
 
-    protected void registerController (Controller controller) {
+    protected void registerProcessor(Processor processor) {
 
-        ControllerComponent controllerAnnotation = controller.getClass().getAnnotation(ControllerComponent.class);
+        ProcessorComponent controllerAnnotation = processor.getClass().getAnnotation(ProcessorComponent.class);
         if(controllerAnnotation != null){
             Class<? extends Command>[] commandClasses = controllerAnnotation.commands();
             for (Class<? extends Command> commandClass : commandClasses) {
-                controllers.put(commandClass, controller);
+                processors.put(commandClass, processor);
             }
         }
     }
 
-    protected Controller getController (Command command) {
-        return controllers.get(command.getClass());
+    protected Processor getController (Command command) {
+        return processors.get(command.getClass());
     }
 }

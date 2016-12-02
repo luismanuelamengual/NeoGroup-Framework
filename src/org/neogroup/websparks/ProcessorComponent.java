@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ControllerComponent {
+public @interface ProcessorComponent {
 
     public Class<? extends Command>[] commands() default {};
 }

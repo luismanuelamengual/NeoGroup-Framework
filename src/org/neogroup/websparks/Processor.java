@@ -1,6 +1,6 @@
 package org.neogroup.websparks;
 
-public abstract class Controller<C extends Command> {
+public abstract class Processor<C extends Command> {
 
     private Application application;
 
@@ -12,7 +12,7 @@ public abstract class Controller<C extends Command> {
         this.application = application;
     }
 
-    protected Object executeCommand (Command commmand) {
+    protected Object executeAction(Command commmand) {
         return application.executeCommand(commmand);
     }
 

@@ -12,7 +12,7 @@ import java.util.Map;
 public class WebApplication extends Application {
 
     private final HttpServer server;
-    private final Map<String, WebController> controllers;
+    private final Map<String, WebProcessor> controllers;
 
     public WebApplication() {
 
@@ -30,21 +30,21 @@ public class WebApplication extends Application {
     }
 
     @Override
-    protected void registerController(Controller controller) {
-        super.registerController(controller);
+    protected void registerProcessor(Processor processor) {
+        super.registerProcessor(processor);
 
-        if (controller instanceof WebController) {
-            WebRoute webRouteAnnotation = controller.getClass().getAnnotation(WebRoute.class);
+        if (processor instanceof WebProcessor) {
+            WebRoute webRouteAnnotation = processor.getClass().getAnnotation(WebRoute.class);
             if (webRouteAnnotation != null) {
                 String path = webRouteAnnotation.path();
-                controllers.put(path, (WebController)controller);
+                controllers.put(path, (WebProcessor) processor);
             }
         }
     }
 
     @Override
-    protected Controller getController(Command command) {
-        Controller controller = null;
+    protected Processor getController(Command command) {
+        Processor controller = null;
         if (command instanceof WebCommand) {
             WebCommand webCommand = (WebCommand)command;
             String path = webCommand.getRequest().getPath();
