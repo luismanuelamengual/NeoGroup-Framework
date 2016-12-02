@@ -1,6 +1,7 @@
 
 package org.neogroup.websparks;
 
+import org.neogroup.websparks.actions.Route;
 import org.neogroup.websparks.actions.WebAction;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
@@ -8,10 +9,13 @@ import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.http.HttpServer;
 import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.http.contexts.FolderContext;
+import org.neogroup.websparks.util.Scanner;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Application {
 
@@ -55,6 +59,23 @@ public class Application {
 
     public void registerRoute (String route, Class<? extends WebAction> action) {
         routes.put(route, action);
+    }
+
+    public void registerRoutesByAnnotations () {
+        Scanner actionsScanner = new Scanner();
+        Set<Class> actionClasses = actionsScanner.findClasses(new Scanner.ClassFilter() {
+            @Override
+            public boolean accept(Class clazz) {
+                return WebAction.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
+            }
+        });
+        for (Class actionClass : actionClasses) {
+            Class<? extends WebAction> webActionClass = (Class<? extends WebAction>)actionClass;
+            Route routeAnnotation = webActionClass.getAnnotation(Route.class);
+            if (routeAnnotation != null) {
+                registerRoute(routeAnnotation.path(), webActionClass);
+            }
+        }
     }
 
     private Class<? extends WebAction> resolveRoute (String route) {

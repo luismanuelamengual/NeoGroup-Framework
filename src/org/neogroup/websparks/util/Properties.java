@@ -7,8 +7,6 @@ import java.io.InputStream;
 
 public class Properties extends java.util.Properties {
 
-    public static final String MAIN_PROPERTIES_FILE = "websparks.properties";
-
     public static final String SERVER_NAME_PROPERTY = "server_name";
     public static final String SERVER_VERSION_PROPERTY = "server_version";
 
@@ -16,12 +14,6 @@ public class Properties extends java.util.Properties {
 
     static {
         instance = new Properties();
-        try {
-            loadResource(MAIN_PROPERTIES_FILE);
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Error loading main properties file !!");
-        }
     }
 
     private Properties () {
