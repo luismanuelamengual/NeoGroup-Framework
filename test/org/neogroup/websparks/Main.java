@@ -1,14 +1,14 @@
 
 package org.neogroup.websparks;
 
-import org.neogroup.websparks.actions.TestAction;
+import org.neogroup.websparks.controllers.TestController;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Application application = new Application();
-        application.registerRoutesByAnnotations();
-        application.start();
+        WebApplication application = new WebApplication();
+        application.registerController(TestController.class);
+        application.startServer();
     }
 }
