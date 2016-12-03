@@ -1,5 +1,5 @@
 package org.neogroup.websparks;
 
-public abstract class Command {
+public abstract class Action {
 
 }

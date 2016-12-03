@@ -1,15 +1,19 @@
 
 package org.neogroup.websparks;
 
+import org.neogroup.websparks.util.Scanner;
+
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Application {
 
-    private final Map<Class<? extends Command>, Executor> processors;
+    private final Map<Class<? extends Action>, Executor> executors;
 
     public Application () {
-        processors = new HashMap<>();
+        executors = new HashMap<>();
     }
 
     public void registerExecutor(Class<? extends Executor> executorClass) {
@@ -19,27 +23,41 @@ public class Application {
             registerExecutor(executor);
         }
         catch (Throwable ex) {
-            throw new RuntimeException("Error registering executor \"" + executorClass + "\"");
+            throw new RuntimeException("Error registering executor \"" + executorClass + "\"", ex);
         }
     }
 
-    public Object executeCommand (Command command) {
-        Executor controller = getExecutor(command);
-        return controller.execute(command);
+    public void registerComponents () {
+
+        Scanner controllersScanner = new Scanner();
+        Set<Class> executorClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
+            @Override
+            public boolean accept(Class clazz) {
+                return Executor.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
+            }
+        });
+        for (Class executorClass : executorClasses) {
+            registerExecutor(executorClass);
+        }
+    }
+
+    public Object executeCommand (Action action) {
+        Executor controller = getExecutor(action);
+        return controller.execute(action);
     }
 
     protected void registerExecutor(Executor processor) {
 
         ExecutorComponent controllerAnnotation = processor.getClass().getAnnotation(ExecutorComponent.class);
         if(controllerAnnotation != null){
-            Class<? extends Command>[] commandClasses = controllerAnnotation.commands();
-            for (Class<? extends Command> commandClass : commandClasses) {
-                processors.put(commandClass, processor);
+            Class<? extends Action>[] commandClasses = controllerAnnotation.commands();
+            for (Class<? extends Action> commandClass : commandClasses) {
+                executors.put(commandClass, processor);
             }
         }
     }
 
-    protected Executor getExecutor(Command command) {
-        return processors.get(command.getClass());
+    protected Executor getExecutor(Action action) {
+        return executors.get(action.getClass());
     }
 }

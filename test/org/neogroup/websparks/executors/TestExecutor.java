@@ -7,7 +7,7 @@ import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
 @ExecutorComponent
-@WebRoute(path = "/test/")
+@WebRoute(path="/rama/")
 public class TestExecutor extends WebExecutor {
 
     @Override

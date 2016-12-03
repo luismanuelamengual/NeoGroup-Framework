@@ -3,12 +3,12 @@ package org.neogroup.websparks;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-public class WebCommand extends Command {
+public class WebAction extends Action {
 
     private final HttpRequest request;
     private final HttpResponse response;
 
-    public WebCommand(HttpRequest request, HttpResponse response) {
+    public WebAction(HttpRequest request, HttpResponse response) {
         this.request = request;
         this.response = response;
     }

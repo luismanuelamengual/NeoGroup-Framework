@@ -12,18 +12,18 @@ import java.util.Map;
 public class WebApplication extends Application {
 
     private final HttpServer server;
-    private final Map<String, WebExecutor> controllers;
+    private final Map<String, WebExecutor> executors;
 
     public WebApplication() {
 
         super();
-        this.controllers = new HashMap<>();
+        this.executors = new HashMap<>();
         this.server = new HttpServer(1408);
         this.server.addContext(new Context("/") {
             @Override
             public void onContext(HttpRequest request, HttpResponse response) {
 
-                WebCommand command = new WebCommand(request, response);
+                WebAction command = new WebAction(request, response);
                 executeCommand(command);
             }
         });
@@ -37,21 +37,21 @@ public class WebApplication extends Application {
             WebRoute webRouteAnnotation = executor.getClass().getAnnotation(WebRoute.class);
             if (webRouteAnnotation != null) {
                 String path = webRouteAnnotation.path();
-                controllers.put(path, (WebExecutor) executor);
+                executors.put(path, (WebExecutor) executor);
             }
         }
     }
 
     @Override
-    protected Executor getExecutor(Command command) {
+    protected Executor getExecutor(Action action) {
         Executor controller = null;
-        if (command instanceof WebCommand) {
-            WebCommand webCommand = (WebCommand)command;
+        if (action instanceof WebAction) {
+            WebAction webCommand = (WebAction) action;
             String path = webCommand.getRequest().getPath();
-            controller = controllers.get(path);
+            controller = executors.get(path);
         }
         else {
-            controller = super.getExecutor(command);
+            controller = super.getExecutor(action);
         }
         return controller;
     }
