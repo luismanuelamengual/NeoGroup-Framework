@@ -41,9 +41,9 @@ public class Application {
         }
     }
 
-    public Object executeCommand (Action action) {
-        Executor controller = getExecutor(action);
-        return controller.execute(action);
+    public Object executeAction(Action action) {
+        Executor executor = getExecutor(action);
+        return executor.execute(action);
     }
 
     protected void registerExecutor(Executor processor) {

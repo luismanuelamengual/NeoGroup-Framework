@@ -24,7 +24,7 @@ public class WebApplication extends Application {
             public void onContext(HttpRequest request, HttpResponse response) {
 
                 WebAction command = new WebAction(request, response);
-                executeCommand(command);
+                executeAction(command);
             }
         });
     }

@@ -13,7 +13,7 @@ public abstract class Executor<C extends Action> {
     }
 
     protected Object executeAction(Action commmand) {
-        return application.executeCommand(commmand);
+        return application.executeAction(commmand);
     }
 
     public abstract Object execute (C command);
