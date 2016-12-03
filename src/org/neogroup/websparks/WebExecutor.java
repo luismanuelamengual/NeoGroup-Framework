@@ -3,7 +3,7 @@ package org.neogroup.websparks;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-public abstract class WebProcessor extends Processor<WebCommand> {
+public abstract class WebExecutor extends Executor<WebCommand> {
 
     @Override
     public Object execute(WebCommand command) {

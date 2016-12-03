@@ -1,14 +1,14 @@
 
 package org.neogroup.websparks;
 
-import org.neogroup.websparks.processors.TestProcessor;
+import org.neogroup.websparks.executors.TestExecutor;
 
 public class Main {
 
     public static void main(String[] args) {
 
         WebApplication application = new WebApplication();
-        application.registerProcessor(TestProcessor.class);
+        application.registerExecutor(TestExecutor.class);
         application.startServer();
     }
 }

@@ -1,6 +1,6 @@
 package org.neogroup.websparks;
 
-public abstract class Processor<C extends Command> {
+public abstract class Executor<C extends Command> {
 
     private Application application;
 

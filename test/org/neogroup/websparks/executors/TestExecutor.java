@@ -1,14 +1,14 @@
-package org.neogroup.websparks.processors;
+package org.neogroup.websparks.executors;
 
-import org.neogroup.websparks.ProcessorComponent;
-import org.neogroup.websparks.WebProcessor;
+import org.neogroup.websparks.ExecutorComponent;
+import org.neogroup.websparks.WebExecutor;
 import org.neogroup.websparks.WebRoute;
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
 
-@ProcessorComponent
+@ExecutorComponent
 @WebRoute(path = "/test/")
-public class TestProcessor extends WebProcessor {
+public class TestExecutor extends WebExecutor {
 
     @Override
     protected void onRequest(HttpRequest request, HttpResponse response) {
