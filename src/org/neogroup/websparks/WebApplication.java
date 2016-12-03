@@ -22,9 +22,8 @@ public class WebApplication extends Application {
         this.server.addContext(new Context("/") {
             @Override
             public void onContext(HttpRequest request, HttpResponse response) {
-
-                WebAction command = new WebAction(request, response);
-                executeAction(command);
+                WebAction action = new WebAction(request, response);
+                executeAction(action);
             }
         });
     }
@@ -44,16 +43,16 @@ public class WebApplication extends Application {
 
     @Override
     protected Executor getExecutor(Action action) {
-        Executor controller = null;
+        Executor executor = null;
         if (action instanceof WebAction) {
-            WebAction webCommand = (WebAction) action;
-            String path = webCommand.getRequest().getPath();
-            controller = executors.get(path);
+            WebAction webAction = (WebAction) action;
+            String path = webAction.getRequest().getPath();
+            executor = executors.get(path);
         }
         else {
-            controller = super.getExecutor(action);
+            executor = super.getExecutor(action);
         }
-        return controller;
+        return executor;
     }
 
     public void registerResourcesContext (String contextPath, String folder) {
