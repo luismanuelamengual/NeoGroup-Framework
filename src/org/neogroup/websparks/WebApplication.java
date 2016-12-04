@@ -2,6 +2,7 @@ package org.neogroup.websparks;
 
 import org.neogroup.websparks.http.HttpRequest;
 import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.websparks.http.HttpResponseCode;
 import org.neogroup.websparks.http.HttpServer;
 import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.http.contexts.FolderContext;
@@ -53,6 +54,24 @@ public class WebApplication extends Application {
             executor = super.getExecutor(action);
         }
         return executor;
+    }
+
+    @Override
+    protected Object onActionError(Action action, Throwable throwable) {
+        Object response = null;
+        if (action instanceof WebAction && throwable instanceof ExecutorNotFoundException) {
+            WebAction webAction = (WebAction)action;
+            onRouteNotFound(webAction.getRequest(), webAction.getResponse());
+        }
+        else {
+            response = super.onActionError(action, throwable);
+        }
+        return response;
+    }
+
+    protected void onRouteNotFound (HttpRequest request, HttpResponse response) {
+        response.setResponseCode(HttpResponseCode.NOT_FOUND);
+        response.write("Executor not found for path \"" + request.getPath() + "\"");
     }
 
     public void registerResourcesContext (String contextPath, String folder) {

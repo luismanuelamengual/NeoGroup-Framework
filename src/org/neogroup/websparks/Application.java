@@ -42,8 +42,18 @@ public class Application {
     }
 
     public Object executeAction(Action action) {
+        Object response = null;
         Executor executor = getExecutor(action);
-        return executor.execute(action);
+        try {
+            if (executor == null) {
+                throw new ExecutorNotFoundException();
+            }
+            response = executor.execute(action);
+        }
+        catch (Throwable throwable) {
+            response = onActionError(action, throwable);
+        }
+        return response;
     }
 
     protected void registerExecutor(Executor processor) {
@@ -59,5 +69,9 @@ public class Application {
 
     protected Executor getExecutor(Action action) {
         return executors.get(action.getClass());
+    }
+
+    protected Object onActionError(Action action, Throwable throwable) {
+        return null;
     }
 }
