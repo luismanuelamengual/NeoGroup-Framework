@@ -1,6 +1,7 @@
 
 package org.neogroup.websparks;
 
+import org.neogroup.websparks.util.Properties;
 import org.neogroup.websparks.util.Scanner;
 
 import java.lang.reflect.Modifier;
@@ -10,10 +11,18 @@ import java.util.Set;
 
 public class Application {
 
+    private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
+
     private final Map<Class<? extends Action>, Executor> executors;
+    private final Properties properties;
 
     public Application () {
         executors = new HashMap<>();
+        properties = new Properties();
+        try {
+            properties.loadResource(PROPERTIES_RESOURCE_NAME);
+        }
+        catch (Exception ex) {}
     }
 
     public void registerExecutor(Class<? extends Executor> executorClass) {
@@ -54,6 +63,10 @@ public class Application {
             response = onActionError(action, throwable);
         }
         return response;
+    }
+
+    public Properties getProperties() {
+        return properties;
     }
 
     protected void registerExecutor(Executor processor) {
