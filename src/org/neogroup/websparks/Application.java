@@ -8,21 +8,37 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.*;
 
 public class Application {
 
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
+    private final static String LOGGER_NAME = "websparks";
+    private final static String LOGGER_PROPERTIES_RESOURCE_NAME_PROPERTY = "loggerPropertiesReourceName";
 
     private final Map<Class<? extends Action>, Executor> executors;
     private final Properties properties;
+    private final Logger logger;
 
     public Application () {
+
         executors = new HashMap<>();
+
+        //Propiedades de la aplicación
         properties = new Properties();
         try {
             properties.loadResource(PROPERTIES_RESOURCE_NAME);
         }
         catch (Exception ex) {}
+
+        //Logger de la aplicación
+        String loggerResourceName = properties.get(LOGGER_PROPERTIES_RESOURCE_NAME_PROPERTY);
+        if (loggerResourceName != null) {
+            logger = Logger.getLogger(LOGGER_NAME, loggerResourceName);
+        }
+        else {
+            logger = Logger.getLogger(LOGGER_NAME);
+        }
     }
 
     public void registerExecutor(Class<? extends Executor> executorClass) {
@@ -67,6 +83,10 @@ public class Application {
 
     public Properties getProperties() {
         return properties;
+    }
+
+    public Logger getLogger() {
+        return logger;
     }
 
     protected void registerExecutor(Executor processor) {

@@ -80,9 +80,11 @@ public class WebApplication extends Application {
 
     public void startServer () {
         server.start();
+        getLogger().info("Web Server started !!" );
     }
 
     public void stopServer () {
         server.stop();
+        getLogger().info("Web Server stopped !!" );
     }
 }
