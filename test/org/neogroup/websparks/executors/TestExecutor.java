@@ -13,6 +13,7 @@ public class TestExecutor extends WebExecutor {
     @Override
     protected void onRequest(HttpRequest request, HttpResponse response) {
 
+        getLogger().info("Entering request !!");
         response.write("candulichssss !!!");
         response.write("<br>my name is: " + request.getParameter("name"));
     }

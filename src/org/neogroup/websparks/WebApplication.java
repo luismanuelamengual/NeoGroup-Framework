@@ -1,12 +1,12 @@
 package org.neogroup.websparks;
 
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
-import org.neogroup.websparks.http.HttpResponseCode;
-import org.neogroup.websparks.http.HttpServer;
+import org.neogroup.websparks.http.*;
 import org.neogroup.websparks.http.contexts.Context;
 import org.neogroup.websparks.http.contexts.FolderContext;
+import org.neogroup.websparks.util.MimeTypes;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,9 +59,21 @@ public class WebApplication extends Application {
     @Override
     protected Object onActionError(Action action, Throwable throwable) {
         Object response = null;
-        if (action instanceof WebAction && throwable instanceof ExecutorNotFoundException) {
+        if (action instanceof WebAction) {
             WebAction webAction = (WebAction)action;
-            onRouteNotFound(webAction.getRequest(), webAction.getResponse());
+            if (throwable instanceof ExecutorNotFoundException) {
+                onRouteNotFound(webAction.getRequest(), webAction.getResponse());
+            }
+            else {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                PrintStream printer = new PrintStream(out);
+                throwable.printStackTrace(printer);
+                byte[] body = out.toByteArray();
+                webAction.getResponse().addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+                webAction.getResponse().setResponseCode(HttpResponseCode.INTERNAL_SERVER_ERROR);
+                webAction.getResponse().setBody(body);
+                response = super.onActionError(action, throwable);
+            }
         }
         else {
             response = super.onActionError(action, throwable);

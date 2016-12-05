@@ -105,6 +105,7 @@ public class Application {
     }
 
     protected Object onActionError(Action action, Throwable throwable) {
+        getLogger().log(Level.WARNING, "Action error", throwable);
         return null;
     }
 }
