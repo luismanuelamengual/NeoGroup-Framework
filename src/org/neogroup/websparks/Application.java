@@ -42,10 +42,12 @@ public class Application {
     }
 
     public void registerExecutor(Class<? extends Executor> executorClass) {
+
         try {
             Executor executor = executorClass.newInstance();
             executor.setApplication(this);
             registerExecutor(executor);
+            getLogger().log(Level.INFO,"Executor \"{0}\" registered !!", executorClass.getName());
         }
         catch (Throwable ex) {
             throw new RuntimeException("Error registering executor \"" + executorClass + "\"", ex);
@@ -54,6 +56,7 @@ public class Application {
 
     public void registerComponents () {
 
+        getLogger().log(Level.INFO,"Scanning classpaths components ...");
         Scanner controllersScanner = new Scanner();
         Set<Class> executorClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
             @Override
@@ -61,6 +64,7 @@ public class Application {
                 return Executor.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
             }
         });
+        getLogger().log(Level.INFO,"Registering executors ...");
         for (Class executorClass : executorClasses) {
             registerExecutor(executorClass);
         }
