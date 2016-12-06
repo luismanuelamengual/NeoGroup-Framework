@@ -1,10 +1,11 @@
 
-package org.neogroup.websparks.http.contexts;
+package org.neogroup.sparks.web.http.contexts;
 
 import java.util.List;
-import org.neogroup.websparks.http.HttpMethod;
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
+
+import org.neogroup.sparks.web.http.HttpMethod;
+import org.neogroup.sparks.web.http.HttpRequest;
+import org.neogroup.sparks.web.http.HttpResponse;
 
 public abstract class RestContext<T> extends Context {
 
@@ -19,7 +20,7 @@ public abstract class RestContext<T> extends Context {
         
         List<T> resources = null;
         switch (method) {
-            case HttpMethod.GET:  
+            case HttpMethod.GET:
                 resources = getResources(request);
                 break;
             case HttpMethod.PUT:

@@ -1,9 +1,13 @@
-package org.neogroup.websparks;
+package org.neogroup.sparks.web;
 
-import org.neogroup.websparks.http.*;
-import org.neogroup.websparks.http.contexts.Context;
-import org.neogroup.websparks.http.contexts.FolderContext;
-import org.neogroup.websparks.util.MimeTypes;
+import org.neogroup.sparks.Action;
+import org.neogroup.sparks.Application;
+import org.neogroup.sparks.Executor;
+import org.neogroup.sparks.ExecutorNotFoundException;
+import org.neogroup.sparks.web.http.contexts.Context;
+import org.neogroup.sparks.web.http.contexts.FolderContext;
+import org.neogroup.sparks.util.MimeTypes;
+import org.neogroup.sparks.web.http.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

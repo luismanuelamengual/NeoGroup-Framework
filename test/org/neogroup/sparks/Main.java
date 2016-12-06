@@ -1,5 +1,7 @@
 
-package org.neogroup.websparks;
+package org.neogroup.sparks;
+
+import org.neogroup.sparks.web.WebApplication;
 
 public class Main {
 

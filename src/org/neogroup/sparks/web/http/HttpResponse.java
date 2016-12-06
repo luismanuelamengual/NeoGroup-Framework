@@ -1,9 +1,9 @@
 
-package org.neogroup.websparks.http;
+package org.neogroup.sparks.web.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import org.neogroup.websparks.util.MimeTypes;
+import org.neogroup.sparks.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

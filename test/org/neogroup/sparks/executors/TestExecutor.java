@@ -1,10 +1,10 @@
-package org.neogroup.websparks.executors;
+package org.neogroup.sparks.executors;
 
-import org.neogroup.websparks.ExecutorComponent;
-import org.neogroup.websparks.WebExecutor;
-import org.neogroup.websparks.WebRoute;
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.sparks.ExecutorComponent;
+import org.neogroup.sparks.web.WebExecutor;
+import org.neogroup.sparks.web.WebRoute;
+import org.neogroup.sparks.web.http.HttpRequest;
+import org.neogroup.sparks.web.http.HttpResponse;
 
 @ExecutorComponent
 @WebRoute(path="/rama/")

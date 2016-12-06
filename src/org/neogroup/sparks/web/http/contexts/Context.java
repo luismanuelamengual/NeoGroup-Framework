@@ -1,8 +1,8 @@
 
-package org.neogroup.websparks.http.contexts;
+package org.neogroup.sparks.web.http.contexts;
 
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.sparks.web.http.HttpRequest;
+import org.neogroup.sparks.web.http.HttpResponse;
 
 public abstract class Context {
 

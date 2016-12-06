@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.util.encoding;
+package org.neogroup.sparks.util.encoding;
 
 import java.io.*;
 import java.util.zip.GZIPInputStream;

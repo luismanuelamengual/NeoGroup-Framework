@@ -1,7 +1,8 @@
-package org.neogroup.websparks;
+package org.neogroup.sparks.web;
 
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
+import org.neogroup.sparks.Executor;
+import org.neogroup.sparks.web.http.HttpResponse;
+import org.neogroup.sparks.web.http.HttpRequest;
 
 public abstract class WebExecutor extends Executor<WebAction> {
 

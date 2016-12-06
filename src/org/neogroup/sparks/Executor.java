@@ -1,6 +1,6 @@
-package org.neogroup.websparks;
+package org.neogroup.sparks;
 
-import org.neogroup.websparks.util.Properties;
+import org.neogroup.sparks.util.Properties;
 
 import java.util.logging.Logger;
 

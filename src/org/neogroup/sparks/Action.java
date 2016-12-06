@@ -1,4 +1,4 @@
-package org.neogroup.websparks;
+package org.neogroup.sparks;
 
 public abstract class Action {
 

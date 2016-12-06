@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.http;
+package org.neogroup.sparks.web.http;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;

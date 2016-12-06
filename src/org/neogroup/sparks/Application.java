@@ -1,8 +1,8 @@
 
-package org.neogroup.websparks;
+package org.neogroup.sparks;
 
-import org.neogroup.websparks.util.Properties;
-import org.neogroup.websparks.util.Scanner;
+import org.neogroup.sparks.util.Properties;
+import org.neogroup.sparks.util.Scanner;
 
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ import java.util.logging.*;
 public class Application {
 
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
-    private final static String LOGGER_NAME = "websparks";
+    private final static String LOGGER_NAME = "sparks";
     private final static String LOGGER_PROPERTIES_RESOURCE_NAME_PROPERTY = "loggerPropertiesReourceName";
 
     private final Map<Class<? extends Action>, Executor> executors;

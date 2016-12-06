@@ -1,5 +1,5 @@
 
-package org.neogroup.websparks.util;
+package org.neogroup.sparks.util;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package org.neogroup.websparks;
+package org.neogroup.sparks;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface WebRoute {
+public @interface ExecutorComponent {
 
-    public String path() default "/";
+    public Class<? extends Action>[] commands() default {};
 }

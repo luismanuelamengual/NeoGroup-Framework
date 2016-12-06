@@ -1,8 +1,8 @@
 
-package org.neogroup.websparks.http;
+package org.neogroup.sparks.web.http;
 
-import org.neogroup.websparks.http.contexts.Context;
-import org.neogroup.websparks.util.MimeTypes;
+import org.neogroup.sparks.web.http.contexts.Context;
+import org.neogroup.sparks.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

@@ -1,11 +1,11 @@
 
-package org.neogroup.websparks.http.contexts;
+package org.neogroup.sparks.web.http.contexts;
 
-import org.neogroup.websparks.util.MimeTypes;
-import org.neogroup.websparks.http.HttpHeader;
-import org.neogroup.websparks.http.HttpRequest;
-import org.neogroup.websparks.http.HttpResponse;
-import org.neogroup.websparks.util.encoding.GZIPCompression;
+import org.neogroup.sparks.web.http.HttpHeader;
+import org.neogroup.sparks.util.MimeTypes;
+import org.neogroup.sparks.util.encoding.GZIPCompression;
+import org.neogroup.sparks.web.http.HttpRequest;
+import org.neogroup.sparks.web.http.HttpResponse;
 
 import java.io.File;
 import java.io.IOException;
