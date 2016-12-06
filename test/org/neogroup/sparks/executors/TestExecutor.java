@@ -15,6 +15,7 @@ public class TestExecutor extends WebExecutor {
 
         getLogger().info("Entering request !!");
         response.write("candulichssss !!!");
+        response.write(getString("name"));
         response.write("<br>my name is: " + request.getParameter("name"));
     }
 }
