@@ -41,7 +41,7 @@ public class Application {
         }
     }
 
-    public void registerExecutor(Class<? extends Executor> executorClass) {
+    public final void registerExecutor(Class<? extends Executor> executorClass) {
 
         try {
             Executor executor = executorClass.newInstance();
@@ -54,7 +54,7 @@ public class Application {
         }
     }
 
-    public void registerComponents () {
+    public final void registerComponents () {
 
         getLogger().log(Level.INFO,"Scanning classpaths components ...");
         Scanner controllersScanner = new Scanner();
@@ -70,7 +70,7 @@ public class Application {
         }
     }
 
-    public Object executeAction(Action action) {
+    public final Object executeAction(Action action) {
         Object response = null;
         Executor executor = getExecutor(action);
         try {
@@ -85,21 +85,21 @@ public class Application {
         return response;
     }
 
-    public Properties getProperties() {
+    public final Properties getProperties() {
         return properties;
     }
 
-    public Logger getLogger() {
+    public final Logger getLogger() {
         return logger;
     }
 
-    protected void registerExecutor(Executor processor) {
+    protected void registerExecutor(Executor executor) {
 
-        ExecutorComponent controllerAnnotation = processor.getClass().getAnnotation(ExecutorComponent.class);
+        ExecutorComponent controllerAnnotation = executor.getClass().getAnnotation(ExecutorComponent.class);
         if(controllerAnnotation != null){
-            Class<? extends Action>[] commandClasses = controllerAnnotation.commands();
-            for (Class<? extends Action> commandClass : commandClasses) {
-                executors.put(commandClass, processor);
+            Class<? extends Action>[] actionClasses = controllerAnnotation.commands();
+            for (Class<? extends Action> commandClass : actionClasses) {
+                executors.put(commandClass, executor);
             }
         }
     }
