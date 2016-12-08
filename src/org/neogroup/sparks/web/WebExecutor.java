@@ -7,9 +7,9 @@ import org.neogroup.sparks.web.http.HttpRequest;
 public abstract class WebExecutor extends Executor<WebAction> {
 
     @Override
-    public Object execute(WebAction command) {
+    public Object execute(WebAction action) {
 
-        onRequest(command.getRequest(), command.getResponse());
+        onRequest(action.getRequest(), action.getResponse());
         return true;
     }
 

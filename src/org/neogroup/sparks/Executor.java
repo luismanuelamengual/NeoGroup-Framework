@@ -5,7 +5,7 @@ import org.neogroup.sparks.util.Properties;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public abstract class Executor<C extends Action> {
+public abstract class Executor<A extends Action> {
 
     private Application application;
 
@@ -45,5 +45,5 @@ public abstract class Executor<C extends Action> {
         return application.getString(bundleName, key, locale);
     }
 
-    public abstract Object execute (C command);
+    public abstract Object execute (A action);
 }
