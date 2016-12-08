@@ -9,5 +9,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ExecutorComponent {
 
-    public Class<? extends Action>[] commands() default {};
+    public Class<? extends Action>[] actions() default {};
 }

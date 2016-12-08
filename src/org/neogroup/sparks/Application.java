@@ -117,7 +117,7 @@ public class Application {
 
         ExecutorComponent controllerAnnotation = executor.getClass().getAnnotation(ExecutorComponent.class);
         if(controllerAnnotation != null){
-            Class<? extends Action>[] actionClasses = controllerAnnotation.commands();
+            Class<? extends Action>[] actionClasses = controllerAnnotation.actions();
             for (Class<? extends Action> commandClass : actionClasses) {
                 executors.put(commandClass, executor);
             }
