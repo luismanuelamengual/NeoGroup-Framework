@@ -32,6 +32,9 @@ public interface HttpHeader {
     String CONNECTION = "Connection";
     String LOCATION = "Location";
     String VARY = "Vary";
+    String E_TAG = "ETag";
+    String CACHE_CONTROL = "Cache-Control";
+    String EXPIRES = "Expires";
 
     //Header Values
     String GZIP_CONTENT_ENCODING = "gzip";

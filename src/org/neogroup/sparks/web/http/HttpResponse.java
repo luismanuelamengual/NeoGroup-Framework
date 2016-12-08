@@ -7,20 +7,10 @@ import org.neogroup.sparks.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class HttpResponse {
-    
-    public static final String SERVER_DATE_FORMAT = "EEE, dd MMM yyyy HH:mm:ss z";
-    
-    private static DateFormat dateFormatter;
-    
-    static {
-        dateFormatter = new SimpleDateFormat(SERVER_DATE_FORMAT);
-    }
-    
+
     private final HttpExchange exchange;
     private int responseCode;
     private ByteArrayOutputStream body;
@@ -82,7 +72,7 @@ public class HttpResponse {
     }
 
     private void sendHeaders () {
-        sendHeaders(body != null? body.size() : -1);
+        sendHeaders(body.size() > 0? body.size() : -1);
     }
 
     private void sendHeaders (long contentLength) {
@@ -90,7 +80,7 @@ public class HttpResponse {
             if (!getHeaders().containsKey(HttpHeader.CONTENT_TYPE)) {
                 addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_HTML);
             }
-            addHeader(HttpHeader.DATE, dateFormatter.format(new Date()));
+            addHeader(HttpHeader.DATE, HttpServerUtils.formatDate(new Date()));
             addHeader(HttpHeader.SERVER, HttpServer.SERVER_NAME);
             try { exchange.sendResponseHeaders(responseCode, contentLength); } catch (IOException ex) {}
             headersSent = true;
