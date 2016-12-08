@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 
-public class FolderContext extends Context {
+public class FilesContext extends Context {
 
     private static final String DEFAULT_DIGEST_ENCRYPTION = "MD5";
     private static final String URI_FOLDER_SEPARATOR = "/";
@@ -27,11 +27,11 @@ public class FolderContext extends Context {
 
     private final Path folder;
     
-    public FolderContext(String path, String folder) {
+    public FilesContext(String path, String folder) {
         this(path, Paths.get(folder));
     }
     
-    public FolderContext(String path, Path folder) {
+    public FilesContext(String path, Path folder) {
         super(path);
         this.folder = folder;
     }

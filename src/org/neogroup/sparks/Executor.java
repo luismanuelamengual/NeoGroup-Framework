@@ -29,20 +29,20 @@ public abstract class Executor<A extends Action> {
         return application.getLogger();
     }
 
-    protected String getString(String key) {
-        return application.getString(key);
+    public String getString(String key, Object... args) {
+        return application.getString(key, args);
     }
 
-    protected String getString(String key, Locale locale) {
-        return application.getString(key, locale);
+    public String getString(String key, Locale locale, Object... args) {
+        return application.getString(key, locale, args);
     }
 
-    protected String getString(String bundleName, String key) {
-        return application.getString(bundleName, key);
+    public String getBundleString(String bundleName, String key, Object... args) {
+        return application.getBundleString(bundleName, key, args);
     }
 
-    protected String getString(String bundleName, String key, Locale locale) {
-        return application.getString(bundleName, key, locale);
+    public String getBundleString(String bundleName, String key, Locale locale, Object... args) {
+        return application.getBundleString(bundleName, key, locale, args);
     }
 
     public abstract Object execute (A action);

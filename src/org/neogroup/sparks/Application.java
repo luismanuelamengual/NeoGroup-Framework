@@ -11,7 +11,7 @@ import java.util.logging.*;
 public class Application {
 
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
-    private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "messages";
+    private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "localization/messages";
     private final static String LOGGER_NAME = "sparks_logger";
     private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "loggerBundleName";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messagesBundleName";
@@ -93,24 +93,24 @@ public class Application {
         return logger;
     }
 
-    public String getString (String key) {
-        return getString(key, Locale.getDefault());
+    public String getString (String key, Object... args) {
+        return getString(key, Locale.getDefault(), args);
     }
 
-    public String getString (String key, Locale locale) {
+    public String getString (String key, Locale locale, Object... args) {
         String bundleName = properties.get(DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY);
         if (bundleName == null) {
             bundleName = DEFAULT_MESSAGES_BUNDLE_NAME;
         }
-        return ResourceBundle.getBundle(bundleName, locale).getString(key);
+        return getBundleString(bundleName, key, locale, args);
     }
 
-    public String getString (String bundleName, String key) {
-        return getString(bundleName, key, Locale.getDefault());
+    public String getBundleString (String bundleName, String key, Object... args) {
+        return getBundleString(bundleName, key, Locale.getDefault(), args);
     }
 
-    public String getString (String bundleName, String key, Locale locale) {
-        return ResourceBundle.getBundle(bundleName, locale).getString(key);
+    public String getBundleString (String bundleName, String key, Locale locale, Object... args) {
+        return String.format(ResourceBundle.getBundle(bundleName, locale).getString(key), args);
     }
 
     protected void registerExecutor(Executor executor) {

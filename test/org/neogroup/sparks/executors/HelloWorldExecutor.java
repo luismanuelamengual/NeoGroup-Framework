@@ -8,14 +8,11 @@ import org.neogroup.sparks.web.http.HttpResponse;
 
 @ExecutorComponent
 @WebRoute(path="/rama/")
-public class TestExecutor extends WebExecutor {
+public class HelloWorldExecutor extends WebExecutor {
 
     @Override
     protected void onRequest(HttpRequest request, HttpResponse response) {
 
-        getLogger().info("Entering request !!");
-        response.write("candulichssss !!!");
-        response.write(getString("name"));
-        response.write("<br>my name is: " + request.getParameter("name"));
+        response.write(getString("welcome_phrase", request.getParameter("name")));
     }
 }
