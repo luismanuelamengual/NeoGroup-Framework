@@ -25,18 +25,14 @@ public class FilesContext extends Context {
     private static final String FOLDER_HTML_LIST_TEMPLATE = "<ul style=\"list-style-type: none;\">%s</ul>";
     private static final String FOLDER_HTML_ITEM_TEMPLATE = "<li><a href=\"%s\">%s</a></li>";
 
-    private final Path folder;
+    private final String folder;
     
     public FilesContext(String path, String folder) {
-        this(path, Paths.get(folder));
-    }
-    
-    public FilesContext(String path, Path folder) {
         super(path);
         this.folder = folder;
     }
 
-    public Path getFolder() {
+    public String getFolder() {
         return folder;
     }
     
@@ -44,21 +40,17 @@ public class FilesContext extends Context {
     public void onContext(HttpRequest request, HttpResponse response) {
         
         String path = request.getPath().substring(getPath().length());
-        String[] pathElements = path.split(URI_FOLDER_SEPARATOR);
-        
-        Path filePath = folder.toAbsolutePath();
-        for(String element : pathElements) {
-            filePath = filePath.resolve(element);
-        }
-
-        File file = filePath.toFile();
+        String filename = folder + path.replaceAll(URI_FOLDER_SEPARATOR, File.separator);
+        File file = new File(filename);
         if(file.exists()) {
             if (file.isDirectory()) {
                 StringBuilder list = new StringBuilder();
+                Path filePath = file.toPath();
+                Path baseFilePath = Paths.get(folder);
                 File[] subFiles = file.listFiles();
                 Arrays.sort(subFiles);
                 for (File subFile : subFiles) {
-                    String subFileLink = filePath.relativize(folder).resolve(request.getPath()).resolve(subFile.getName()).toString();
+                    String subFileLink = filePath.relativize(baseFilePath).resolve(request.getPath()).resolve(subFile.getName()).toString();
                     String subFileName = subFile.getName();
                     if (subFile.isDirectory()) {
                         subFileName += File.separator;
@@ -77,7 +69,7 @@ public class FilesContext extends Context {
                 Date lastModifiedDate = new Date(file.lastModified());
 
                 try { 
-                    body = Files.readAllBytes(filePath);
+                    body = Files.readAllBytes(file.toPath());
                 } 
                 catch (Exception ex) {
                     throw new RuntimeException("Error reading file \"" + file + "\" !!");
@@ -136,7 +128,8 @@ public class FilesContext extends Context {
             }
         } 
         else {
-            throw new IllegalArgumentException("File \"" + file + "\" not found !!");
+            response.setResponseCode(HttpResponseCode.NOT_FOUND);
+            response.setBody("File \"" + filename + "\" not found !!");
         }
     }
 }

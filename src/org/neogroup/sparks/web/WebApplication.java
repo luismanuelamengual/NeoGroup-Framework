@@ -7,6 +7,7 @@ import org.neogroup.sparks.ExecutorNotFoundException;
 import org.neogroup.sparks.util.MimeTypes;
 import org.neogroup.sparks.web.http.*;
 import org.neogroup.sparks.web.http.contexts.Context;
+import org.neogroup.sparks.web.http.contexts.FilesContext;
 import org.neogroup.sparks.web.http.contexts.ResourcesContext;
 
 import java.io.ByteArrayOutputStream;
@@ -92,6 +93,10 @@ public class WebApplication extends Application {
 
     public void registerResourcesContext (String contextPath, String resourceFolder) {
         this.server.addContext(new ResourcesContext(contextPath, resourceFolder));
+    }
+
+    public void registerFilesContext (String contextPath, String folder) {
+        this.server.addContext(new FilesContext(contextPath, folder));
     }
 
     public void startServer () {
