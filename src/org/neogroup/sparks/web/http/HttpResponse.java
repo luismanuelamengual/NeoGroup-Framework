@@ -7,6 +7,7 @@ import org.neogroup.sparks.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Date;
 
 public class HttpResponse {
@@ -59,7 +60,7 @@ public class HttpResponse {
     }
 
     public void write (String text, Object... args) {
-        write(String.format(text, args).getBytes());
+        write(MessageFormat.format(text, args).getBytes());
     }
     
     public void write (byte[] bytes) {

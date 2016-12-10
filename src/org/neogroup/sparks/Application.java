@@ -5,6 +5,7 @@ import org.neogroup.sparks.util.Properties;
 import org.neogroup.sparks.util.Scanner;
 
 import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.*;
 
@@ -110,7 +111,7 @@ public class Application {
     }
 
     public String getBundleString (String bundleName, String key, Locale locale, Object... args) {
-        return String.format(ResourceBundle.getBundle(bundleName, locale).getString(key), args);
+        return MessageFormat.format(ResourceBundle.getBundle(bundleName, locale).getString(key), args);
     }
 
     protected void registerExecutor(Executor executor) {
