@@ -14,7 +14,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Date;
 
-public class FilesContext extends AbstractResourcesContext {
+public class FolderContext extends DataContext {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
     private static final String FOLDER_HTML_DOCUMENT_TEMPLATE = "<!DOCTYPE html><html><head><title>%s</title><body>%s</body></html></head>";
@@ -23,7 +23,7 @@ public class FilesContext extends AbstractResourcesContext {
 
     private final String folder;
     
-    public FilesContext(String path, String folder) {
+    public FolderContext(String path, String folder) {
         super(path);
         this.folder = folder;
     }

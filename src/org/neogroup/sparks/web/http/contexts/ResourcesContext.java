@@ -9,7 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.InputStream;
 
-public class ResourcesContext extends AbstractResourcesContext {
+public class ResourcesContext extends DataContext {
 
     private static final String URI_FOLDER_SEPARATOR = "/";
 

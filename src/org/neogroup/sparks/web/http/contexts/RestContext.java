@@ -43,7 +43,7 @@ public abstract class RestContext<T> extends Context {
     protected abstract byte[] encodeResources (List<T> resource);
     
     protected abstract List<T> getResources (HttpRequest request);
-    protected abstract List<T> createResources (HttpRequest request, List<T> resource);
-    protected abstract List<T> updateResources (HttpRequest request, List<T> resource);
+    protected abstract List<T> createResources (HttpRequest request, List<T> resources);
+    protected abstract List<T> updateResources (HttpRequest request, List<T> resources);
     protected abstract List<T> deleteResources (HttpRequest request);
 }

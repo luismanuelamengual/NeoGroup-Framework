@@ -11,11 +11,11 @@ import java.text.ParseException;
 import java.util.Base64;
 import java.util.Date;
 
-public abstract class AbstractResourcesContext extends Context {
+public abstract class DataContext extends Context {
 
     private static final String DEFAULT_DIGEST_ENCRYPTION = "MD5";
 
-    public AbstractResourcesContext(String path) {
+    public DataContext(String path) {
         super(path);
     }
 
