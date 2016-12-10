@@ -57,9 +57,9 @@ public class HttpResponse {
         writeContents();
         closeConnection();
     }
-    
-    public void write (String text) {
-        write(text.getBytes());
+
+    public void write (String text, Object... args) {
+        write(String.format(text, args).getBytes());
     }
     
     public void write (byte[] bytes) {

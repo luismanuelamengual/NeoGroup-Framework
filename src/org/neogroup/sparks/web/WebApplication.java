@@ -88,7 +88,7 @@ public class WebApplication extends Application {
 
     protected void onRouteNotFound (HttpRequest request, HttpResponse response) {
         response.setResponseCode(HttpResponseCode.NOT_FOUND);
-        response.write(String.format("Executor not found for path \"%s\"", request.getPath()));
+        response.write("Executor not found for path \"%s\"", request.getPath());
     }
 
     public void registerResourcesContext (String contextPath, String resourceFolder) {
