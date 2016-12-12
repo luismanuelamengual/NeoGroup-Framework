@@ -7,7 +7,6 @@ import org.neogroup.sparks.ExecutorNotFoundException;
 import org.neogroup.sparks.util.MimeTypes;
 import org.neogroup.sparks.web.http.*;
 import org.neogroup.sparks.web.http.contexts.Context;
-import org.neogroup.sparks.web.http.contexts.FolderContext;
 import org.neogroup.sparks.web.http.contexts.ResourcesContext;
 
 import java.io.ByteArrayOutputStream;
@@ -91,12 +90,8 @@ public class WebApplication extends Application {
         response.write("Executor not found for path \"{0}\"", request.getPath());
     }
 
-    public void registerResourcesContext (String contextPath, String resourceFolder) {
-        this.server.addContext(new ResourcesContext(contextPath, resourceFolder));
-    }
-
-    public void registerFolderContext(String contextPath, String folder) {
-        this.server.addContext(new FolderContext(contextPath, folder));
+    public void registerResourcesContext (String contextPath, String resourcePath) {
+        this.server.addContext(new ResourcesContext(contextPath, resourcePath));
     }
 
     public void startServer () {
