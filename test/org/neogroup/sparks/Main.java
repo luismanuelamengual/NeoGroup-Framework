@@ -1,7 +1,8 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.web.WebApplication;
+import org.neogroup.sparks.executors.HelloWorldExecutor;
+import org.neogroup.sparks.routing.WebApplication;
 
 public class Main {
 
@@ -9,7 +10,8 @@ public class Main {
 
         WebApplication application = new WebApplication();
         application.registerResourcesContext("/resources", "public");
-        application.registerComponents();
+        //application.registerComponents();
+        application.registerExecutor("/test/", HelloWorldExecutor.class);
         application.startServer();
     }
 }

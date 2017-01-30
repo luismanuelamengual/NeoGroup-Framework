@@ -1,13 +1,14 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.util.Properties;
-import org.neogroup.sparks.util.Scanner;
+import org.neogroup.sparks.controller.Controller;
+import org.neogroup.util.Properties;
+import org.neogroup.util.Translator;
 
-import java.lang.reflect.Modifier;
-import java.text.MessageFormat;
-import java.util.*;
-import java.util.logging.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Application {
 
@@ -17,13 +18,14 @@ public class Application {
     private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "loggerBundleName";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messagesBundleName";
 
-    private final Map<Class<? extends Action>, Executor> executors;
+    private final Map<Class<? extends Controller>, Controller> controllers;
     private final Properties properties;
     private final Logger logger;
+    private final Translator translator;
 
     public Application () {
 
-        executors = new HashMap<>();
+        controllers = new HashMap<>();
 
         //Propiedades de la aplicación
         properties = new Properties();
@@ -40,23 +42,32 @@ public class Application {
         else {
             logger = Logger.getLogger(LOGGER_NAME);
         }
+
+        //Traductor de la aplicación
+        String defaultBundleResourceName = properties.get(DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY);
+        if (defaultBundleResourceName == null) {
+            defaultBundleResourceName = DEFAULT_MESSAGES_BUNDLE_NAME;
+        }
+        translator = new Translator();
+        translator.setDefaultBundleName(defaultBundleResourceName);
     }
 
-    public final void registerExecutor(Class<? extends Executor> executorClass) {
+    public final void registerController(Class<? extends Controller> controllerClass) {
 
         try {
-            Executor executor = executorClass.newInstance();
-            executor.setApplication(this);
-            registerExecutor(executor);
-            getLogger().log(Level.INFO,"Executor \"{0}\" registered !!", executorClass.getName());
+            Controller controller = controllerClass.newInstance();
+            controller.setApplication(this);
+            controllers.put(controllerClass, controller);
+            getLogger().log(Level.INFO,"Controller \"{0}\" registered !!", controllerClass.getName());
         }
         catch (Throwable ex) {
-            throw new RuntimeException("Error registering executor \"" + executorClass + "\"", ex);
+            throw new RuntimeException("Error registering controller \"" + controllerClass + "\"", ex);
         }
     }
 
     public final void registerComponents () {
 
+        /*
         getLogger().log(Level.INFO,"Scanning classpaths components ...");
         Scanner controllersScanner = new Scanner();
         Set<Class> executorClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
@@ -69,21 +80,7 @@ public class Application {
         for (Class executorClass : executorClasses) {
             registerExecutor(executorClass);
         }
-    }
-
-    public final Object executeAction(Action action) {
-        Object response = null;
-        Executor executor = getExecutor(action);
-        try {
-            if (executor == null) {
-                throw new ExecutorNotFoundException();
-            }
-            response = executor.execute(action);
-        }
-        catch (Throwable throwable) {
-            response = onActionError(action, throwable);
-        }
-        return response;
+        */
     }
 
     public final Properties getProperties() {
@@ -94,43 +91,7 @@ public class Application {
         return logger;
     }
 
-    public String getString (String key, Object... args) {
-        return getString(key, Locale.getDefault(), args);
-    }
-
-    public String getString (String key, Locale locale, Object... args) {
-        String bundleName = properties.get(DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY);
-        if (bundleName == null) {
-            bundleName = DEFAULT_MESSAGES_BUNDLE_NAME;
-        }
-        return getBundleString(bundleName, key, locale, args);
-    }
-
-    public String getBundleString (String bundleName, String key, Object... args) {
-        return getBundleString(bundleName, key, Locale.getDefault(), args);
-    }
-
-    public String getBundleString (String bundleName, String key, Locale locale, Object... args) {
-        return MessageFormat.format(ResourceBundle.getBundle(bundleName, locale).getString(key), args);
-    }
-
-    protected void registerExecutor(Executor executor) {
-
-        ExecutorComponent controllerAnnotation = executor.getClass().getAnnotation(ExecutorComponent.class);
-        if(controllerAnnotation != null){
-            Class<? extends Action>[] actionClasses = controllerAnnotation.actions();
-            for (Class<? extends Action> commandClass : actionClasses) {
-                executors.put(commandClass, executor);
-            }
-        }
-    }
-
-    protected Executor getExecutor(Action action) {
-        return executors.get(action.getClass());
-    }
-
-    protected Object onActionError(Action action, Throwable throwable) {
-        getLogger().log(Level.WARNING, "Action error", throwable);
-        return null;
+    public final Translator getTranslator() {
+        return translator;
     }
 }

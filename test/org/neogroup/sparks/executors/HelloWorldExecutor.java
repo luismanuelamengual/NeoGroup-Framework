@@ -1,13 +1,13 @@
 package org.neogroup.sparks.executors;
 
 import org.neogroup.sparks.ExecutorComponent;
-import org.neogroup.sparks.web.WebExecutor;
-import org.neogroup.sparks.web.WebRoute;
-import org.neogroup.sparks.web.http.HttpRequest;
-import org.neogroup.sparks.web.http.HttpResponse;
+import org.neogroup.sparks.routing.WebExecutor;
+import org.neogroup.sparks.routing.Route;
+import org.neogroup.sparks.routing.http.HttpRequest;
+import org.neogroup.sparks.routing.http.HttpResponse;
 
 @ExecutorComponent
-@WebRoute(path="/rama/")
+@Route(path="/rama/")
 public class HelloWorldExecutor extends WebExecutor {
 
     @Override
