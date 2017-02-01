@@ -1,9 +1,10 @@
 
-package org.neogroup.sparks.controller;
+package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.Application;
+import org.neogroup.sparks.commands.Command;
 
-public class Controller {
+public abstract class Processor <C extends Command> {
 
     private Application application;
 
@@ -14,4 +15,6 @@ public class Controller {
     public void setApplication(Application application) {
         this.application = application;
     }
+
+    public abstract Object execute (C command);
 }

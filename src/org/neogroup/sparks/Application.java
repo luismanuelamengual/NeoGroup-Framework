@@ -1,7 +1,7 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.controller.Controller;
+import org.neogroup.sparks.processors.Processor;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -18,7 +18,7 @@ public class Application {
     private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "loggerBundleName";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messagesBundleName";
 
-    private final Map<Class<? extends Controller>, Controller> controllers;
+    private final Map<Class<? extends Processor>, Processor> controllers;
     private final Properties properties;
     private final Logger logger;
     private final Translator translator;
@@ -52,16 +52,16 @@ public class Application {
         translator.setDefaultBundleName(defaultBundleResourceName);
     }
 
-    public final void registerController(Class<? extends Controller> controllerClass) {
+    public final void registerController(Class<? extends Processor> controllerClass) {
 
         try {
-            Controller controller = controllerClass.newInstance();
+            Processor controller = controllerClass.newInstance();
             controller.setApplication(this);
             controllers.put(controllerClass, controller);
-            getLogger().log(Level.INFO,"Controller \"{0}\" registered !!", controllerClass.getName());
+            getLogger().log(Level.INFO,"Processor \"{0}\" registered !!", controllerClass.getName());
         }
         catch (Throwable ex) {
-            throw new RuntimeException("Error registering controller \"" + controllerClass + "\"", ex);
+            throw new RuntimeException("Error registering processors \"" + controllerClass + "\"", ex);
         }
     }
 
