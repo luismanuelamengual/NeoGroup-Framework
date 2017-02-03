@@ -1,13 +1,15 @@
 
 package org.neogroup.sparks;
 
+import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
+import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Application {
@@ -18,14 +20,13 @@ public class Application {
     private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "loggerBundleName";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messagesBundleName";
 
-    private final Map<Class<? extends Processor>, Processor> controllers;
     private final Properties properties;
     private final Logger logger;
     private final Translator translator;
 
-    public Application () {
+    private final Map<Class<? extends Processor>, Processor> processors;
 
-        controllers = new HashMap<>();
+    public Application () {
 
         //Propiedades de la aplicación
         properties = new Properties();
@@ -50,37 +51,9 @@ public class Application {
         }
         translator = new Translator();
         translator.setDefaultBundleName(defaultBundleResourceName);
-    }
 
-    public final void registerController(Class<? extends Processor> controllerClass) {
-
-        try {
-            Processor controller = controllerClass.newInstance();
-            controller.setApplication(this);
-            controllers.put(controllerClass, controller);
-            getLogger().log(Level.INFO,"Processor \"{0}\" registered !!", controllerClass.getName());
-        }
-        catch (Throwable ex) {
-            throw new RuntimeException("Error registering processors \"" + controllerClass + "\"", ex);
-        }
-    }
-
-    public final void registerComponents () {
-
-        /*
-        getLogger().log(Level.INFO,"Scanning classpaths components ...");
-        Scanner controllersScanner = new Scanner();
-        Set<Class> executorClasses = controllersScanner.findClasses(new Scanner.ClassFilter() {
-            @Override
-            public boolean accept(Class clazz) {
-                return Executor.class.isAssignableFrom(clazz) && !Modifier.isAbstract(clazz.getModifiers());
-            }
-        });
-        getLogger().log(Level.INFO,"Registering executors ...");
-        for (Class executorClass : executorClasses) {
-            registerExecutor(executorClass);
-        }
-        */
+        //Procesadores
+        processors = new HashMap<>();
     }
 
     public final Properties getProperties() {
@@ -93,5 +66,42 @@ public class Application {
 
     public final Translator getTranslator() {
         return translator;
+    }
+
+    public final void registerProcessor (Class<? extends Processor> processorClass) {
+
+        if (!Modifier.isAbstract(processorClass.getModifiers())) {
+
+            Class<? extends Command>[] commandClasses = null;
+            boolean statefullProcessor = true;
+
+            ProcessorComponent processorComponentAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
+            if (processorComponentAnnotation != null) {
+                commandClasses = processorComponentAnnotation.commands();
+                statefullProcessor = processorComponentAnnotation.statefull();
+            }
+
+            if (commandClasses == null || commandClasses.length == 0) {
+                Class<? extends Processor> currentProcessorClass = processorClass;
+                do {
+                    currentProcessorClass = (Class<? extends Processor>) currentProcessorClass.getSuperclass();
+                    ProcessorComponent currentProcessorComponentAnnotation = currentProcessorClass.getAnnotation(ProcessorComponent.class);
+                    if (currentProcessorComponentAnnotation != null) {
+                        commandClasses = currentProcessorComponentAnnotation.commands();
+                    }
+                } while (commandClasses == null || commandClasses.length == 0);
+            }
+
+            if (commandClasses != null && commandClasses.length > 0) {
+                for (Class<? extends Command> commandClass : commandClasses) {
+
+                }
+            }
+        }
+        return;
+    }
+
+    public final Object executeCommand (Command command) {
+        return null;
     }
 }

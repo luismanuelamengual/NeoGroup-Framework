@@ -1,17 +1,13 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.executors.HelloWorldExecutor;
-import org.neogroup.sparks.routing.WebApplication;
+import org.neogroup.sparks.processors.HelloWorldProcessor;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        WebApplication application = new WebApplication();
-        application.registerResourcesContext("/resources", "public");
-        //application.registerComponents();
-        application.registerExecutor("/test/", HelloWorldExecutor.class);
-        application.startServer();
+        Application application = new Application();
+        application.registerProcessor(HelloWorldProcessor.class);
     }
 }

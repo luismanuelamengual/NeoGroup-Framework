@@ -1,5 +1,5 @@
 
-package org.neogroup.sparks.routing;
+package org.neogroup.sparks.processors.web;
 
 import org.neogroup.net.httpserver.HttpMethod;
 
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface RouteAction {
+public @interface WebAction {
 
     public String name() default "";
     public String method() default HttpMethod.GET;

@@ -4,7 +4,7 @@ package org.neogroup.sparks.processors;
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.commands.Command;
 
-public abstract class Processor <C extends Command> {
+public abstract class Processor <C extends Command, R extends Object> {
 
     private Application application;
 
@@ -16,5 +16,5 @@ public abstract class Processor <C extends Command> {
         this.application = application;
     }
 
-    public abstract Object execute (C command);
+    public abstract R execute (C command);
 }

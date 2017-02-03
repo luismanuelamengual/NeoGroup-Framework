@@ -1,5 +1,5 @@
 
-package org.neogroup.sparks.routing;
+package org.neogroup.sparks.processors.web;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Route {
+public @interface WebRoute {
 
     public String path() default "/";
 }
