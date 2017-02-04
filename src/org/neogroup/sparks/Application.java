@@ -7,7 +7,6 @@ import org.neogroup.sparks.processors.ProcessorFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 public class Application {

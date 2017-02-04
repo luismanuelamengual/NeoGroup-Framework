@@ -1,21 +1,15 @@
-/*
 
 package org.neogroup.sparks.processors;
 
-import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.net.httpserver.HttpResponse;
-import org.neogroup.sparks.processors.web.WebProcessor;
-import org.neogroup.sparks.processors.web.WebRoute;
-import org.neogroup.sparks.processors.web.WebAction;
+import org.neogroup.sparks.commands.HelloWorldCommand;
 
-@ProcessorComponent
-@WebRoute(path="/rama/")
-public class HelloWorldProcessor extends WebProcessor {
+@ProcessorComponent(commands = {HelloWorldCommand.class})
+public class HelloWorldProcessor extends Processor<HelloWorldCommand, Boolean> {
 
-    @WebAction()
-    protected HttpResponse indexAction(HttpRequest request) {
-        HttpResponse response = new HttpResponse();
-        response.setBody("Hola mundeli");
-        return response;
+    @Override
+    public Boolean processCommand(HelloWorldCommand command) {
+
+        System.out.println ("Hi " + command.getName() + ", hello world");
+        return true;
     }
-}*/
+}
