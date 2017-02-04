@@ -2,6 +2,7 @@
 package org.neogroup.sparks;
 
 import org.neogroup.sparks.processors.TestProcessor;
+import org.neogroup.sparks.web.WebApplication;
 
 public class Main {
 

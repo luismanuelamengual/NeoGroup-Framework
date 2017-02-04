@@ -1,8 +1,10 @@
 
-package org.neogroup.sparks.commands;
+package org.neogroup.sparks.web.commands;
 
 import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.sparks.processors.WebProcessorSelector;
+import org.neogroup.sparks.commands.Command;
+import org.neogroup.sparks.commands.CommandComponent;
+import org.neogroup.sparks.web.processors.WebProcessorSelector;
 
 @CommandComponent(selector = WebProcessorSelector.class)
 public class WebCommand extends Command {

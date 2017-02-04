@@ -1,15 +1,17 @@
 
-package org.neogroup.sparks.processors;
+package org.neogroup.sparks.web.processors;
 
 import org.neogroup.net.httpserver.HttpRequest;
 import org.neogroup.net.httpserver.HttpResponse;
-import org.neogroup.sparks.commands.WebCommand;
+import org.neogroup.sparks.processors.Processor;
+import org.neogroup.sparks.processors.ProcessorComponent;
+import org.neogroup.sparks.web.commands.WebCommand;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-@ProcessorComponent (commands = {WebCommand.class})
+@ProcessorComponent(commands = {WebCommand.class})
 public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
 
     private final Map<String, Method> actionMethods;

@@ -1,12 +1,13 @@
 
-package org.neogroup.sparks.processors;
+package org.neogroup.sparks.web.processors;
 
-import org.neogroup.sparks.commands.WebCommand;
+import org.neogroup.sparks.processors.ProcessorSelector;
+import org.neogroup.sparks.web.commands.WebCommand;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class WebProcessorSelector extends ProcessorSelector<WebCommand, WebProcessor>{
+public class WebProcessorSelector extends ProcessorSelector<WebCommand, WebProcessor> {
 
     private final Map<String, Class<? extends WebProcessor>> routes;
 

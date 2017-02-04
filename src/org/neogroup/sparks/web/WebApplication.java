@@ -1,11 +1,12 @@
 
-package org.neogroup.sparks;
+package org.neogroup.sparks.web;
 
 import org.neogroup.net.httpserver.HttpContext;
 import org.neogroup.net.httpserver.HttpRequest;
 import org.neogroup.net.httpserver.HttpResponse;
 import org.neogroup.net.httpserver.HttpServer;
-import org.neogroup.sparks.commands.WebCommand;
+import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.commands.WebCommand;
 
 public class WebApplication extends Application {
 

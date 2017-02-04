@@ -1,4 +1,5 @@
-package org.neogroup.sparks.processors;
+
+package org.neogroup.sparks.web.processors;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,8 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface WebAction {
+@Target(ElementType.TYPE)
+public @interface WebRoute {
 
-    public String name();
+    public String path();
 }
