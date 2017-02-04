@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ProcessorComponent {
 
-    public boolean statefull() default true;
+    public boolean singleInstance() default true;
     public Class<? extends Command>[] commands() default {};
 }
 

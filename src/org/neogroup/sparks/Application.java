@@ -3,13 +3,11 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorComponent;
+import org.neogroup.sparks.processors.ProcessorFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
-import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class Application {
@@ -23,8 +21,7 @@ public class Application {
     private final Properties properties;
     private final Logger logger;
     private final Translator translator;
-
-    private final Map<Class<? extends Processor>, Processor> processors;
+    private final ProcessorFactory processorFactory;
 
     public Application () {
 
@@ -52,8 +49,8 @@ public class Application {
         translator = new Translator();
         translator.setDefaultBundleName(defaultBundleResourceName);
 
-        //Procesadores
-        processors = new HashMap<>();
+        //Fabrica de Procesadores
+        processorFactory = new ProcessorFactory(this);
     }
 
     public final Properties getProperties() {
@@ -69,39 +66,11 @@ public class Application {
     }
 
     public final void registerProcessor (Class<? extends Processor> processorClass) {
-
-        if (!Modifier.isAbstract(processorClass.getModifiers())) {
-
-            Class<? extends Command>[] commandClasses = null;
-            boolean statefullProcessor = true;
-
-            ProcessorComponent processorComponentAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
-            if (processorComponentAnnotation != null) {
-                commandClasses = processorComponentAnnotation.commands();
-                statefullProcessor = processorComponentAnnotation.statefull();
-            }
-
-            if (commandClasses == null || commandClasses.length == 0) {
-                Class<? extends Processor> currentProcessorClass = processorClass;
-                do {
-                    currentProcessorClass = (Class<? extends Processor>) currentProcessorClass.getSuperclass();
-                    ProcessorComponent currentProcessorComponentAnnotation = currentProcessorClass.getAnnotation(ProcessorComponent.class);
-                    if (currentProcessorComponentAnnotation != null) {
-                        commandClasses = currentProcessorComponentAnnotation.commands();
-                    }
-                } while (commandClasses == null || commandClasses.length == 0);
-            }
-
-            if (commandClasses != null && commandClasses.length > 0) {
-                for (Class<? extends Command> commandClass : commandClasses) {
-
-                }
-            }
-        }
-        return;
+        processorFactory.registerProcessor(processorClass);
     }
 
-    public final Object executeCommand (Command command) {
-        return null;
+    public final <R extends Object> R executeCommand (Command command) {
+        Processor processor = processorFactory.getProcessor(command);
+        return (R)processor.processCommand(command);
     }
 }

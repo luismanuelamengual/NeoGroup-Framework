@@ -1,3 +1,4 @@
+/*
 
 package org.neogroup.sparks.processors;
 
@@ -17,4 +18,4 @@ public class HelloWorldProcessor extends WebProcessor {
         response.setBody("Hola mundeli");
         return response;
     }
-}
+}*/
