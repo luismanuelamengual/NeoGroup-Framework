@@ -1,7 +1,7 @@
 
 package org.neogroup.sparks.web.commands;
 
-import org.neogroup.net.httpserver.HttpRequest;
+import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.CommandComponent;
 import org.neogroup.sparks.web.processors.WebProcessorSelector;

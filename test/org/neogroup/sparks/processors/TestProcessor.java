@@ -1,8 +1,8 @@
 
 package org.neogroup.sparks.processors;
 
-import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.net.httpserver.HttpResponse;
+import org.neogroup.httpserver.HttpRequest;
+import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebAction;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.processors.WebRoute;

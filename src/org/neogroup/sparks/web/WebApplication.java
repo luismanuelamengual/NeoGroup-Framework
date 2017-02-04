@@ -1,10 +1,10 @@
 
 package org.neogroup.sparks.web;
 
-import org.neogroup.net.httpserver.HttpContext;
-import org.neogroup.net.httpserver.HttpRequest;
-import org.neogroup.net.httpserver.HttpResponse;
-import org.neogroup.net.httpserver.HttpServer;
+import org.neogroup.httpserver.HttpContext;
+import org.neogroup.httpserver.HttpRequest;
+import org.neogroup.httpserver.HttpResponse;
+import org.neogroup.httpserver.HttpServer;
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.web.commands.WebCommand;
 
