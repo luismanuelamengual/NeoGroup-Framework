@@ -13,7 +13,7 @@ public class DefaultProcessorSelector extends ProcessorSelector<Command,Processo
     }
 
     @Override
-    public Class<? extends Processor> selectProcessor(Command command) {
+    public Class<? extends Processor> getProcessorClass(Command command) {
         return selectedProcessorClass;
     }
 }

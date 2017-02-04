@@ -9,7 +9,7 @@ import org.neogroup.util.Translator;
 
 import java.util.logging.Logger;
 
-public class Application {
+public abstract class Application {
 
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "localization/messages";
@@ -72,4 +72,7 @@ public class Application {
         Processor processor = processorFactory.getProcessor(command);
         return (R)processor.processCommand(command);
     }
+
+    public abstract void start ();
+    public abstract void stop ();
 }

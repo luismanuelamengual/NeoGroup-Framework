@@ -55,7 +55,7 @@ public class ProcessorFactory {
     }
 
     public Processor getProcessor (Command command) {
-        Class<? extends Processor> processorClass = selectors.get(command.getClass()).selectProcessor(command);
+        Class<? extends Processor> processorClass = selectors.get(command.getClass()).getProcessorClass(command);
         Processor processor = processors.get(processorClass);
         if (processor == null) {
             try {

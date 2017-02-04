@@ -1,15 +1,14 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.commands.HelloWorldCommand;
-import org.neogroup.sparks.processors.HelloWorldProcessor;
+import org.neogroup.sparks.processors.TestProcessor;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Application application = new Application();
-        application.registerProcessor(HelloWorldProcessor.class);
-        application.executeCommand(new HelloWorldCommand("pedro"));
+        WebApplication application = new WebApplication();
+        application.registerProcessor(TestProcessor.class);
+        application.start();
     }
 }
