@@ -1,12 +1,14 @@
 
 package org.neogroup.sparks.web;
 
-import org.neogroup.httpserver.HttpContext;
-import org.neogroup.httpserver.HttpRequest;
-import org.neogroup.httpserver.HttpResponse;
-import org.neogroup.httpserver.HttpServer;
+import org.neogroup.httpserver.*;
 import org.neogroup.sparks.Application;
+import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.web.commands.WebCommand;
+import org.neogroup.util.MimeTypes;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 public class WebApplication extends Application {
 
@@ -19,7 +21,17 @@ public class WebApplication extends Application {
         server.addContext(new HttpContext("/") {
             @Override
             public HttpResponse onContext(HttpRequest request) {
-                return WebApplication.this.executeCommand(new WebCommand(request));
+                HttpResponse response = null;
+                try {
+                    response = WebApplication.this.executeCommand(new WebCommand(request));
+                }
+                catch (ProcessorNotFoundException exception) {
+                    response = onContextNotFound(request);
+                }
+                catch (Throwable throwable) {
+                    response = onError(request, throwable);
+                }
+                return response;
             }
         });
     }
@@ -40,5 +52,25 @@ public class WebApplication extends Application {
 
     public void removeContext(HttpContext context) {
         server.removeContext(context);
+    }
+
+    public HttpResponse onContextNotFound (HttpRequest request) {
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponseCode.HTTP_NOT_FOUND);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.setBody("No controller found for path \"" + request.getPath() + "\" !!");
+        return response;
+    }
+
+    public HttpResponse onError (HttpRequest request, Throwable throwable) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printer = new PrintStream(out);
+        throwable.printStackTrace(printer);
+        byte[] body = out.toByteArray();
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponseCode.HTTP_INTERNAL_ERROR);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.setBody(body);
+        return response;
     }
 }

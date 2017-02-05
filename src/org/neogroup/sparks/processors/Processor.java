@@ -16,5 +16,5 @@ public abstract class Processor <C extends Command, R extends Object> {
         this.application = application;
     }
 
-    public abstract R processCommand (C command);
+    public abstract R processCommand (C command) throws ProcessorException;
 }

@@ -4,6 +4,7 @@ package org.neogroup.sparks;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorFactory;
+import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -70,7 +71,10 @@ public abstract class Application {
 
     public final <R extends Object> R executeCommand (Command command) {
         Processor processor = processorFactory.getProcessor(command);
-        return (R)processor.processCommand(command);
+        if (processor == null) {
+            throw new ProcessorNotFoundException("Processor not found for command \"" + command.toString() + "\" !!");
+        }
+        return (R) processor.processCommand(command);
     }
 
     public abstract void start ();
