@@ -8,9 +8,11 @@ import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
-public abstract class Application {
+public class Application {
 
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "localization/messages";
@@ -21,7 +23,8 @@ public abstract class Application {
     protected final Properties properties;
     protected final Logger logger;
     protected final Translator translator;
-    private final ProcessorFactory processorFactory;
+    protected final ProcessorFactory processorFactory;
+    protected final List<Module> modules;
 
     public Application () {
 
@@ -51,6 +54,9 @@ public abstract class Application {
 
         //Fabrica de Procesadores
         processorFactory = new ProcessorFactory(this);
+
+        //Modulos de la aplicación
+        modules = new ArrayList<>();
     }
 
     public final Properties getProperties() {
@@ -65,6 +71,16 @@ public abstract class Application {
         return translator;
     }
 
+    public final void registerModule (Class<? extends Module> moduleClass) {
+        try {
+            Module module = moduleClass.getDeclaredConstructor(Application.class).newInstance(this);
+            modules.add(module);
+        }
+        catch (Throwable throwable) {
+            throw new RuntimeException("Module \"" + moduleClass.getName() + "\" couldnt be created !!");
+        }
+    }
+
     public final void registerProcessor (Class<? extends Processor> processorClass) {
         processorFactory.registerProcessor(processorClass);
     }
@@ -77,6 +93,15 @@ public abstract class Application {
         return (R) processor.processCommand(command);
     }
 
-    public abstract void start ();
-    public abstract void stop ();
+    public void start () {
+        for (Module module : modules) {
+            module.start();
+        }
+    }
+
+    public void stop () {
+        for (Module module : modules) {
+            module.stop();
+        }
+    }
 }

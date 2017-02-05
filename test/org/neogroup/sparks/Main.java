@@ -2,13 +2,14 @@
 package org.neogroup.sparks;
 
 import org.neogroup.sparks.processors.TestProcessor;
-import org.neogroup.sparks.web.WebApplication;
+import org.neogroup.sparks.web.WebModule;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        WebApplication application = new WebApplication();
+        Application application = new Application();
+        application.registerModule(WebModule.class);
         application.registerProcessor(TestProcessor.class);
         application.start();
     }
