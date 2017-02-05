@@ -14,12 +14,12 @@ public abstract class Application {
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
     private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "localization/messages";
     private final static String LOGGER_NAME = "sparks_logger";
-    private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "loggerBundleName";
-    private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messagesBundleName";
+    private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "logger_default_bundle_name";
+    private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messages_default_bundle_name";
 
-    private final Properties properties;
-    private final Logger logger;
-    private final Translator translator;
+    protected final Properties properties;
+    protected final Logger logger;
+    protected final Translator translator;
     private final ProcessorFactory processorFactory;
 
     public Application () {

@@ -10,10 +10,12 @@ import org.neogroup.sparks.web.commands.WebCommand;
 
 public class WebApplication extends Application {
 
+    public static final String SERVER_PORT_PROPERTY = "server_port";
+
     private final HttpServer server;
 
     public WebApplication() {
-        server = new HttpServer(1408);
+        server = new HttpServer(properties.getInt(SERVER_PORT_PROPERTY, 80));
         server.addContext(new HttpContext("/") {
             @Override
             public HttpResponse onContext(HttpRequest request) {
