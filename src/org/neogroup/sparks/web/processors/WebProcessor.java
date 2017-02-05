@@ -1,12 +1,17 @@
 
 package org.neogroup.sparks.web.processors;
 
+import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
+import org.neogroup.httpserver.HttpResponseCode;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.web.commands.WebCommand;
+import org.neogroup.util.MimeTypes;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,10 +65,22 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
     }
 
     protected HttpResponse onActionError (String action, HttpRequest request, Throwable throwable) {
-        return null;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        PrintStream printer = new PrintStream(out);
+        throwable.printStackTrace(printer);
+        byte[] body = out.toByteArray();
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponseCode.HTTP_INTERNAL_ERROR);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.setBody(body);
+        return response;
     }
 
     protected HttpResponse onActionNotFound (String action, HttpRequest request) {
-        return null;
+        HttpResponse response = new HttpResponse();
+        response.setResponseCode(HttpResponseCode.HTTP_NOT_FOUND);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.setBody("Action \"" + action + "\" found in controller \"" + this + "\" !!");
+        return response;
     }
 }

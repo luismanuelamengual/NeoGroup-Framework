@@ -21,15 +21,16 @@ public class WebApplication extends Application {
         server.addContext(new HttpContext("/") {
             @Override
             public HttpResponse onContext(HttpRequest request) {
+                WebCommand webCommand = new WebCommand(request);
                 HttpResponse response = null;
                 try {
-                    response = WebApplication.this.executeCommand(new WebCommand(request));
+                    response = WebApplication.this.executeCommand(webCommand);
                 }
                 catch (ProcessorNotFoundException exception) {
-                    response = onContextNotFound(request);
+                    response = onContextNotFound(webCommand);
                 }
                 catch (Throwable throwable) {
-                    response = onError(request, throwable);
+                    response = onError(webCommand, throwable);
                 }
                 return response;
             }
@@ -54,15 +55,15 @@ public class WebApplication extends Application {
         server.removeContext(context);
     }
 
-    public HttpResponse onContextNotFound (HttpRequest request) {
+    public HttpResponse onContextNotFound (WebCommand command) {
         HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.HTTP_NOT_FOUND);
         response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
-        response.setBody("No controller found for path \"" + request.getPath() + "\" !!");
+        response.setBody("No controller found for path \"" + command.getWebRoute() + "\" !!");
         return response;
     }
 
-    public HttpResponse onError (HttpRequest request, Throwable throwable) {
+    public HttpResponse onError (WebCommand command, Throwable throwable) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
