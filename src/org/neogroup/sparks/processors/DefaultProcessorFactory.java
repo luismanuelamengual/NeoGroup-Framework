@@ -13,12 +13,12 @@ public class DefaultProcessorFactory extends ProcessorFactory<Processor, Command
 
     private final ApplicationContext applicationContext;
     private final Map<Class<? extends Command>, ProcessorSelector> selectors;
-    private final Map<Class<? extends Processor>, Processor> processors;
+    private final Map<Class<? extends Processor>, Processor> statelessProcessors;
 
     public DefaultProcessorFactory(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
         selectors = new HashMap<>();
-        processors = new HashMap<>();
+        statelessProcessors = new HashMap<>();
     }
 
     @Override
@@ -42,12 +42,13 @@ public class DefaultProcessorFactory extends ProcessorFactory<Processor, Command
 
                     selector.addProcessorCandidate(processorClass);
                 }
+            }
 
-                if (processorAnnotation.singleInstance()) {
-                    Processor processor = processorClass.newInstance();
-                    processor.setApplicationContext(applicationContext);
-                    processors.put(processorClass, processor);
-                }
+            StatelessProcessor statelessProcessorAnnotation = ReflectionUtils.findAnnotation(processorClass, StatelessProcessor.class);
+            if (statelessProcessorAnnotation != null) {
+                Processor processor = processorClass.newInstance();
+                processor.setApplicationContext(applicationContext);
+                statelessProcessors.put(processorClass, processor);
             }
         }
         catch (Throwable throwable) {
@@ -66,7 +67,7 @@ public class DefaultProcessorFactory extends ProcessorFactory<Processor, Command
         ProcessorSelector selector = selectors.get(command.getClass());
         if (selector != null) {
             Class<? extends Processor> processorClass = selector.getProcessorClass(command);
-            processor = processors.get(processorClass);
+            processor = statelessProcessors.get(processorClass);
             if (processor == null) {
                 try {
                     processor = processorClass.newInstance();
