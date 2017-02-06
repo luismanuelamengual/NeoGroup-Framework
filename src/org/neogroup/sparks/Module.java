@@ -3,7 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorFactory;
+import org.neogroup.sparks.processors.DefaultProcessorFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -16,7 +16,7 @@ public abstract class Module extends ApplicationContext {
 
     public Module() {
         running = false;
-        processorFactory = new ProcessorFactory(this);
+        processorFactory = new DefaultProcessorFactory(this);
     }
 
     public Application getApplication() {
