@@ -9,7 +9,7 @@ import org.neogroup.util.ReflectionUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DefaultProcessorFactory extends ProcessorFactory {
+public class DefaultProcessorFactory extends ProcessorFactory<Processor, Command> {
 
     private final ApplicationContext applicationContext;
     private final Map<Class<? extends Command>, ProcessorSelector> selectors;
