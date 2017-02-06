@@ -24,6 +24,11 @@ public class WebProcessorSelector extends ProcessorSelector<WebCommand, WebProce
     }
 
     @Override
+    public void removeProcessorCandidate(Class<? extends WebProcessor> processorClass) {
+        //TODO: Remover una clase de procesador web candidata
+    }
+
+    @Override
     public Class<? extends WebProcessor> getProcessorClass(WebCommand command) {
         return routes.get(command.getWebRoute());
     }

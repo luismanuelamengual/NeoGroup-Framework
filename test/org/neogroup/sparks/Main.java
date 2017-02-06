@@ -9,7 +9,7 @@ public class Main {
     public static void main(String[] args) {
 
         Application application = new Application();
-        application.registerModule(WebModule.class);
+        application.addModule(new WebModule(1408));
         application.registerProcessor(TestProcessor.class);
         application.start();
     }

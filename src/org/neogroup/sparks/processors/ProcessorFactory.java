@@ -1,7 +1,7 @@
 
 package org.neogroup.sparks.processors;
 
-import org.neogroup.sparks.Application;
+import org.neogroup.sparks.ApplicationContext;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.CommandComponent;
 import org.neogroup.util.ReflectionUtils;
@@ -11,12 +11,12 @@ import java.util.Map;
 
 public class ProcessorFactory {
 
-    private final Application application;
+    private final ApplicationContext applicationContext;
     private final Map<Class<? extends Command>, ProcessorSelector> selectors;
     private final Map<Class<? extends Processor>, Processor> processors;
 
-    public ProcessorFactory(Application application) {
-        this.application = application;
+    public ProcessorFactory(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
         selectors = new HashMap<>();
         processors = new HashMap<>();
     }
@@ -44,7 +44,7 @@ public class ProcessorFactory {
 
                 if (processorAnnotation.singleInstance()) {
                     Processor processor = processorClass.newInstance();
-                    processor.setApplication(application);
+                    processor.setApplicationContext(applicationContext);
                     processors.put(processorClass, processor);
                 }
             }
@@ -54,14 +54,23 @@ public class ProcessorFactory {
         }
     }
 
+    public void unregisterProcessor (Class<? extends Processor> processorClass) {
+        //TODO: Unregister a processor class
+    }
+
     public Processor getProcessor (Command command) {
-        Class<? extends Processor> processorClass = selectors.get(command.getClass()).getProcessorClass(command);
-        Processor processor = processors.get(processorClass);
-        if (processor == null) {
-            try {
-                processor = processorClass.newInstance();
-                processor.setApplication(application);
-            } catch (Exception ex) {}
+        Processor processor = null;
+        ProcessorSelector selector = selectors.get(command.getClass());
+        if (selector != null) {
+            Class<? extends Processor> processorClass = selector.getProcessorClass(command);
+            processor = processors.get(processorClass);
+            if (processor == null) {
+                try {
+                    processor = processorClass.newInstance();
+                    processor.setApplicationContext(applicationContext);
+                } catch (Exception ex) {
+                }
+            }
         }
         return processor;
     }

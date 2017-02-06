@@ -1,20 +1,20 @@
 
 package org.neogroup.sparks.processors;
 
-import org.neogroup.sparks.Application;
+import org.neogroup.sparks.ApplicationContext;
 import org.neogroup.sparks.commands.Command;
 
 public abstract class Processor <C extends Command, R extends Object> {
 
-    private Application application;
+    private ApplicationContext applicationContext;
 
-    public Application getApplication() {
-        return application;
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
-    public void setApplication(Application application) {
-        this.application = application;
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
     }
 
-    public abstract R processCommand (C command) throws ProcessorException;
+    public abstract R process (C command) throws ProcessorException;
 }

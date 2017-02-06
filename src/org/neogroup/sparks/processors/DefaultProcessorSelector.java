@@ -13,6 +13,11 @@ public class DefaultProcessorSelector extends ProcessorSelector<Command,Processo
     }
 
     @Override
+    public void removeProcessorCandidate(Class<? extends Processor> processorClass) {
+        //TODO: Remover una clase candidata
+    }
+
+    @Override
     public Class<? extends Processor> getProcessorClass(Command command) {
         return selectedProcessorClass;
     }
