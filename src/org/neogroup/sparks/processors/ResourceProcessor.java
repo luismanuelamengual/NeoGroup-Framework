@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class ResourceProcessor<R extends Resource> extends Processor {
-    protected abstract R createResource (R resource);
-    protected abstract R updateResource (R resource);
-    protected abstract R deleteResource (R resource);
-    protected abstract List<R> retrieveResources (ResourceFilter filters, List<ResourceOrder> orders, Map<String,Object> params);
+    protected abstract R create (R resource);
+    protected abstract R update (R resource);
+    protected abstract R delete (R resource);
+    protected abstract List<R> retrieve (ResourceFilter filters, List<ResourceOrder> orders, Map<String,Object> params);
 }
