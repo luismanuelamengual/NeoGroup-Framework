@@ -1,7 +1,6 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.processors.DefaultProcessorFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -45,9 +44,6 @@ public class Application extends ApplicationContext {
         translator = new Translator();
         translator.setDefaultBundleName(defaultBundleResourceName);
 
-        //Fabrica de Procesadores
-        processorFactory = new DefaultProcessorFactory(this);
-
         //Modulos de la aplicación
         modules = new ArrayList<>();
     }
@@ -62,13 +58,15 @@ public class Application extends ApplicationContext {
         modules.remove(module);
     }
 
-    public void start () {
+    @Override
+    public void onStart () {
         for (Module module : modules) {
             module.start();
         }
     }
 
-    public void stop () {
+    @Override
+    public void onStop () {
         for (Module module : modules) {
             module.stop();
         }

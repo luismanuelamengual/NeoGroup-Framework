@@ -8,6 +8,7 @@ import org.neogroup.httpserver.HttpResponseCode;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.web.commands.WebCommand;
+import org.neogroup.sparks.web.routing.RouteAction;
 import org.neogroup.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +17,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-@ProcessorComponent(commands = {WebCommand.class})
 public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
 
     private final Map<String, Method> actionMethods;
@@ -24,7 +24,7 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
     public WebProcessor() {
         actionMethods = new HashMap<>();
         for (Method method : getClass().getDeclaredMethods()) {
-            WebAction webAction = method.getAnnotation(WebAction.class);
+            RouteAction webAction = method.getAnnotation(RouteAction.class);
             if (webAction != null) {
                 actionMethods.put(webAction.name(), method);
             }

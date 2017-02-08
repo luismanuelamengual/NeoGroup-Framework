@@ -2,8 +2,7 @@
 package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
-import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.DefaultProcessorFactory;
+import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -12,11 +11,8 @@ import java.util.logging.Logger;
 public abstract class Module extends ApplicationContext {
 
     protected Application application;
-    protected boolean running;
 
     public Module() {
-        running = false;
-        processorFactory = new DefaultProcessorFactory(this);
     }
 
     public Application getApplication() {
@@ -55,28 +51,15 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public Processor getProcessor(Command command) {
-        Processor processor = super.getProcessor(command);
-        if (processor == null) {
-            processor = application.getProcessor(command);
-        }
-        return processor;
-    }
+    public <R extends Object> R processCommand(Command command) {
 
-    public void start () {
-        if (!running) {
-            onStart();
-            running = true;
+        R response = null;
+        try {
+            response = super.processCommand(command);
         }
-    }
-
-    public void stop () {
-        if (running) {
-            onStop();
-            running = false;
+        catch (ProcessorNotFoundException exception) {
+            response = application.processCommand(command);
         }
+        return (R) response;
     }
-
-    protected abstract void onStart ();
-    protected abstract void onStop ();
 }

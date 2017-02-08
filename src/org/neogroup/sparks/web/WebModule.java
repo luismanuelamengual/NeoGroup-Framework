@@ -5,6 +5,7 @@ import org.neogroup.httpserver.*;
 import org.neogroup.sparks.Module;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.web.commands.WebCommand;
+import org.neogroup.sparks.web.processors.WebSelectorProcessor;
 import org.neogroup.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
@@ -39,6 +40,7 @@ public class WebModule extends Module {
                 return response;
             }
         });
+        registerProcessor(WebSelectorProcessor.class);
     }
 
     @Override

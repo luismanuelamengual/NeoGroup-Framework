@@ -23,6 +23,10 @@ public abstract class Processor <C extends Command, R extends Object> {
         this.applicationContext = applicationContext;
     }
 
+    public void onStart () {}
+
+    public void onStop () {}
+
     protected <R extends Resource> R createResource (R resource) {
         return createResource(resource, null);
     }

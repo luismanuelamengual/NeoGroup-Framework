@@ -3,10 +3,7 @@ package org.neogroup.sparks.web.commands;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.sparks.commands.Command;
-import org.neogroup.sparks.commands.CommandComponent;
-import org.neogroup.sparks.web.processors.WebProcessorSelector;
 
-@CommandComponent(selector = WebProcessorSelector.class)
 public class WebCommand extends Command {
 
     public static final String CONTEXT_SEPARATOR = "/";
