@@ -32,8 +32,7 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <R extends Resource> R createResource (R resource, Map<String,Object> params) {
-        CreateResourcesCommand command = new CreateResourcesCommand();
-        command.addResource(resource);
+        CreateResourcesCommand command = new CreateResourcesCommand(resource.getClass(), resource);
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }
@@ -43,8 +42,7 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <R extends Resource> R updateResource (R resource, Map<String,Object> params) {
-        UpdateResourcesCommand command = new UpdateResourcesCommand();
-        command.addResource(resource);
+        UpdateResourcesCommand command = new UpdateResourcesCommand(resource.getClass(), resource);
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }
@@ -54,8 +52,7 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <R extends Resource> R deleteResource (R resource, Map<String,Object> params) {
-        DeleteResourcesCommand command = new DeleteResourcesCommand();
-        command.addResource(resource);
+        DeleteResourcesCommand command = new DeleteResourcesCommand(resource.getClass(), resource);
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }
@@ -80,8 +77,7 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass, ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
-        RetrieveResourcesCommand command = new RetrieveResourcesCommand();
-        command.setResourceClass(resourceClass);
+        RetrieveResourcesCommand command = new RetrieveResourcesCommand(resourceClass);
         command.setFilters(filters);
         command.setOrders(orders);
         command.setParameters(params);
