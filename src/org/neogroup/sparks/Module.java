@@ -3,7 +3,6 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -55,23 +54,19 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
+    public Processor getProcessor(Class<? extends Command> commandClass) {
+        Processor processor = super.getProcessor(commandClass);
+        if (processor == null) {
+            processor = application.getProcessor(commandClass);
+        }
+        return processor;
+    }
+
+    @Override
     public Collection<Processor> getRegisteredProcessors() {
         List<Processor> registeredProcessors = new ArrayList<>();
         registeredProcessors.addAll(super.getRegisteredProcessors());
         registeredProcessors.addAll(application.getRegisteredProcessors());
         return registeredProcessors;
-    }
-
-    @Override
-    public <R extends Object> R processCommand(Command command) {
-
-        R response = null;
-        try {
-            response = super.processCommand(command);
-        }
-        catch (ProcessorNotFoundException exception) {
-            response = application.processCommand(command);
-        }
-        return (R) response;
     }
 }

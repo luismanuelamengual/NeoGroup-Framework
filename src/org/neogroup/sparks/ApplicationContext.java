@@ -54,7 +54,11 @@ public abstract class ApplicationContext {
         return processors.values();
     }
 
-    public void registerProcessor (Class<? extends Processor> processorClass) {
+    public Processor getProcessor (Class<? extends Command> commandClass) {
+        return processorsByCommand.get(commandClass);
+    }
+
+    public final void registerProcessor (Class<? extends Processor> processorClass) {
         if (!processors.containsKey(processorClass)) {
             try {
                 //Obtener una instancia del procesador
@@ -76,8 +80,8 @@ public abstract class ApplicationContext {
         }
     }
 
-    public <R extends Object> R processCommand(Command command) {
-        Processor processor = processorsByCommand.get(command.getClass());
+    public final <R extends Object> R processCommand(Command command) {
+        Processor processor = getProcessor(command.getClass());
         if (processor == null) {
             throw new ProcessorNotFoundException("Processor not found for command \"" + command.toString() + "\" !!");
         }
