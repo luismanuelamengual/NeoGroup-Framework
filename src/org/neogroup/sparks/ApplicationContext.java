@@ -55,23 +55,24 @@ public abstract class ApplicationContext {
     }
 
     public void registerProcessor (Class<? extends Processor> processorClass) {
-        try {
-            //Obtener una instancia del procesador
-            Processor processor = processorClass.newInstance();
-            processor.setApplicationContext(this);
-            processors.put(processorClass, processor);
+        if (!processors.containsKey(processorClass)) {
+            try {
+                //Obtener una instancia del procesador
+                Processor processor = processorClass.newInstance();
+                processor.setApplicationContext(this);
+                processors.put(processorClass, processor);
 
-            //Asociar este procesador a los comandos especificados para este procesador
-            ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
-            if (processorAnnotation != null) {
-                Class<? extends Command>[] commandClasses = processorAnnotation.commands();
-                for (Class<? extends Command> commandClass : commandClasses) {
-                    processorsByCommand.put(commandClass, processor);
+                //Asociar este procesador a los comandos especificados para este procesador
+                ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
+                if (processorAnnotation != null) {
+                    Class<? extends Command>[] commandClasses = processorAnnotation.commands();
+                    for (Class<? extends Command> commandClass : commandClasses) {
+                        processorsByCommand.put(commandClass, processor);
+                    }
                 }
+            } catch (Exception exception) {
+                throw new ProcessorException("Error registering processor", exception);
             }
-        }
-        catch (Exception exception) {
-            throw new ProcessorException("Error registering processor", exception);
         }
     }
 

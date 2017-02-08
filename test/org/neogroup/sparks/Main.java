@@ -12,14 +12,15 @@ public class Main {
 
         WebModule pepeModule = new WebModule(1408);
         pepeModule.registerProcessor(PepeProcessor.class);
+        pepeModule.registerProcessor(TestProcessor.class);
 
         WebModule ramaModule = new WebModule(1409);
         ramaModule.registerProcessor(RamaProcessor.class);
+        ramaModule.registerProcessor(TestProcessor.class);
 
         Application application = new Application();
         application.addModule(pepeModule);
         application.addModule(ramaModule);
-        application.registerProcessor(TestProcessor.class);
         application.start();
     }
 }
