@@ -14,11 +14,11 @@ public class Main {
         pepeModule.registerProcessor(PepeProcessor.class);
 
         WebModule ramaModule = new WebModule(1409);
-        pepeModule.registerProcessor(RamaProcessor.class);
+        ramaModule.registerProcessor(RamaProcessor.class);
 
         Application application = new Application();
         application.addModule(pepeModule);
-        application.addModule(pepeModule);
+        application.addModule(ramaModule);
         application.registerProcessor(TestProcessor.class);
         application.start();
     }

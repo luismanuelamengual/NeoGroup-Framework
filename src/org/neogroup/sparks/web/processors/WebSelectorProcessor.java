@@ -31,6 +31,6 @@ public class WebSelectorProcessor extends SelectorProcessor<WebCommand, WebProce
 
     @Override
     public WebProcessor getProcessor(WebCommand command) {
-        return processorsByRoute.get(command.getClass());
+        return processorsByRoute.get(command.getWebRoute());
     }
 }
