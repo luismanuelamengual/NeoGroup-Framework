@@ -24,6 +24,7 @@ public abstract class ApplicationContext {
         running = false;
         this.processors = new HashMap<>();
         this.processorsByCommand = new HashMap<>();
+        registerProcessor(ResourceSelectorProcessor.class);
     }
 
     public Properties getProperties() {

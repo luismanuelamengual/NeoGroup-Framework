@@ -1,9 +1,7 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.processors.PepeProcessor;
-import org.neogroup.sparks.processors.RamaProcessor;
-import org.neogroup.sparks.processors.TestProcessor;
+import org.neogroup.sparks.processors.*;
 import org.neogroup.sparks.web.WebModule;
 
 public class Main {
@@ -20,6 +18,8 @@ public class Main {
         application.addModule(pepeModule);
         application.addModule(ramaModule);
         application.registerProcessor(TestProcessor.class);
+        application.registerProcessor(UserResourceProcessor.class);
+        application.registerProcessor(UsersProcessor.class);
         application.start();
     }
 }
