@@ -2,10 +2,14 @@
 package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
+import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class Module extends ApplicationContext {
@@ -48,6 +52,14 @@ public abstract class Module extends ApplicationContext {
             translator = application.getTranslator();
         }
         return translator;
+    }
+
+    @Override
+    public Collection<Processor> getRegisteredProcessors() {
+        List<Processor> registeredProcessors = new ArrayList<>();
+        registeredProcessors.addAll(super.getRegisteredProcessors());
+        registeredProcessors.addAll(application.getRegisteredProcessors());
+        return registeredProcessors;
     }
 
     @Override
