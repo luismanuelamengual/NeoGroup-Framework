@@ -1,22 +1,24 @@
 
-package org.neogroup.sparks;
+package example;
 
-import org.neogroup.sparks.processors.*;
+import example.processors.*;
+import org.neogroup.sparks.Application;
 import org.neogroup.sparks.web.WebModule;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        WebModule pepeModule = new WebModule(1408);
-        pepeModule.registerProcessor(PepeProcessor.class);
-
-        WebModule ramaModule = new WebModule(1409);
-        ramaModule.registerProcessor(RamaProcessor.class);
-
         Application application = new Application();
+
+        WebModule pepeModule = new WebModule(application, 1408);
+        pepeModule.registerProcessor(PepeProcessor.class);
         application.addModule(pepeModule);
+
+        WebModule ramaModule = new WebModule(application, 1409);
+        ramaModule.registerProcessor(RamaProcessor.class);
         application.addModule(ramaModule);
+
         application.registerProcessor(TestProcessor.class);
         application.registerProcessor(UserResourceProcessor.class);
         application.registerProcessor(UsersProcessor.class);

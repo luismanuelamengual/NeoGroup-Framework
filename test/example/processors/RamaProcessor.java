@@ -1,5 +1,5 @@
 
-package org.neogroup.sparks.processors;
+package example.processors;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;

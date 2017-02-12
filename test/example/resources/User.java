@@ -1,5 +1,7 @@
 
-package org.neogroup.sparks.resources;
+package example.resources;
+
+import org.neogroup.sparks.resources.Resource;
 
 public class User extends Resource {
 

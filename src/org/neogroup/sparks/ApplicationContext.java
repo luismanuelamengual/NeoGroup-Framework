@@ -89,7 +89,7 @@ public abstract class ApplicationContext {
         return (R) processor.process(command);
     }
 
-    public final void start () {
+    protected final void startContext () {
         if (!running) {
             for (Processor processor : processors.values()) {
                 processor.onStart();
@@ -99,7 +99,7 @@ public abstract class ApplicationContext {
         }
     }
 
-    public final void stop () {
+    protected final void stopContext () {
         if (running) {
             for (Processor processor : processors.values()) {
                 processor.onStop();

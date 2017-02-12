@@ -49,26 +49,33 @@ public class Application extends ApplicationContext {
     }
 
     public final void addModule(Module module) {
-        module.setApplication(this);
         modules.add(module);
     }
 
     public final void removeModule(Module module) {
-        module.setApplication(null);
+
         modules.remove(module);
     }
 
+    public final void start() {
+        startContext();
+    }
+
+    public final void stop() {
+        stopContext();
+    }
+
     @Override
-    public void onStart () {
+    protected void onStart() {
         for (Module module : modules) {
-            module.start();
+            module.startContext();
         }
     }
 
     @Override
-    public void onStop () {
+    protected void onStop() {
         for (Module module : modules) {
-            module.stop();
+            module.stopContext();
         }
     }
 }

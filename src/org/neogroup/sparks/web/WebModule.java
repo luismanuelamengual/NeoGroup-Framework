@@ -2,6 +2,7 @@
 package org.neogroup.sparks.web;
 
 import org.neogroup.httpserver.*;
+import org.neogroup.sparks.Application;
 import org.neogroup.sparks.Module;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.web.commands.WebCommand;
@@ -17,11 +18,12 @@ public class WebModule extends Module {
 
     private final HttpServer server;
 
-    public WebModule() {
-        this(DEFAULT_SERVER_PORT);
+    public WebModule(Application application) {
+        this(application, DEFAULT_SERVER_PORT);
     }
 
-    public WebModule(int port) {
+    public WebModule(Application application, int port) {
+        super(application);
         server = new HttpServer(port);
         server.addContext(new HttpContext("/") {
             @Override
@@ -29,7 +31,7 @@ public class WebModule extends Module {
                 WebCommand webCommand = new WebCommand(request);
                 HttpResponse response = null;
                 try {
-                    response = WebModule.this.processCommand(webCommand);
+                    response = processCommand(webCommand);
                 }
                 catch (ProcessorNotFoundException exception) {
                     response = onContextNotFound(webCommand);

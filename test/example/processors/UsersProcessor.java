@@ -1,11 +1,10 @@
 
-package org.neogroup.sparks.processors;
+package example.processors;
 
 import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
-import org.neogroup.httpserver.HttpResponseCode;
-import org.neogroup.sparks.resources.User;
+import example.resources.User;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
@@ -25,11 +24,11 @@ public class UsersProcessor extends WebProcessor {
         user.setAge(Integer.parseInt(request.getParameter("age")));
         createResource(user);
 
-        return retrieveUsersAction(request);
+        return showUsersAction(request);
     }
 
-    @RouteAction(name="retrieveUsers")
-    public HttpResponse retrieveUsersAction(HttpRequest request) {
+    @RouteAction(name="showUsers")
+    public HttpResponse showUsersAction(HttpRequest request) {
 
         StringBuilder str = new StringBuilder();
         List<User> users = retrieveResources(User.class);

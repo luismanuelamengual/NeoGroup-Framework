@@ -1,9 +1,10 @@
 
-package org.neogroup.sparks.processors;
+package example.processors;
 
+import org.neogroup.sparks.processors.ResourceProcessor;
 import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
-import org.neogroup.sparks.resources.User;
+import example.resources.User;
 
 import java.util.*;
 

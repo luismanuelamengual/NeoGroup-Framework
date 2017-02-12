@@ -1,18 +1,19 @@
-package org.neogroup.sparks.processors;
+
+package example.processors;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
+import org.neogroup.sparks.web.routing.RouteAction;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
 
-@Route(path="/pepe/")
-public class PepeProcessor extends WebProcessor {
+@Route(path="/test/")
+public class TestProcessor extends WebProcessor {
 
     @RouteAction
     public HttpResponse indexAction (HttpRequest request) {
         HttpResponse response = new HttpResponse();
-        response.setBody("PEPE CONTROLLER !!");
+        response.setBody("TEST CONTROLLER !!");
         return response;
     }
 }

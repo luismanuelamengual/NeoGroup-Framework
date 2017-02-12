@@ -13,17 +13,14 @@ import java.util.logging.Logger;
 
 public abstract class Module extends ApplicationContext {
 
-    protected Application application;
+    protected final Application application;
 
-    public Module() {
+    public Module(Application application) {
+        this.application = application;
     }
 
     public Application getApplication() {
         return application;
-    }
-
-    public void setApplication(Application application) {
-        this.application = application;
     }
 
     @Override
