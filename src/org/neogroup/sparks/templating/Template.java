@@ -5,8 +5,8 @@ public abstract class Template {
 
     protected final String filename;
 
-    public Template(String name) {
-        this.filename = name;
+    public Template(String filename) {
+        this.filename = filename;
     }
 
     public String getFilename() {

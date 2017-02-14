@@ -2,6 +2,7 @@
 package org.neogroup.sparks.web;
 
 import org.neogroup.httpserver.*;
+import org.neogroup.httpserver.contexts.HttpContext;
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.Module;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;

@@ -1,24 +1,21 @@
 
 package org.neogroup.sparks.templating.velocity;
 
-import org.neogroup.sparks.templating.Template;
-import org.neogroup.sparks.templating.TemplateExtensions;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.VelocityEngine;
+import org.neogroup.sparks.templating.Template;
 
 import java.io.StringWriter;
 
-@TemplateExtensions({"vm"})
 public class VelocityTemplate extends Template {
 
     private static String TEMPLATE_PROCESSING_ERROR = "Error processing velocity template !!";
 
+    private final org.apache.velocity.Template template;
     private final VelocityContext context;
-    private final VelocityEngine engine;
 
-    public VelocityTemplate(VelocityEngine engine, String filename) {
+    public VelocityTemplate(String filename, org.apache.velocity.Template template) {
         super(filename);
-        this.engine = engine;
+        this.template = template;
         this.context = new VelocityContext();
     }
 
@@ -36,7 +33,7 @@ public class VelocityTemplate extends Template {
     public String render() {
         String response = null;
         try (StringWriter writer = new StringWriter()) {
-            engine.getTemplate(getFilename()).merge(context, writer);
+            template.merge(context, writer);
             response = writer.toString();
         }
         catch (Throwable throwable) {
