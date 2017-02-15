@@ -3,7 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.templating.TemplateManager;
+import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -52,12 +52,12 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public TemplateManager getTemplateManager() {
-        TemplateManager templateManager = super.getTemplateManager();
-        if (templateManager == null) {
-            templateManager = application.getTemplateManager();
+    public TemplatesManager getTemplatesManager() {
+        TemplatesManager templatesManager = super.getTemplatesManager();
+        if (templatesManager == null) {
+            templatesManager = application.getTemplatesManager();
         }
-        return templateManager;
+        return templatesManager;
     }
 
     @Override

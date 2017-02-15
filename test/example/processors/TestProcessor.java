@@ -21,7 +21,7 @@ public class TestProcessor extends WebProcessor {
     @RouteAction (name="template")
     public HttpResponse templateAction (HttpRequest request) {
 
-        Template template = getApplicationContext().getTemplateManager().createTemplate(request.getParameter("tpl"));
+        Template template = getApplicationContext().getTemplatesManager().createTemplate(request.getParameter("tpl"));
         template.setParameter("name", request.getParameter("name"));
 
         HttpResponse response = new HttpResponse();

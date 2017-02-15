@@ -1,7 +1,7 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.templating.TemplateManager;
+import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.sparks.templating.freemarker.FreeMarkerTemplateFactory;
 import org.neogroup.sparks.templating.velocity.VelocityTemplateFactory;
 import org.neogroup.util.Properties;
@@ -49,16 +49,16 @@ public class Application extends ApplicationContext {
 
         //Manejador de templates
         String baseTemplatesPath = "/home/luis/Escritorio/Pepe/";
-        templateManager = new TemplateManager();
+        templatesManager = new TemplatesManager();
 
         VelocityTemplateFactory velocityTemplateFactory = new VelocityTemplateFactory();
         velocityTemplateFactory.setDebugMode(true);
         velocityTemplateFactory.setBasePath(baseTemplatesPath);
-        templateManager.addTemplateFactory(velocityTemplateFactory);
+        templatesManager.addTemplateFactory(velocityTemplateFactory);
 
         FreeMarkerTemplateFactory freeMarkerTemplateFactory = new FreeMarkerTemplateFactory();
         freeMarkerTemplateFactory.setBasePath(baseTemplatesPath);
-        templateManager.addTemplateFactory(freeMarkerTemplateFactory);
+        templatesManager.addTemplateFactory(freeMarkerTemplateFactory);
 
         //Modulos de la aplicación
         modules = new ArrayList<>();

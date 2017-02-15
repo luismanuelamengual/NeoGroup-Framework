@@ -5,13 +5,13 @@ import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
-public class TemplateManager {
+public class TemplatesManager {
 
     private static final String TEMPLATE_NOT_FOUND_ERROR = "Template \"{0}\" not found !!";
 
     private final Set<TemplateFactory> templateFactories;
 
-    public TemplateManager() {
+    public TemplatesManager() {
         this.templateFactories = new HashSet<>();
     }
 

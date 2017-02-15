@@ -3,7 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.*;
-import org.neogroup.sparks.templating.TemplateManager;
+import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -18,7 +18,7 @@ public abstract class ApplicationContext {
     protected Properties properties;
     protected Logger logger;
     protected Translator translator;
-    protected TemplateManager templateManager;
+    protected TemplatesManager templatesManager;
     private final Map<Class<? extends Processor>, Processor> processors;
     private final Map<Class<? extends Command>, Processor> processorsByCommand;
 
@@ -53,12 +53,12 @@ public abstract class ApplicationContext {
         this.translator = translator;
     }
 
-    public TemplateManager getTemplateManager() {
-        return templateManager;
+    public TemplatesManager getTemplatesManager() {
+        return templatesManager;
     }
 
-    public void setTemplateManager(TemplateManager templateManager) {
-        this.templateManager = templateManager;
+    public void setTemplatesManager(TemplatesManager templatesManager) {
+        this.templatesManager = templatesManager;
     }
 
     public Collection<Processor> getRegisteredProcessors () {
