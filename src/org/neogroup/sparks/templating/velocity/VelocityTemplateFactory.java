@@ -2,9 +2,10 @@
 package org.neogroup.sparks.templating.velocity;
 
 import org.apache.velocity.Template;
-import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.neogroup.sparks.templating.TemplateException;
 import org.neogroup.sparks.templating.TemplateFactory;
 import org.neogroup.sparks.templating.TemplateNotFoundException;
@@ -15,14 +16,12 @@ public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
 
     public static final String TEMPLATE_NAMESPACE_SEPARATOR = ".";
 
-    static {
-        Velocity.init();
-    }
-
     private final VelocityEngine engine;
 
     public VelocityTemplateFactory() {
         engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+        engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
     }
 
     public void setBasePath (String basePath) {

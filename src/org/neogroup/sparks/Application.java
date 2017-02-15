@@ -1,6 +1,9 @@
 
 package org.neogroup.sparks;
 
+import org.neogroup.sparks.templating.TemplateManager;
+import org.neogroup.sparks.templating.freemarker.FreeMarkerTemplateFactory;
+import org.neogroup.sparks.templating.velocity.VelocityTemplateFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.Translator;
 
@@ -43,6 +46,19 @@ public class Application extends ApplicationContext {
         }
         translator = new Translator();
         translator.setDefaultBundleName(defaultBundleResourceName);
+
+        //Manejador de templates
+        String baseTemplatesPath = "/home/luis/Escritorio/Pepe/";
+        templateManager = new TemplateManager();
+
+        VelocityTemplateFactory velocityTemplateFactory = new VelocityTemplateFactory();
+        velocityTemplateFactory.setDebugMode(true);
+        velocityTemplateFactory.setBasePath(baseTemplatesPath);
+        templateManager.addTemplateFactory(velocityTemplateFactory);
+
+        FreeMarkerTemplateFactory freeMarkerTemplateFactory = new FreeMarkerTemplateFactory();
+        freeMarkerTemplateFactory.setBasePath(baseTemplatesPath);
+        templateManager.addTemplateFactory(freeMarkerTemplateFactory);
 
         //Modulos de la aplicación
         modules = new ArrayList<>();

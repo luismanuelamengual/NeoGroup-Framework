@@ -6,7 +6,6 @@ import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.httpserver.HttpResponseCode;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.routing.RouteAction;
 import org.neogroup.util.MimeTypes;
