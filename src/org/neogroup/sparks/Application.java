@@ -26,7 +26,7 @@ public class Application extends ApplicationContext {
         //Propiedades de la aplicación
         properties = new Properties();
         try {
-            properties.loadResource(PROPERTIES_RESOURCE_NAME);
+            properties.loadFromFile(PROPERTIES_RESOURCE_NAME);
         }
         catch (Exception ex) {}
 

@@ -28,4 +28,15 @@ public class TestProcessor extends WebProcessor {
         response.setBody(template.render());
         return response;
     }
+
+    @RouteAction (name="properties")
+    public HttpResponse propertiesAction (HttpRequest request) {
+
+        String property = request.getParameter("property");
+        String value = getApplicationContext().getProperties().get(property);
+
+        HttpResponse response = new HttpResponse();
+        response.setBody("El valor de la propiedad \"" + property + "\" es: " + value);
+        return response;
+    }
 }
