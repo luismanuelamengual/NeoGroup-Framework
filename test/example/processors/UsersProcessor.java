@@ -21,7 +21,9 @@ public class UsersProcessor extends WebProcessor {
         User user = new User();
         user.setName(request.getParameter("name"));
         user.setLastName(request.getParameter("lastName"));
-        user.setAge(Integer.parseInt(request.getParameter("age")));
+        if (request.hasParameter("age")) {
+            user.setAge(Integer.parseInt(request.getParameter("age")));
+        }
         createResource(user);
 
         return showUsersAction(request);

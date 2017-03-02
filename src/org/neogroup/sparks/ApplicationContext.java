@@ -5,7 +5,7 @@ import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.*;
 import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.util.Properties;
-import org.neogroup.util.Translator;
+import org.neogroup.util.BundlesManager;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public abstract class ApplicationContext {
     protected boolean running;
     protected Properties properties;
     protected Logger logger;
-    protected Translator translator;
+    protected BundlesManager bundlesManager;
     protected TemplatesManager templatesManager;
     private final Map<Class<? extends Processor>, Processor> processors;
     private final Map<Class<? extends Command>, Processor> processorsByCommand;
@@ -45,12 +45,12 @@ public abstract class ApplicationContext {
         this.logger = logger;
     }
 
-    public Translator getTranslator() {
-        return translator;
+    public BundlesManager getBundlesManager() {
+        return bundlesManager;
     }
 
-    public void setTranslator(Translator translator) {
-        this.translator = translator;
+    public void setBundlesManager(BundlesManager bundlesManager) {
+        this.bundlesManager = bundlesManager;
     }
 
     public TemplatesManager getTemplatesManager() {

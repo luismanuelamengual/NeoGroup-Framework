@@ -5,7 +5,7 @@ import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.util.Properties;
-import org.neogroup.util.Translator;
+import org.neogroup.util.BundlesManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,12 +43,12 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public Translator getTranslator() {
-        Translator translator = super.getTranslator();
-        if (translator == null) {
-            translator = application.getTranslator();
+    public BundlesManager getBundlesManager() {
+        BundlesManager bundlesManager = super.getBundlesManager();
+        if (bundlesManager == null) {
+            bundlesManager = application.getBundlesManager();
         }
-        return translator;
+        return bundlesManager;
     }
 
     @Override

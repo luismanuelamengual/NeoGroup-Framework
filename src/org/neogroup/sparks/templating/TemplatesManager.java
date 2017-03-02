@@ -26,14 +26,16 @@ public class TemplatesManager {
     public Template createTemplate (String templateName) throws TemplateException {
 
         Template template = null;
-        for (TemplateFactory templateFactory : templateFactories) {
-            try {
-                template = templateFactory.createTemplate(templateName);
-                if (template != null) {
-                    break;
+        if (templateName != null && !templateName.isEmpty()) {
+            for (TemplateFactory templateFactory : templateFactories) {
+                try {
+                    template = templateFactory.createTemplate(templateName);
+                    if (template != null) {
+                        break;
+                    }
+                } catch (TemplateNotFoundException ex) {
                 }
             }
-            catch (TemplateNotFoundException ex) {}
         }
         if (template == null) {
             throw new TemplateNotFoundException(MessageFormat.format(TEMPLATE_NOT_FOUND_ERROR, templateName));

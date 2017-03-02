@@ -5,7 +5,7 @@ import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.sparks.templating.freemarker.FreeMarkerTemplateFactory;
 import org.neogroup.sparks.templating.velocity.VelocityTemplateFactory;
 import org.neogroup.util.Properties;
-import org.neogroup.util.Translator;
+import org.neogroup.util.BundlesManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,11 +13,10 @@ import java.util.logging.Logger;
 
 public class Application extends ApplicationContext {
 
-    private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
-    private final static String DEFAULT_MESSAGES_BUNDLE_NAME = "localization/messages";
     private final static String LOGGER_NAME = "sparks_logger";
-    private final static String DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY = "logger_default_bundle_name";
-    private final static String DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY = "messages_default_bundle_name";
+    private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
+    private final static String DEFAULT_BUNDLE_NAME_PROPERTY = "default_bundle_name";
+    private final static String BUNDLES_PATH_PROPERTY = "bundles_path";
 
     protected final List<Module> modules;
 
@@ -30,34 +29,26 @@ public class Application extends ApplicationContext {
         }
         catch (Exception ex) {}
 
-        //Logger de la aplicación
-        String loggerResourceName = properties.get(DEFAULT_LOGGER_BUNDLE_NAME_PROPERTY);
-        if (loggerResourceName != null) {
-            logger = Logger.getLogger(LOGGER_NAME, loggerResourceName);
+        //Traductor de la aplicación
+        bundlesManager = new BundlesManager();
+        String bundlesPath = properties.get(BUNDLES_PATH_PROPERTY);
+        if (bundlesPath != null) {
+            bundlesManager.setDefaultBundlesPath(bundlesPath);
         }
-        else {
-            logger = Logger.getLogger(LOGGER_NAME);
+        String defaultBundleName = properties.get(DEFAULT_BUNDLE_NAME_PROPERTY);
+        if (defaultBundleName != null) {
+            bundlesManager.setDefaultBundleName(defaultBundleName);
         }
 
-        //Traductor de la aplicación
-        String defaultBundleResourceName = properties.get(DEFAULT_MESSAGES_BUNDLE_NAME_PROPERTY);
-        if (defaultBundleResourceName == null) {
-            defaultBundleResourceName = DEFAULT_MESSAGES_BUNDLE_NAME;
-        }
-        translator = new Translator();
-        translator.setDefaultBundleName(defaultBundleResourceName);
+        //Logger de la aplicación
+        logger = Logger.getLogger(LOGGER_NAME);
 
         //Manejador de templates
-        String baseTemplatesPath = "/home/luis/Escritorio/Pepe/";
-        templatesManager = new TemplatesManager();
-
         VelocityTemplateFactory velocityTemplateFactory = new VelocityTemplateFactory();
         velocityTemplateFactory.setDebugMode(true);
-        velocityTemplateFactory.setBasePath(baseTemplatesPath);
-        templatesManager.addTemplateFactory(velocityTemplateFactory);
-
         FreeMarkerTemplateFactory freeMarkerTemplateFactory = new FreeMarkerTemplateFactory();
-        freeMarkerTemplateFactory.setBasePath(baseTemplatesPath);
+        templatesManager = new TemplatesManager();
+        templatesManager.addTemplateFactory(velocityTemplateFactory);
         templatesManager.addTemplateFactory(freeMarkerTemplateFactory);
 
         //Modulos de la aplicación
@@ -69,7 +60,6 @@ public class Application extends ApplicationContext {
     }
 
     public final void removeModule(Module module) {
-
         modules.remove(module);
     }
 

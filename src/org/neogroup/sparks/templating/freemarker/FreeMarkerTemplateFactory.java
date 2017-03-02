@@ -20,6 +20,7 @@ public class FreeMarkerTemplateFactory extends TemplateFactory<FreeMarkerTemplat
         configuration = new Configuration(Configuration.VERSION_2_3_25);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+        configuration.setClassForTemplateLoading(this.getClass(), "/");
         configuration.setLogTemplateExceptions(false);
     }
 
