@@ -13,8 +13,7 @@ public class VelocityTemplate extends Template {
     private final org.apache.velocity.Template template;
     private final VelocityContext context;
 
-    public VelocityTemplate(String filename, org.apache.velocity.Template template) {
-        super(filename);
+    public VelocityTemplate(org.apache.velocity.Template template) {
         this.template = template;
         this.context = new VelocityContext();
     }

@@ -37,7 +37,7 @@ public class FreeMarkerTemplateFactory extends TemplateFactory<FreeMarkerTemplat
         try {
             String templateFilename = templateName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".ft";
             Template template = configuration.getTemplate(templateFilename);
-            return new FreeMarkerTemplate(templateFilename, template);
+            return new FreeMarkerTemplate(template);
         }
         catch (freemarker.template.TemplateNotFoundException ex) {
             throw new TemplateNotFoundException(ex);

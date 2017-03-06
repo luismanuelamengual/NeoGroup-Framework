@@ -14,8 +14,7 @@ public class FreeMarkerTemplate extends Template {
     private final freemarker.template.Template template;
     private final Map<String,Object> parameters;
 
-    public FreeMarkerTemplate(String filename, freemarker.template.Template template) {
-        super(filename);
+    public FreeMarkerTemplate(freemarker.template.Template template) {
         this.template = template;
         this.parameters = new HashMap<>();
     }

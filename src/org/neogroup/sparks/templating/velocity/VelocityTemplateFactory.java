@@ -20,6 +20,8 @@ public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
 
     public VelocityTemplateFactory() {
         engine = new VelocityEngine();
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.NullLogChute");
+        engine.setProperty(RuntimeConstants.RUNTIME_LOG, "/dev/null");
         engine.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
         engine.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
     }
@@ -38,7 +40,7 @@ public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
         try {
             String templateFilename = templateName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".vm";
             Template template = engine.getTemplate(templateFilename);
-            return new VelocityTemplate(templateFilename, template);
+            return new VelocityTemplate(template);
         }
         catch (ResourceNotFoundException ex) {
             throw new TemplateNotFoundException(ex);
