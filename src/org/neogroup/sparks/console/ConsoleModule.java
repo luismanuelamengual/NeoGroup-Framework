@@ -3,6 +3,9 @@ package org.neogroup.sparks.console;
 
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.Module;
+import org.neogroup.sparks.console.commands.ConsoleCommand;
+import org.neogroup.sparks.console.processors.ConsoleSelectorProcessor;
+import org.neogroup.sparks.processors.ProcessorNotFoundException;
 
 public class ConsoleModule extends Module {
 
@@ -11,6 +14,7 @@ public class ConsoleModule extends Module {
     public ConsoleModule(Application application) {
         super(application);
         consoleHandler = new LocalConsoleHandler();
+        registerProcessor(ConsoleSelectorProcessor.class);
     }
 
     @Override
@@ -36,7 +40,25 @@ public class ConsoleModule extends Module {
 
         @Override
         protected void onCommandEntered(Console console, String command) {
-            console.println("shessss optus !!");
+
+            ConsoleCommand consoleCommand = new ConsoleCommand(console, command);
+            try {
+                processCommand(consoleCommand);
+            }
+            catch (ProcessorNotFoundException exception) {
+                onCommandNotFound(console, command);
+            }
+            catch (Throwable throwable) {
+                onCommandError(console, command, throwable);
+            }
         }
+    }
+
+    protected void onCommandNotFound (Console console, String command) {
+        console.println("Command \"" + command + "\" not found !!");
+    }
+
+    protected void onCommandError (Console console, String command, Throwable throwable) {
+        console.println("Error: " + throwable.getMessage());
     }
 }
