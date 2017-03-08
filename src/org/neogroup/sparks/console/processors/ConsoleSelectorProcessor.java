@@ -33,6 +33,6 @@ public class ConsoleSelectorProcessor extends SelectorProcessor<ConsoleCommand, 
 
     @Override
     public ConsoleProcessor getProcessor(ConsoleCommand command) {
-        return processorsByCommandName.get(command.getCommandName());
+        return processorsByCommandName.get(command.getCommand().getCommandName());
     }
 }

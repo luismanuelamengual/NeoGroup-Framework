@@ -41,7 +41,7 @@ public class Console {
 
     public String readLine()  {
         String line = null;
-        try { line = reader.readLine(); } catch (Exception ex) { close(); };
+        try { line = reader.readLine(); } catch (Exception ex) { close(); }
         return line;
     }
 

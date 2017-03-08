@@ -39,7 +39,7 @@ public class ConsoleModule extends Module {
         }
 
         @Override
-        protected void onCommandEntered(Console console, String command) {
+        protected void onCommandEntered(Console console, Command command) {
 
             ConsoleCommand consoleCommand = new ConsoleCommand(console, command);
             try {
@@ -54,11 +54,11 @@ public class ConsoleModule extends Module {
         }
     }
 
-    protected void onCommandNotFound (Console console, String command) {
+    protected void onCommandNotFound (Console console, Command command) {
         console.println("Command \"" + command + "\" not found !!");
     }
 
-    protected void onCommandError (Console console, String command, Throwable throwable) {
+    protected void onCommandError (Console console, Command command, Throwable throwable) {
         console.println("Error: " + throwable.getMessage());
     }
 }
