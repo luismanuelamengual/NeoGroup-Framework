@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ResourceProcessor<R extends Resource> extends Processor<ResourcesCommand,Object> {
+public abstract class ResourceProcessor<R extends Resource> extends Processor<ResourcesCommand,List<R>> {
 
     @Override
-    public Object process(ResourcesCommand command) throws ProcessorException {
+    public List<R> process(ResourcesCommand command) throws ProcessorException {
 
-        Object result = null;
+        List<R> result = null;
         if (command instanceof RetrieveResourcesCommand) {
             RetrieveResourcesCommand retrieveResourcesCommand = (RetrieveResourcesCommand)command;
             result = retrieve(retrieveResourcesCommand.getFilters(), retrieveResourcesCommand.getOrders(), retrieveResourcesCommand.getParameters());
@@ -23,23 +23,22 @@ public abstract class ResourceProcessor<R extends Resource> extends Processor<Re
         else if (command instanceof ModifyResourcesCommand) {
             ModifyResourcesCommand modifyResourcesCommand = (ModifyResourcesCommand)command;
             List<R> resources = modifyResourcesCommand.getResources();
-            List<R> resultArray = new ArrayList<R>();
+            result = new ArrayList<R>();
             if (command instanceof CreateResourcesCommand) {
                 for (R resource : resources) {
-                    resultArray.add((R)create(resource, modifyResourcesCommand.getParameters()));
+                    result.add((R)create(resource, modifyResourcesCommand.getParameters()));
                 }
             }
             else if (command instanceof UpdateResourcesCommand) {
                 for (R resource : resources) {
-                    resultArray.add((R)update(resource, modifyResourcesCommand.getParameters()));
+                    result.add((R)update(resource, modifyResourcesCommand.getParameters()));
                 }
             }
             else if (command instanceof DeleteResourcesCommand) {
                 for (R resource : resources) {
-                    resultArray.add((R)delete(resource, modifyResourcesCommand.getParameters()));
+                    result.add((R)delete(resource, modifyResourcesCommand.getParameters()));
                 }
             }
-            result = resultArray;
         }
         return result;
     }
