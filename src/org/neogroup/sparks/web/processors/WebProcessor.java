@@ -6,6 +6,7 @@ import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.httpserver.HttpResponseCode;
 import org.neogroup.sparks.processors.Processor;
+import org.neogroup.sparks.templating.Template;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.routing.RouteAction;
 import org.neogroup.util.MimeTypes;
@@ -68,18 +69,80 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
+        return createResponse(HttpResponseCode.HTTP_INTERNAL_ERROR, MimeTypes.TEXT_PLAIN, body);
+    }
+
+    protected HttpResponse onActionNotFound (String action, HttpRequest request) {
+        return createResponse(HttpResponseCode.HTTP_NOT_FOUND, MimeTypes.TEXT_PLAIN, "Action \"" + action + "\" found in controller \"" + this + "\" !!");
+    }
+
+    protected HttpResponse createResponse (String body) {
+        return createResponse(HttpResponseCode.HTTP_OK, body);
+    }
+
+    protected HttpResponse createResponse (String responseType, String body) {
+        return createResponse(HttpResponseCode.HTTP_OK, responseType, body);
+    }
+
+    protected HttpResponse createResponse (int responseCode, String body) {
+        return createResponse(responseCode, MimeTypes.TEXT_HTML, body);
+    }
+
+    protected HttpResponse createResponse (int responseCode, String responseType, String body) {
+        return createResponse (responseCode, responseType, body.getBytes());
+    }
+
+    protected HttpResponse createResponse (int responseCode, String responseType, byte[] body) {
         HttpResponse response = new HttpResponse();
-        response.setResponseCode(HttpResponseCode.HTTP_INTERNAL_ERROR);
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.setResponseCode(responseCode);
+        response.addHeader(HttpHeader.CONTENT_TYPE, responseType);
         response.setBody(body);
         return response;
     }
 
-    protected HttpResponse onActionNotFound (String action, HttpRequest request) {
+    protected HttpResponse createRedirectionResponse (String path) {
         HttpResponse response = new HttpResponse();
-        response.setResponseCode(HttpResponseCode.HTTP_NOT_FOUND);
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
-        response.setBody("Action \"" + action + "\" found in controller \"" + this + "\" !!");
+        response.setResponseCode(HttpResponseCode.HTTP_MOVED_TEMP);
+        response.setBody(new byte[0]);
+        response.addHeader("location", path);
         return response;
+    }
+
+    protected TemplateHttpResponse createTemplateResponse (String templateName) {
+        return createTemplateResponse(HttpResponseCode.HTTP_OK, templateName);
+    }
+
+    protected TemplateHttpResponse createTemplateResponse (int responseCode, String templateName) {
+        TemplateHttpResponse templateResponse = new TemplateHttpResponse(getTemplatesManager().createTemplate(templateName));
+        templateResponse.setResponseCode(responseCode);
+        return templateResponse;
+    }
+
+    protected class TemplateHttpResponse extends HttpResponse {
+
+        private final Template template;
+        private boolean templateRendered;
+
+        public TemplateHttpResponse(Template template) {
+            this.template = template;
+            templateRendered = false;
+        }
+
+        public void setParameter(String name, Object value) {
+            template.setParameter(name, value);
+        }
+
+        public Object getParameter(String name) {
+            return template.getParameter(name);
+        }
+
+        @Override
+        protected void writeBuffer() {
+            if (!templateRendered) {
+                setBody(template.render());
+                templateRendered = true;
+            }
+            super.writeBuffer();
+        }
     }
 }

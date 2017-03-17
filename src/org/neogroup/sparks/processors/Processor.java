@@ -8,10 +8,14 @@ import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
 import org.neogroup.sparks.resources.ResourcePropertyFilter;
 import org.neogroup.sparks.resources.commands.*;
+import org.neogroup.sparks.templating.TemplatesManager;
+import org.neogroup.util.BundlesManager;
+import org.neogroup.util.Properties;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public abstract class Processor <C extends Command, R extends Object> {
 
@@ -28,6 +32,22 @@ public abstract class Processor <C extends Command, R extends Object> {
     public void onStart () {}
 
     public void onStop () {}
+
+    public Properties getProperties() {
+        return applicationContext.getProperties();
+    }
+
+    public Logger getLogger() {
+        return applicationContext.getLogger();
+    }
+
+    public BundlesManager getBundlesManager() {
+        return applicationContext.getBundlesManager();
+    }
+
+    public TemplatesManager getTemplatesManager() {
+        return applicationContext.getTemplatesManager();
+    }
 
     protected <R extends Resource> R createResource (R resource) {
         return createResource(resource, null);
