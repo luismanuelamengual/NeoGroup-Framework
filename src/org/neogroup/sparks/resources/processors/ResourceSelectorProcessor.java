@@ -1,8 +1,10 @@
 
-package org.neogroup.sparks.processors;
+package org.neogroup.sparks.resources.processors;
 
-import org.neogroup.sparks.commands.*;
+import org.neogroup.sparks.processors.ProcessorComponent;
+import org.neogroup.sparks.processors.SelectorProcessor;
 import org.neogroup.sparks.resources.Resource;
+import org.neogroup.sparks.resources.commands.*;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

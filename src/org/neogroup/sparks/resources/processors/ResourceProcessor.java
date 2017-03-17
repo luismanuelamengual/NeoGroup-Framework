@@ -1,10 +1,12 @@
 
-package org.neogroup.sparks.processors;
+package org.neogroup.sparks.resources.processors;
 
-import org.neogroup.sparks.commands.*;
+import org.neogroup.sparks.processors.Processor;
+import org.neogroup.sparks.processors.ProcessorException;
 import org.neogroup.sparks.resources.Resource;
 import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
+import org.neogroup.sparks.resources.commands.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Map;
 public abstract class ResourceProcessor<R extends Resource> extends Processor<ResourcesCommand,List<R>> {
 
     @Override
-    public List<R> process(ResourcesCommand command) throws ProcessorException {
+    public final List<R> process(ResourcesCommand command) throws ProcessorException {
 
         List<R> result = null;
         if (command instanceof RetrieveResourcesCommand) {

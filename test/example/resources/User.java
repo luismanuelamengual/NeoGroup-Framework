@@ -3,18 +3,18 @@ package example.resources;
 
 import org.neogroup.sparks.resources.Resource;
 
-public class User extends Resource {
+public class User extends Resource<Integer> {
 
     private int id;
     private String name;
     private String lastName;
     private int age;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

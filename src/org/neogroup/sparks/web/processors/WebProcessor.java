@@ -31,7 +31,7 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
     }
 
     @Override
-    public HttpResponse process(WebCommand command) {
+    public final HttpResponse process(WebCommand command) {
 
         HttpResponse response = null;
         HttpRequest request = command.getRequest();

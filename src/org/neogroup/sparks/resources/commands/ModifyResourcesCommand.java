@@ -1,7 +1,6 @@
 
-package org.neogroup.sparks.commands;
+package org.neogroup.sparks.resources.commands;
 
-import org.neogroup.sparks.processors.ResourceProcessor;
 import org.neogroup.sparks.resources.Resource;
 
 import java.util.ArrayList;

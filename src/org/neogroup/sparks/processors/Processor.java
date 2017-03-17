@@ -6,6 +6,8 @@ import org.neogroup.sparks.commands.*;
 import org.neogroup.sparks.resources.Resource;
 import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
+import org.neogroup.sparks.resources.ResourcePropertyFilter;
+import org.neogroup.sparks.resources.commands.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +57,24 @@ public abstract class Processor <C extends Command, R extends Object> {
         DeleteResourcesCommand command = new DeleteResourcesCommand(resource.getClass(), resource);
         command.setParameters(params);
         return ((List<R>)applicationContext.processCommand(command)).get(0);
+    }
+
+    protected <I extends Object, R extends Resource<I>> R retrieveResource(Class<? extends R> resourceClass, I id) {
+        return retrieveResource(resourceClass, id, null);
+    }
+
+    protected <I extends Object, R extends Resource<I>> R retrieveResource(Class<? extends R> resourceClass, I id, Map<String, Object> params) {
+        if (params == null) {
+            params = new HashMap<>();
+        }
+        params.put(ResourcesCommand.START_PARAMETER, 0);
+        params.put(ResourcesCommand.LIMIT_PARAMETER, 1);
+        List<R> resources = retrieveResources(resourceClass, new ResourcePropertyFilter("id", id), null, params);
+        R resource = null;
+        if (resources != null && !resources.isEmpty()) {
+            resource = resources.get(0);
+        }
+        return resource;
     }
 
     protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass) {

@@ -3,6 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.*;
+import org.neogroup.sparks.resources.processors.ResourceSelectorProcessor;
 import org.neogroup.sparks.templating.TemplatesManager;
 import org.neogroup.util.Properties;
 import org.neogroup.util.BundlesManager;

@@ -48,4 +48,13 @@ public class UsersProcessor extends WebProcessor {
         response.setBody(str.toString());
         return response;
     }
+
+    @RouteAction(name="showUser")
+    public HttpResponse showUserAction(HttpRequest request) {
+        User user = retrieveResource(User.class, 1);
+        HttpResponse response = new HttpResponse();
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_HTML);
+        response.setBody(user.getName());
+        return response;
+    }
 }

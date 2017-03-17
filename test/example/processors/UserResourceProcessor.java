@@ -1,12 +1,13 @@
 
 package example.processors;
 
-import org.neogroup.sparks.processors.ResourceProcessor;
+import org.neogroup.sparks.resources.processors.ResourceProcessor;
 import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
 import example.resources.User;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserResourceProcessor extends ResourceProcessor<User> {
 
@@ -39,6 +40,7 @@ public class UserResourceProcessor extends ResourceProcessor<User> {
 
     @Override
     protected List<User> retrieve(ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
-        return new ArrayList<User>(users.values());
+        List<User> usersList = new ArrayList<User>(users.values());
+        return usersList;
     }
 }
