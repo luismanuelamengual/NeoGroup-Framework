@@ -20,7 +20,7 @@ public abstract class ResourceProcessor<R extends Resource> extends Processor<Re
         List<R> result = null;
         if (command instanceof RetrieveResourcesCommand) {
             RetrieveResourcesCommand retrieveResourcesCommand = (RetrieveResourcesCommand)command;
-            result = retrieve(retrieveResourcesCommand.getFilters(), retrieveResourcesCommand.getOrders(), retrieveResourcesCommand.getParameters());
+            result = retrieve(command.getResourceClass(), retrieveResourcesCommand.getFilters(), retrieveResourcesCommand.getOrders(), retrieveResourcesCommand.getParameters());
         }
         else if (command instanceof ModifyResourcesCommand) {
             ModifyResourcesCommand modifyResourcesCommand = (ModifyResourcesCommand)command;
@@ -48,5 +48,5 @@ public abstract class ResourceProcessor<R extends Resource> extends Processor<Re
     protected abstract R create (R resource, Map<String,Object> params);
     protected abstract R update (R resource, Map<String,Object> params);
     protected abstract R delete (R resource, Map<String,Object> params);
-    protected abstract List<R> retrieve (ResourceFilter filters, List<ResourceOrder> orders, Map<String,Object> params);
+    protected abstract List<R> retrieve (Class<? extends R> resourceClass, ResourceFilter filters, List<ResourceOrder> orders, Map<String,Object> params);
 }
