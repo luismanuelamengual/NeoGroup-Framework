@@ -33,6 +33,8 @@ public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
     public void setDebugMode (boolean debugMode) {
         engine.setProperty("file.resource.loader.cache", debugMode?"false":"true");
         engine.setProperty("velocimacro.library.autoreload", debugMode?"true":"false");
+        engine.setProperty("resource.manager.cache.enabled", false);
+        engine.setProperty(RuntimeConstants.VM_PERM_ALLOW_INLINE_REPLACE_GLOBAL, true);
     }
 
     @Override

@@ -4,16 +4,16 @@ package org.neogroup.sparks.resources;
 public class ResourcePropertyFilter extends ResourceFilter {
 
     private final String property;
-    private final String connector;
+    private final String operator;
     private final Object value;
 
     public ResourcePropertyFilter(String property, Object value) {
         this(property, ResourcePropertyOperator.EQUALS, value);
     }
 
-    public ResourcePropertyFilter(String property, String connector, Object value) {
+    public ResourcePropertyFilter(String property, String operator, Object value) {
         this.property = property;
-        this.connector = connector;
+        this.operator = operator;
         this.value = value;
     }
 
@@ -21,8 +21,8 @@ public class ResourcePropertyFilter extends ResourceFilter {
         return property;
     }
 
-    public String getConnector() {
-        return connector;
+    public String getOperator() {
+        return operator;
     }
 
     public Object getValue() {
