@@ -41,7 +41,7 @@ public class UserResourceProcessor extends ResourceProcessor<User> {
     }
 
     @Override
-    protected List<User> retrieve(Class<? extends User> resourceClass, ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
+    protected List<User> retrieve(ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
         List<User> usersList = new ArrayList<User>(users.values());
         return usersList;
     }
