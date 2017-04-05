@@ -6,7 +6,7 @@ import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.httpserver.HttpResponseCode;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.templating.Template;
+import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.routing.RouteAction;
 import org.neogroup.util.MimeTypes;
@@ -108,39 +108,39 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
         return response;
     }
 
-    protected TemplateHttpResponse createTemplateResponse (String templateName) {
-        return createTemplateResponse(HttpResponseCode.HTTP_OK, templateName);
+    protected ViewHttpResponse createViewResponse(String viewName) {
+        return createViewResponse(HttpResponseCode.HTTP_OK, viewName);
     }
 
-    protected TemplateHttpResponse createTemplateResponse (int responseCode, String templateName) {
-        TemplateHttpResponse templateResponse = new TemplateHttpResponse(getTemplatesManager().createTemplate(templateName));
+    protected ViewHttpResponse createViewResponse(int responseCode, String viewName) {
+        ViewHttpResponse templateResponse = new ViewHttpResponse(getViewsManager().createView(viewName));
         templateResponse.setResponseCode(responseCode);
         return templateResponse;
     }
 
-    protected class TemplateHttpResponse extends HttpResponse {
+    protected class ViewHttpResponse extends HttpResponse {
 
-        private final Template template;
-        private boolean templateRendered;
+        private final View view;
+        private boolean viewRendered;
 
-        public TemplateHttpResponse(Template template) {
-            this.template = template;
-            templateRendered = false;
+        public ViewHttpResponse(View view) {
+            this.view = view;
+            viewRendered = false;
         }
 
         public void setParameter(String name, Object value) {
-            template.setParameter(name, value);
+            view.setParameter(name, value);
         }
 
         public Object getParameter(String name) {
-            return template.getParameter(name);
+            return view.getParameter(name);
         }
 
         @Override
         protected void writeBuffer() {
-            if (!templateRendered) {
-                setBody(template.render());
-                templateRendered = true;
+            if (!viewRendered) {
+                setBody(view.render());
+                viewRendered = true;
             }
             super.writeBuffer();
         }

@@ -4,7 +4,7 @@ package org.neogroup.sparks;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.*;
 import org.neogroup.sparks.resources.processors.ResourceSelectorProcessor;
-import org.neogroup.sparks.templating.TemplatesManager;
+import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.Properties;
 import org.neogroup.util.BundlesManager;
 
@@ -19,7 +19,7 @@ public abstract class ApplicationContext {
     protected Properties properties;
     protected Logger logger;
     protected BundlesManager bundlesManager;
-    protected TemplatesManager templatesManager;
+    protected ViewsManager viewsManager;
     private final Map<Class<? extends Processor>, Processor> processors;
     private final Map<Class<? extends Command>, Processor> processorsByCommand;
 
@@ -54,12 +54,12 @@ public abstract class ApplicationContext {
         this.bundlesManager = bundlesManager;
     }
 
-    public TemplatesManager getTemplatesManager() {
-        return templatesManager;
+    public ViewsManager getViewsManager() {
+        return viewsManager;
     }
 
-    public void setTemplatesManager(TemplatesManager templatesManager) {
-        this.templatesManager = templatesManager;
+    public void setViewsManager(ViewsManager viewsManager) {
+        this.viewsManager = viewsManager;
     }
 
     public Collection<Processor> getRegisteredProcessors () {

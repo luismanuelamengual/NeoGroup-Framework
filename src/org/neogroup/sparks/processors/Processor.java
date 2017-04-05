@@ -8,7 +8,7 @@ import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
 import org.neogroup.sparks.resources.ResourcePropertyFilter;
 import org.neogroup.sparks.resources.commands.*;
-import org.neogroup.sparks.templating.TemplatesManager;
+import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.BundlesManager;
 import org.neogroup.util.Properties;
 
@@ -45,8 +45,8 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext.getBundlesManager();
     }
 
-    public TemplatesManager getTemplatesManager() {
-        return applicationContext.getTemplatesManager();
+    public ViewsManager getViewsManager() {
+        return applicationContext.getViewsManager();
     }
 
     protected <R extends Resource> R createResource (R resource) {

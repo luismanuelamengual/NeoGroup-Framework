@@ -1,19 +1,19 @@
 
-package org.neogroup.sparks.templating.velocity;
+package org.neogroup.sparks.views.velocity;
 
 import org.apache.velocity.VelocityContext;
-import org.neogroup.sparks.templating.Template;
+import org.neogroup.sparks.views.View;
 
 import java.io.StringWriter;
 
-public class VelocityTemplate extends Template {
+public class VelocityView extends View {
 
     private static String TEMPLATE_PROCESSING_ERROR = "Error processing velocity template !!";
 
     private final org.apache.velocity.Template template;
     private final VelocityContext context;
 
-    public VelocityTemplate(org.apache.velocity.Template template) {
+    public VelocityView(org.apache.velocity.Template template) {
         this.template = template;
         this.context = new VelocityContext();
     }

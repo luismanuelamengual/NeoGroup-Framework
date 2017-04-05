@@ -3,7 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.templating.TemplatesManager;
+import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.Properties;
 import org.neogroup.util.BundlesManager;
 
@@ -52,12 +52,12 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public TemplatesManager getTemplatesManager() {
-        TemplatesManager templatesManager = super.getTemplatesManager();
-        if (templatesManager == null) {
-            templatesManager = application.getTemplatesManager();
+    public ViewsManager getViewsManager() {
+        ViewsManager viewsManager = super.getViewsManager();
+        if (viewsManager == null) {
+            viewsManager = application.getViewsManager();
         }
-        return templatesManager;
+        return viewsManager;
     }
 
     @Override

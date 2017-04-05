@@ -1,24 +1,24 @@
 
-package org.neogroup.sparks.templating.velocity;
+package org.neogroup.sparks.views.velocity;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.neogroup.sparks.templating.TemplateException;
-import org.neogroup.sparks.templating.TemplateFactory;
-import org.neogroup.sparks.templating.TemplateNotFoundException;
+import org.neogroup.sparks.views.ViewException;
+import org.neogroup.sparks.views.ViewFactory;
+import org.neogroup.sparks.views.ViewNotFoundException;
 
 import java.io.File;
 
-public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
+public class VelocityViewFactory extends ViewFactory<VelocityView> {
 
     public static final String TEMPLATE_NAMESPACE_SEPARATOR = ".";
 
     private final VelocityEngine engine;
 
-    public VelocityTemplateFactory() {
+    public VelocityViewFactory() {
         engine = new VelocityEngine();
         engine.setProperty(RuntimeConstants.RUNTIME_LOG_LOGSYSTEM_CLASS, "org.apache.velocity.runtime.log.NullLogChute");
         engine.setProperty(RuntimeConstants.RUNTIME_LOG, "/dev/null");
@@ -38,17 +38,17 @@ public class VelocityTemplateFactory extends TemplateFactory<VelocityTemplate> {
     }
 
     @Override
-    public VelocityTemplate createTemplate(String templateName) throws TemplateException {
+    public VelocityView createView(String viewName) throws ViewException {
         try {
-            String templateFilename = templateName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".vm";
+            String templateFilename = viewName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".vm";
             Template template = engine.getTemplate(templateFilename);
-            return new VelocityTemplate(template);
+            return new VelocityView(template);
         }
         catch (ResourceNotFoundException ex) {
-            throw new TemplateNotFoundException(ex);
+            throw new ViewNotFoundException(ex);
         }
         catch (Exception ex) {
-            throw new TemplateException(ex);
+            throw new ViewException(ex);
         }
     }
 }

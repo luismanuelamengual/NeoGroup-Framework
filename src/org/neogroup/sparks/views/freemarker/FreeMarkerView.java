@@ -1,20 +1,20 @@
 
-package org.neogroup.sparks.templating.freemarker;
+package org.neogroup.sparks.views.freemarker;
 
-import org.neogroup.sparks.templating.Template;
+import org.neogroup.sparks.views.View;
 
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FreeMarkerTemplate extends Template {
+public class FreeMarkerView extends View {
 
     private static String TEMPLATE_PROCESSING_ERROR = "Error processing freemarker template !!";
 
     private final freemarker.template.Template template;
     private final Map<String,Object> parameters;
 
-    public FreeMarkerTemplate(freemarker.template.Template template) {
+    public FreeMarkerView(freemarker.template.Template template) {
         this.template = template;
         this.parameters = new HashMap<>();
     }

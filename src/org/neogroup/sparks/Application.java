@@ -1,9 +1,9 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.templating.TemplatesManager;
-import org.neogroup.sparks.templating.freemarker.FreeMarkerTemplateFactory;
-import org.neogroup.sparks.templating.velocity.VelocityTemplateFactory;
+import org.neogroup.sparks.views.ViewsManager;
+import org.neogroup.sparks.views.freemarker.FreeMarkerViewFactory;
+import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 import org.neogroup.util.Properties;
 import org.neogroup.util.BundlesManager;
 
@@ -44,12 +44,12 @@ public class Application extends ApplicationContext {
         logger = Logger.getLogger(LOGGER_NAME);
 
         //Manejador de templates
-        VelocityTemplateFactory velocityTemplateFactory = new VelocityTemplateFactory();
+        VelocityViewFactory velocityTemplateFactory = new VelocityViewFactory();
         velocityTemplateFactory.setDebugMode(true);
-        FreeMarkerTemplateFactory freeMarkerTemplateFactory = new FreeMarkerTemplateFactory();
-        templatesManager = new TemplatesManager();
-        templatesManager.addTemplateFactory(velocityTemplateFactory);
-        templatesManager.addTemplateFactory(freeMarkerTemplateFactory);
+        FreeMarkerViewFactory freeMarkerTemplateFactory = new FreeMarkerViewFactory();
+        viewsManager = new ViewsManager();
+        viewsManager.addViewFactory(velocityTemplateFactory);
+        viewsManager.addViewFactory(freeMarkerTemplateFactory);
 
         //Modulos de la aplicación
         modules = new ArrayList<>();

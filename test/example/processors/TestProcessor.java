@@ -17,7 +17,7 @@ public class TestProcessor extends WebProcessor {
 
     @RouteAction (name="template")
     public HttpResponse templateAction (HttpRequest request) {
-        TemplateHttpResponse response  = createTemplateResponse("templates.saranga");
+        ViewHttpResponse response  = createViewResponse("templates.saranga");
         response.setParameter("name", request.getParameter("name"));
         return response;
     }

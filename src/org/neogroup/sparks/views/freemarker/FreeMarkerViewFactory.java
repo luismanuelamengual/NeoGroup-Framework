@@ -1,22 +1,22 @@
 
-package org.neogroup.sparks.templating.freemarker;
+package org.neogroup.sparks.views.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
-import org.neogroup.sparks.templating.TemplateException;
-import org.neogroup.sparks.templating.TemplateFactory;
-import org.neogroup.sparks.templating.TemplateNotFoundException;
+import org.neogroup.sparks.views.ViewException;
+import org.neogroup.sparks.views.ViewFactory;
+import org.neogroup.sparks.views.ViewNotFoundException;
 
 import java.io.File;
 
-public class FreeMarkerTemplateFactory extends TemplateFactory<FreeMarkerTemplate> {
+public class FreeMarkerViewFactory extends ViewFactory<FreeMarkerView> {
 
     public static final String TEMPLATE_NAMESPACE_SEPARATOR = ".";
 
     private final Configuration configuration;
 
-    public FreeMarkerTemplateFactory() {
+    public FreeMarkerViewFactory() {
         configuration = new Configuration(Configuration.VERSION_2_3_25);
         configuration.setDefaultEncoding("UTF-8");
         configuration.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
@@ -33,17 +33,17 @@ public class FreeMarkerTemplateFactory extends TemplateFactory<FreeMarkerTemplat
     }
 
     @Override
-    public FreeMarkerTemplate createTemplate(String templateName) throws TemplateException {
+    public FreeMarkerView createView(String viewName) throws ViewException {
         try {
-            String templateFilename = templateName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".ft";
+            String templateFilename = viewName.replace(TEMPLATE_NAMESPACE_SEPARATOR, File.separator) + ".ft";
             Template template = configuration.getTemplate(templateFilename);
-            return new FreeMarkerTemplate(template);
+            return new FreeMarkerView(template);
         }
         catch (freemarker.template.TemplateNotFoundException ex) {
-            throw new TemplateNotFoundException(ex);
+            throw new ViewNotFoundException(ex);
         }
         catch (Exception ex) {
-            throw new TemplateException (ex);
+            throw new ViewException(ex);
         }
     }
 }

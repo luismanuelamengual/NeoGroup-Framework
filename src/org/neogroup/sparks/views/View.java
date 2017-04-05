@@ -1,7 +1,7 @@
 
-package org.neogroup.sparks.templating;
+package org.neogroup.sparks.views;
 
-public abstract class Template {
+public abstract class View {
 
     public abstract void setParameter (String name, Object value);
     public abstract Object getParameter (String name);
