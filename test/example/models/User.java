@@ -1,9 +1,9 @@
 
-package example.resources;
+package example.models;
 
-import org.neogroup.sparks.resources.Resource;
+import org.neogroup.sparks.models.Model;
 
-public class User extends Resource<Integer> {
+public class User extends Model<Integer> {
 
     private int id;
     private String name;

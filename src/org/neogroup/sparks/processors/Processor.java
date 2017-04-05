@@ -3,11 +3,11 @@ package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.ApplicationContext;
 import org.neogroup.sparks.commands.*;
-import org.neogroup.sparks.resources.Resource;
-import org.neogroup.sparks.resources.ResourceFilter;
-import org.neogroup.sparks.resources.ResourceOrder;
-import org.neogroup.sparks.resources.ResourcePropertyFilter;
-import org.neogroup.sparks.resources.commands.*;
+import org.neogroup.sparks.commands.crud.*;
+import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.models.ModelFilter;
+import org.neogroup.sparks.models.ModelSorter;
+import org.neogroup.sparks.models.ModelPropertyFilter;
 import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.BundlesManager;
 import org.neogroup.util.Properties;
@@ -49,77 +49,77 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext.getViewsManager();
     }
 
-    protected <R extends Resource> R createResource (R resource) {
-        return createResource(resource, null);
+    protected <M extends Model> M createEntity(M entity) {
+        return createEntity(entity, null);
     }
 
-    protected <R extends Resource> R createResource (R resource, Map<String,Object> params) {
-        CreateResourcesCommand command = new CreateResourcesCommand(resource.getClass(), resource);
+    protected <M extends Model> M createEntity(M entity, Map<String,Object> params) {
+        CreateEntitiesCommand command = new CreateEntitiesCommand(entity.getClass(), entity);
         command.setParameters(params);
-        return ((List<R>)applicationContext.processCommand(command)).get(0);
+        return ((List<M>)applicationContext.processCommand(command)).get(0);
     }
 
-    protected <R extends Resource> R updateResource (R resource) {
-        return updateResource(resource, null);
+    protected <M extends Model> M updateEntity(M entity) {
+        return updateEntity(entity, null);
     }
 
-    protected <R extends Resource> R updateResource (R resource, Map<String,Object> params) {
-        UpdateResourcesCommand command = new UpdateResourcesCommand(resource.getClass(), resource);
+    protected <M extends Model> M updateEntity(M entity, Map<String,Object> params) {
+        UpdateEntitiesCommand command = new UpdateEntitiesCommand(entity.getClass(), entity);
         command.setParameters(params);
-        return ((List<R>)applicationContext.processCommand(command)).get(0);
+        return ((List<M>)applicationContext.processCommand(command)).get(0);
     }
 
-    protected <R extends Resource> R deleteResource (R resource) {
-        return deleteResource(resource, null);
+    protected <M extends Model> M deleteEntity(M entity) {
+        return deleteEntity(entity, null);
     }
 
-    protected <R extends Resource> R deleteResource (R resource, Map<String,Object> params) {
-        DeleteResourcesCommand command = new DeleteResourcesCommand(resource.getClass(), resource);
+    protected <M extends Model> M deleteEntity(M entity, Map<String,Object> params) {
+        DeleteEntitiesCommand command = new DeleteEntitiesCommand(entity.getClass(), entity);
         command.setParameters(params);
-        return ((List<R>)applicationContext.processCommand(command)).get(0);
+        return ((List<M>)applicationContext.processCommand(command)).get(0);
     }
 
-    protected <I extends Object, R extends Resource<I>> R retrieveResource(Class<? extends R> resourceClass, I id) {
-        return retrieveResource(resourceClass, id, null);
+    protected <I extends Object, M extends Model<I>> M retrieveEntity(Class<? extends M> modelClass, I id) {
+        return retrieveEntity(modelClass, id, null);
     }
 
-    protected <I extends Object, R extends Resource<I>> R retrieveResource(Class<? extends R> resourceClass, I id, Map<String, Object> params) {
+    protected <I extends Object, M extends Model<I>> M retrieveEntity(Class<? extends M> modelClass, I id, Map<String, Object> params) {
         if (params == null) {
             params = new HashMap<>();
         }
-        params.put(ResourcesCommand.START_PARAMETER, 0);
-        params.put(ResourcesCommand.LIMIT_PARAMETER, 1);
-        List<R> resources = retrieveResources(resourceClass, new ResourcePropertyFilter("id", id), null, params);
-        R resource = null;
+        params.put(CRUDCommand.START_PARAMETER, 0);
+        params.put(CRUDCommand.LIMIT_PARAMETER, 1);
+        List<M> resources = retrieveEntities(modelClass, new ModelPropertyFilter("id", id), null, params);
+        M resource = null;
         if (resources != null && !resources.isEmpty()) {
             resource = resources.get(0);
         }
         return resource;
     }
 
-    protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass) {
-        return retrieveResources(resourceClass, null);
+    protected <M extends Model> List<M> retrieveEntities(Class<? extends M> modelClass) {
+        return retrieveEntities(modelClass, null);
     }
 
-    protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass, ResourceFilter filters) {
-        return retrieveResources(resourceClass, filters, null);
+    protected <M extends Model> List<M> retrieveEntities(Class<? extends M> modelClass, ModelFilter filters) {
+        return retrieveEntities(modelClass, filters, null);
     }
 
-    protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass, ResourceFilter filters, List<ResourceOrder> orders) {
-        return retrieveResources(resourceClass, filters, orders, null);
+    protected <M extends Model> List<M> retrieveEntities(Class<? extends M> modelClass, ModelFilter filters, List<ModelSorter> sorters) {
+        return retrieveEntities(modelClass, filters, sorters, null);
     }
 
-    protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass, ResourceFilter filters, List<ResourceOrder> orders, int start, int limit) {
+    protected <M extends Model> List<M> retrieveEntities(Class<? extends M> modelClass, ModelFilter filters, List<ModelSorter> sorters, int start, int limit) {
         Map<String, Object> params = new HashMap<>();
-        params.put(ResourcesCommand.START_PARAMETER, start);
-        params.put(ResourcesCommand.LIMIT_PARAMETER, limit);
-        return retrieveResources(resourceClass, filters, orders, params);
+        params.put(CRUDCommand.START_PARAMETER, start);
+        params.put(CRUDCommand.LIMIT_PARAMETER, limit);
+        return retrieveEntities(modelClass, filters, sorters, params);
     }
 
-    protected <R extends Resource> List<R> retrieveResources (Class<? extends R> resourceClass, ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
-        RetrieveResourcesCommand command = new RetrieveResourcesCommand(resourceClass);
+    protected <M extends Model> List<M> retrieveEntities(Class<? extends M> modelClass, ModelFilter filters, List<ModelSorter> sorters, Map<String, Object> params) {
+        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(modelClass);
         command.setFilters(filters);
-        command.setOrders(orders);
+        command.setOrders(sorters);
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }

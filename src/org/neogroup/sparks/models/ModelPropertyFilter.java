@@ -1,17 +1,17 @@
 
-package org.neogroup.sparks.resources;
+package org.neogroup.sparks.models;
 
-public class ResourcePropertyFilter extends ResourceFilter {
+public class ModelPropertyFilter extends ModelFilter {
 
     private final String property;
     private final String operator;
     private final Object value;
 
-    public ResourcePropertyFilter(String property, Object value) {
-        this(property, ResourcePropertyOperator.EQUALS, value);
+    public ModelPropertyFilter(String property, Object value) {
+        this(property, ModelPropertyOperator.EQUALS, value);
     }
 
-    public ResourcePropertyFilter(String property, String operator, Object value) {
+    public ModelPropertyFilter(String property, String operator, Object value) {
         this.property = property;
         this.operator = operator;
         this.value = value;

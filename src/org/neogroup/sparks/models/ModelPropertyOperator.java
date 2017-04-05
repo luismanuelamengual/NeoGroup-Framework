@@ -1,7 +1,7 @@
 
-package org.neogroup.sparks.resources;
+package org.neogroup.sparks.models;
 
-public abstract class ResourcePropertyOperator {
+public abstract class ModelPropertyOperator {
 
     public static final String EQUALS = "eq";
     public static final String DISTINCT = "dt";

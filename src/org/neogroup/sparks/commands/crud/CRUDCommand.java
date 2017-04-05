@@ -1,29 +1,29 @@
 
-package org.neogroup.sparks.resources.commands;
+package org.neogroup.sparks.commands.crud;
 
 import org.neogroup.sparks.commands.Command;
-import org.neogroup.sparks.resources.Resource;
+import org.neogroup.sparks.models.Model;
 
 import java.util.Map;
 
-public abstract class ResourcesCommand<R extends Resource> extends Command {
+public abstract class CRUDCommand<M extends Model> extends Command {
 
     public static final String START_PARAMETER = "start";
     public static final String LIMIT_PARAMETER = "limit";
 
-    private final Class<? extends R> resourceClass;
+    private final Class<? extends M> modelClass;
     private Map<String,Object> parameters;
 
-    public ResourcesCommand(Class<? extends R> resourceClass) {
-        this.resourceClass = resourceClass;
+    public CRUDCommand(Class<? extends M> modelClass) {
+        this.modelClass = modelClass;
     }
 
     public Map<String, Object> getParameters() {
         return parameters;
     }
 
-    public Class<? extends R> getResourceClass() {
-        return resourceClass;
+    public Class<? extends M> getModelClass() {
+        return modelClass;
     }
 
     public void setParameters(Map<String, Object> parameters) {

@@ -24,7 +24,7 @@ public class Main {
         application.addModule(consoleModule);
 
         application.registerProcessor(TestProcessor.class);
-        application.registerProcessor(UserResourceProcessor.class);
+        application.registerProcessor(UserCRUDProcessor.class);
         application.registerProcessor(UsersProcessor.class);
         application.registerProcessor(VaneProcessor.class);
         application.start();

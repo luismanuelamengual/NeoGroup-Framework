@@ -1,22 +1,22 @@
 
 package example.processors;
 
-import example.resources.User;
-import org.neogroup.sparks.resources.ResourceFilter;
-import org.neogroup.sparks.resources.ResourceOrder;
-import org.neogroup.sparks.resources.processors.ResourceProcessor;
+import example.models.User;
+import org.neogroup.sparks.models.ModelFilter;
+import org.neogroup.sparks.models.ModelSorter;
+import org.neogroup.sparks.processors.crud.CRUDProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class UserResourceProcessor extends ResourceProcessor<User> {
+public class UserCRUDProcessor extends CRUDProcessor<User> {
 
     private Map<Integer, User> users;
     private int nextId;
 
-    public UserResourceProcessor() {
+    public UserCRUDProcessor() {
         this.users = new HashMap<>();
         nextId = 1;
     }
@@ -41,7 +41,7 @@ public class UserResourceProcessor extends ResourceProcessor<User> {
     }
 
     @Override
-    protected List<User> retrieve(ResourceFilter filters, List<ResourceOrder> orders, Map<String, Object> params) {
+    protected List<User> retrieve(ModelFilter filters, List<ModelSorter> orders, Map<String, Object> params) {
         List<User> usersList = new ArrayList<User>(users.values());
         return usersList;
     }
