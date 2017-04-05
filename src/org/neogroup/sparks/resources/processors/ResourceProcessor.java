@@ -8,11 +8,29 @@ import org.neogroup.sparks.resources.ResourceFilter;
 import org.neogroup.sparks.resources.ResourceOrder;
 import org.neogroup.sparks.resources.commands.*;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public abstract class ResourceProcessor<R extends Resource> extends Processor<ResourcesCommand,List<R>> {
+
+    protected Class<? extends R> resourceClass;
+
+    public ResourceProcessor() {
+
+        Type type = this.getClass().getGenericSuperclass();
+        if(type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            Type[] fieldArgTypes = parameterizedType.getActualTypeArguments();
+            resourceClass = (Class<? extends R>) fieldArgTypes[0];
+        }
+    }
+
+    public Class<? extends R> getResourceClass() {
+        return resourceClass;
+    }
 
     @Override
     public final List<R> process(ResourcesCommand command) throws ProcessorException {

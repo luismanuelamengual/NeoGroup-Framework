@@ -5,8 +5,6 @@ import org.neogroup.sparks.resources.*;
 import org.neogroup.sparks.resources.commands.ResourcesCommand;
 
 import javax.sql.DataSource;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.sql.*;
 import java.util.*;
 
@@ -17,14 +15,7 @@ public abstract class DataSourceResourceProcessor<R extends Resource> extends Re
 
     public DataSourceResourceProcessor() {
         this.source = createDataSource();
-
-        Type type = this.getClass().getGenericSuperclass();
-        if(type instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) type;
-            Type[] fieldArgTypes = parameterizedType.getActualTypeArguments();
-            Class<? extends R> resourceClass = (Class<? extends R>) fieldArgTypes[0];
-            resourceTableMetadata = getResourceTableMetadata (resourceClass);
-        }
+        this.resourceTableMetadata = getResourceTableMetadata (resourceClass);
     }
 
     protected DataSource getDataSource () {
