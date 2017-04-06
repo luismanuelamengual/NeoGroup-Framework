@@ -1,5 +1,5 @@
 
-package org.neogroup.sparks.processors.crud;
+package org.neogroup.sparks.processors.crud.datasource;
 
 import java.lang.reflect.Field;
 
