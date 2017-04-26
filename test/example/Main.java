@@ -23,10 +23,12 @@ public class Main {
         ConsoleModule consoleModule = new ConsoleModule(application);
         application.addModule(consoleModule);
 
-        application.registerProcessor(TestProcessor.class);
-        application.registerProcessor(UserCRUDProcessor.class);
-        application.registerProcessor(UsersProcessor.class);
-        application.registerProcessor(VaneProcessor.class);
+        application.registerProcessors(
+                TestProcessor.class,
+                UserCRUDProcessor.class,
+                UsersProcessor.class,
+                VaneProcessor.class
+        );
         application.start();
     }
 }

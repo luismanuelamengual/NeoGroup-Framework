@@ -92,6 +92,12 @@ public abstract class ApplicationContext {
         }
     }
 
+    public final void registerProcessors (Class<? extends Processor> ... processorClasses) {
+        for (Class<? extends Processor> processorClass : processorClasses) {
+            registerProcessor(processorClass);
+        }
+    }
+
     public final <R extends Object> R processCommand(Command command) {
         Processor processor = getProcessor(command.getClass());
         if (processor == null) {
