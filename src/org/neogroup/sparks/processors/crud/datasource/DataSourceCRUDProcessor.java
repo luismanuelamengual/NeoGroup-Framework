@@ -1,7 +1,7 @@
 
 package org.neogroup.sparks.processors.crud.datasource;
 
-import org.neogroup.sparks.models.*;
+import org.neogroup.sparks.model.*;
 import org.neogroup.sparks.commands.crud.CRUDCommand;
 import org.neogroup.sparks.processors.crud.CRUDProcessor;
 
@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.*;
 
-public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProcessor<R> {
+public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProcessor<E> {
 
     private final DataSource source;
     private EntityTableMetadata modelTableMetadata;
@@ -28,7 +28,7 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
     }
 
     @Override
-    protected R create(R resource, Map<String, Object> params) {
+    protected E create(E resource, Map<String, Object> params) {
 
         try {
             DataSource source = getDataSource();
@@ -97,7 +97,7 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
     }
 
     @Override
-    protected R update(R resource, Map<String, Object> params) {
+    protected E update(E resource, Map<String, Object> params) {
 
         try {
             DataSource source = getDataSource();
@@ -155,7 +155,7 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
     }
 
     @Override
-    protected R delete(R resource, Map<String, Object> params) {
+    protected E delete(E resource, Map<String, Object> params) {
 
         try {
             DataSource source = getDataSource();
@@ -198,9 +198,9 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
     }
 
     @Override
-    protected List<R> retrieve(ModelFilter filters, List<ModelSorter> orders, Map<String, Object> params) {
+    protected List<E> retrieve(EntityFilter filters, List<EntitySorter> orders, Map<String, Object> params) {
 
-        List<R> resources = new ArrayList<>();
+        List<E> resources = new ArrayList<>();
         try {
             DataSource source = getDataSource();
             Connection connection = source.getConnection();
@@ -218,9 +218,9 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
 
             if (orders != null) {
                 sql.append(" ORDER BY ");
-                Iterator<ModelSorter> orderIterator = orders.iterator();
+                Iterator<EntitySorter> orderIterator = orders.iterator();
                 while (orderIterator.hasNext()) {
-                    ModelSorter order = orderIterator.next();
+                    EntitySorter order = orderIterator.next();
                     EntityColumnMetadata columnMetadata = modelTableMetadata.getColumnMetadataByPropertyName(order.getProperty());
                     sql.append(columnMetadata.getColumnName());
                     sql.append(" ");
@@ -258,7 +258,7 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                R resource = createResourceFromResultSet(resultSet);
+                E resource = createResourceFromResultSet(resultSet);
                 resources.add(resource);
             }
         }
@@ -269,15 +269,15 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
         return resources;
     }
 
-    private void buildFilterSQL(ModelFilter filter, StringBuilder sql, List<Object> sqlParameters) {
+    private void buildFilterSQL(EntityFilter filter, StringBuilder sql, List<Object> sqlParameters) {
 
-        if (filter instanceof ModelFilterGroup) {
-            ModelFilterGroup resourceFilterGroup = (ModelFilterGroup)filter;
+        if (filter instanceof EntityFilterGroup) {
+            EntityFilterGroup resourceFilterGroup = (EntityFilterGroup)filter;
             sql.append("(");
-            Iterator<ModelFilter> resourceFilterIterator = resourceFilterGroup.getFilters().iterator();
+            Iterator<EntityFilter> resourceFilterIterator = resourceFilterGroup.getFilters().iterator();
             while (resourceFilterIterator.hasNext()) {
-                ModelFilter childModelFilter = resourceFilterIterator.next();
-                buildFilterSQL(childModelFilter, sql, sqlParameters);
+                EntityFilter childEntityFilter = resourceFilterIterator.next();
+                buildFilterSQL(childEntityFilter, sql, sqlParameters);
 
                 if (resourceFilterIterator.hasNext()) {
                     switch (resourceFilterGroup.getConnector()) {
@@ -292,59 +292,59 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
             }
             sql.append(")");
         }
-        else if (filter instanceof ModelPropertyFilter) {
-            ModelPropertyFilter resourcePropertyFilter = (ModelPropertyFilter)filter;
+        else if (filter instanceof EntityPropertyFilter) {
+            EntityPropertyFilter resourcePropertyFilter = (EntityPropertyFilter)filter;
             EntityColumnMetadata columnMetadata = modelTableMetadata.getColumnMetadataByPropertyName(resourcePropertyFilter.getProperty());
             switch (resourcePropertyFilter.getOperator()) {
-                case ModelPropertyOperator.EQUALS:
+                case EntityPropertyOperator.EQUALS:
                     sql.append(columnMetadata.getColumnName());
                     sql.append("=");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.DISTINCT:
+                case EntityPropertyOperator.DISTINCT:
                     sql.append(columnMetadata.getColumnName());
                     sql.append("!=");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.GREATER_THAN:
+                case EntityPropertyOperator.GREATER_THAN:
                     sql.append(columnMetadata.getColumnName());
                     sql.append(">");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.GREATER_OR_EQUALS_THAN:
+                case EntityPropertyOperator.GREATER_OR_EQUALS_THAN:
                     sql.append(columnMetadata.getColumnName());
                     sql.append(">=");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.LESS_THAN:
+                case EntityPropertyOperator.LESS_THAN:
                     sql.append(columnMetadata.getColumnName());
                     sql.append("<");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.LESS_OR_EQUALS_THAN:
+                case EntityPropertyOperator.LESS_OR_EQUALS_THAN:
                     sql.append(columnMetadata.getColumnName());
                     sql.append("<=");
                     sql.append("?");
                     sqlParameters.add(resourcePropertyFilter.getValue());
                     break;
-                case ModelPropertyOperator.CONTAINS:
+                case EntityPropertyOperator.CONTAINS:
                     sql.append(columnMetadata.getColumnName());
                     sql.append(" LIKE ");
                     sql.append("?");
                     sqlParameters.add("%" + resourcePropertyFilter.getValue() + "%");
                     break;
-                case ModelPropertyOperator.NOT_CONTAINS:
+                case EntityPropertyOperator.NOT_CONTAINS:
                     sql.append(columnMetadata.getColumnName());
                     sql.append(" NOT LIKE ");
                     sql.append("?");
                     sqlParameters.add("%" + resourcePropertyFilter.getValue() + "%");
                     break;
-                case ModelPropertyOperator.IN: {
+                case EntityPropertyOperator.IN: {
                     sql.append(columnMetadata.getColumnName());
                     sql.append(" IN ");
                     sql.append("(");
@@ -361,7 +361,7 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
                     sql.append(")");
                     break;
                 }
-                case ModelPropertyOperator.NOT_IN: {
+                case EntityPropertyOperator.NOT_IN: {
                     sql.append(columnMetadata.getColumnName());
                     sql.append(" NOT IN ");
                     sql.append("(");
@@ -382,11 +382,11 @@ public abstract class DataSourceCRUDProcessor<R extends Model> extends CRUDProce
         }
     }
 
-    protected EntityTableMetadata getResourceTableMetadata (Class<? extends R> resourceClass) {
+    protected EntityTableMetadata getResourceTableMetadata (Class<? extends E> resourceClass) {
         return null;
     }
 
-    protected R createResourceFromResultSet (ResultSet resultSet) {
+    protected E createResourceFromResultSet (ResultSet resultSet) {
         return null;
     }
 

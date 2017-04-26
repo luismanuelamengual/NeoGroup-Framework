@@ -4,9 +4,9 @@ package org.neogroup.sparks.processors.crud;
 import org.neogroup.sparks.commands.crud.*;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorException;
-import org.neogroup.sparks.models.Model;
-import org.neogroup.sparks.models.ModelFilter;
-import org.neogroup.sparks.models.ModelSorter;
+import org.neogroup.sparks.model.Entity;
+import org.neogroup.sparks.model.EntityFilter;
+import org.neogroup.sparks.model.EntitySorter;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class CRUDProcessor<R extends Model> extends Processor<CRUDCommand,List<R>> {
+public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDCommand,List<E>> {
 
-    protected Class<? extends R> modelClass;
+    protected Class<? extends E> modelClass;
 
     public CRUDProcessor() {
 
@@ -24,47 +24,47 @@ public abstract class CRUDProcessor<R extends Model> extends Processor<CRUDComma
         if(type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] fieldArgTypes = parameterizedType.getActualTypeArguments();
-            modelClass = (Class<? extends R>) fieldArgTypes[0];
+            modelClass = (Class<? extends E>) fieldArgTypes[0];
         }
     }
 
-    public Class<? extends R> getModelClass() {
+    public Class<? extends E> getModelClass() {
         return modelClass;
     }
 
     @Override
-    public final List<R> process(CRUDCommand command) throws ProcessorException {
+    public final List<E> process(CRUDCommand command) throws ProcessorException {
 
-        List<R> result = null;
+        List<E> result = null;
         if (command instanceof RetrieveEntitiesCommand) {
             RetrieveEntitiesCommand retrieveResourcesCommand = (RetrieveEntitiesCommand)command;
             result = retrieve(retrieveResourcesCommand.getFilters(), retrieveResourcesCommand.getOrders(), retrieveResourcesCommand.getParameters());
         }
         else if (command instanceof ModifyEntitiesCommand) {
             ModifyEntitiesCommand modifyResourcesCommand = (ModifyEntitiesCommand)command;
-            List<R> resources = modifyResourcesCommand.getResources();
-            result = new ArrayList<R>();
+            List<E> resources = modifyResourcesCommand.getResources();
+            result = new ArrayList<E>();
             if (command instanceof CreateEntitiesCommand) {
-                for (R resource : resources) {
-                    result.add((R)create(resource, modifyResourcesCommand.getParameters()));
+                for (E resource : resources) {
+                    result.add((E)create(resource, modifyResourcesCommand.getParameters()));
                 }
             }
             else if (command instanceof UpdateEntitiesCommand) {
-                for (R resource : resources) {
-                    result.add((R)update(resource, modifyResourcesCommand.getParameters()));
+                for (E resource : resources) {
+                    result.add((E)update(resource, modifyResourcesCommand.getParameters()));
                 }
             }
             else if (command instanceof DeleteEntitiesCommand) {
-                for (R resource : resources) {
-                    result.add((R)delete(resource, modifyResourcesCommand.getParameters()));
+                for (E resource : resources) {
+                    result.add((E)delete(resource, modifyResourcesCommand.getParameters()));
                 }
             }
         }
         return result;
     }
 
-    protected abstract R create (R resource, Map<String,Object> params);
-    protected abstract R update (R resource, Map<String,Object> params);
-    protected abstract R delete (R resource, Map<String,Object> params);
-    protected abstract List<R> retrieve (ModelFilter filters, List<ModelSorter> orders, Map<String,Object> params);
+    protected abstract E create (E resource, Map<String,Object> params);
+    protected abstract E update (E resource, Map<String,Object> params);
+    protected abstract E delete (E resource, Map<String,Object> params);
+    protected abstract List<E> retrieve (EntityFilter filters, List<EntitySorter> orders, Map<String,Object> params);
 }

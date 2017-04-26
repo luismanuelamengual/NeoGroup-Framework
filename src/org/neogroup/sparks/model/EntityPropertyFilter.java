@@ -1,17 +1,17 @@
 
-package org.neogroup.sparks.models;
+package org.neogroup.sparks.model;
 
-public class ModelPropertyFilter extends ModelFilter {
+public class EntityPropertyFilter extends EntityFilter {
 
     private final String property;
     private final String operator;
     private final Object value;
 
-    public ModelPropertyFilter(String property, Object value) {
-        this(property, ModelPropertyOperator.EQUALS, value);
+    public EntityPropertyFilter(String property, Object value) {
+        this(property, EntityPropertyOperator.EQUALS, value);
     }
 
-    public ModelPropertyFilter(String property, String operator, Object value) {
+    public EntityPropertyFilter(String property, String operator, Object value) {
         this.property = property;
         this.operator = operator;
         this.value = value;

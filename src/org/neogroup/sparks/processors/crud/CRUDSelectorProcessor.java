@@ -4,7 +4,7 @@ package org.neogroup.sparks.processors.crud;
 import org.neogroup.sparks.commands.crud.*;
 import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.processors.SelectorProcessor;
-import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.model.Entity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.Map;
 })
 public class CRUDSelectorProcessor extends SelectorProcessor<CRUDCommand, CRUDProcessor> {
 
-    private Map<Class<? extends Model>, CRUDProcessor> processorsbyModel;
+    private Map<Class<? extends Entity>, CRUDProcessor> processorsbyModel;
 
     public CRUDSelectorProcessor() {
         this.processorsbyModel = new HashMap<>();

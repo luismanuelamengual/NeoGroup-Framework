@@ -2,19 +2,19 @@
 package org.neogroup.sparks.commands.crud;
 
 import org.neogroup.sparks.commands.Command;
-import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.model.Entity;
 
 import java.util.Map;
 
-public abstract class CRUDCommand<M extends Model> extends Command {
+public abstract class CRUDCommand<E extends Entity> extends Command {
 
     public static final String START_PARAMETER = "start";
     public static final String LIMIT_PARAMETER = "limit";
 
-    private final Class<? extends M> modelClass;
+    private final Class<? extends E> modelClass;
     private Map<String,Object> parameters;
 
-    public CRUDCommand(Class<? extends M> modelClass) {
+    public CRUDCommand(Class<? extends E> modelClass) {
         this.modelClass = modelClass;
     }
 
@@ -22,7 +22,7 @@ public abstract class CRUDCommand<M extends Model> extends Command {
         return parameters;
     }
 
-    public Class<? extends M> getModelClass() {
+    public Class<? extends E> getModelClass() {
         return modelClass;
     }
 

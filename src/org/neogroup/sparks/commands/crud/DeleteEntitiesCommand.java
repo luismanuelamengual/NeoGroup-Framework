@@ -1,17 +1,17 @@
 
 package org.neogroup.sparks.commands.crud;
 
-import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.model.Entity;
 
 import java.util.List;
 
-public class DeleteEntitiesCommand<M extends Model> extends ModifyEntitiesCommand<M> {
+public class DeleteEntitiesCommand<E extends Entity> extends ModifyEntitiesCommand<E> {
 
-    public DeleteEntitiesCommand(Class<? extends M> resourceClass, M resource) {
+    public DeleteEntitiesCommand(Class<? extends E> resourceClass, E resource) {
         super(resourceClass, resource);
     }
 
-    public DeleteEntitiesCommand(Class<? extends M> resourceClass, List<M> resources) {
+    public DeleteEntitiesCommand(Class<? extends E> resourceClass, List<E> resources) {
         super(resourceClass, resources);
     }
 }

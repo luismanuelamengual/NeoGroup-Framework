@@ -1,17 +1,17 @@
 
 package org.neogroup.sparks.commands.crud;
 
-import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.model.Entity;
 
 import java.util.List;
 
-public class UpdateEntitiesCommand<M extends Model> extends ModifyEntitiesCommand<M> {
+public class UpdateEntitiesCommand<E extends Entity> extends ModifyEntitiesCommand<E> {
 
-    public UpdateEntitiesCommand(Class<? extends M> resourceClass, M resource) {
+    public UpdateEntitiesCommand(Class<? extends E> resourceClass, E resource) {
         super(resourceClass, resource);
     }
 
-    public UpdateEntitiesCommand(Class<? extends M> resourceClass, List<M> resources) {
+    public UpdateEntitiesCommand(Class<? extends E> resourceClass, List<E> resources) {
         super(resourceClass, resources);
     }
 }

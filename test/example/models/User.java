@@ -1,13 +1,16 @@
 
 package example.models;
 
-import org.neogroup.sparks.models.Model;
+import org.neogroup.sparks.model.Entity;
 
-public class User extends Model<Integer> {
+public class User extends Entity<Integer> {
 
     private int id;
+
     private String name;
+
     private String lastName;
+
     private int age;
 
     public Integer getId() {

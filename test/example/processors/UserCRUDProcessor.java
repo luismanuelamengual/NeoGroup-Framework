@@ -2,8 +2,8 @@
 package example.processors;
 
 import example.models.User;
-import org.neogroup.sparks.models.ModelFilter;
-import org.neogroup.sparks.models.ModelSorter;
+import org.neogroup.sparks.model.EntityFilter;
+import org.neogroup.sparks.model.EntitySorter;
 import org.neogroup.sparks.processors.crud.CRUDProcessor;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class UserCRUDProcessor extends CRUDProcessor<User> {
     }
 
     @Override
-    protected List<User> retrieve(ModelFilter filters, List<ModelSorter> orders, Map<String, Object> params) {
+    protected List<User> retrieve(EntityFilter filters, List<EntitySorter> orders, Map<String, Object> params) {
         List<User> usersList = new ArrayList<User>(users.values());
         return usersList;
     }

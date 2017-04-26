@@ -1,5 +1,5 @@
 
-package org.neogroup.sparks.processors.crud.datasource.annotations;
+package org.neogroup.sparks.model.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface Table {
-
-    public String name() default "";
+@Target(ElementType.FIELD)
+public @interface Id {
 }
