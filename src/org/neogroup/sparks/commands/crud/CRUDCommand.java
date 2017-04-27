@@ -8,9 +8,6 @@ import java.util.Map;
 
 public abstract class CRUDCommand<E extends Entity> extends Command {
 
-    public static final String START_PARAMETER = "start";
-    public static final String LIMIT_PARAMETER = "limit";
-
     private final Class<? extends E> entityClass;
     private Map<String,Object> parameters;
 

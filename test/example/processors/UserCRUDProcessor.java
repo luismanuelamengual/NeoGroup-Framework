@@ -3,6 +3,7 @@ package example.processors;
 
 import example.models.User;
 import org.neogroup.sparks.model.EntityFilter;
+import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.model.EntitySorter;
 import org.neogroup.sparks.processors.crud.CRUDProcessor;
 
@@ -22,26 +23,26 @@ public class UserCRUDProcessor extends CRUDProcessor<User> {
     }
 
     @Override
-    protected User create(User resource, Map<String, Object> params) {
-        resource.setId(nextId++);
-        users.put(resource.getId(), resource);
-        return resource;
+    protected User create(User entity, Map<String, Object> params) {
+        entity.setId(nextId++);
+        users.put(entity.getId(), entity);
+        return entity;
     }
 
     @Override
-    protected User update(User resource, Map<String, Object> params) {
-        users.put(resource.getId(), resource);
-        return resource;
+    protected User update(User entity, Map<String, Object> params) {
+        users.put(entity.getId(), entity);
+        return entity;
     }
 
     @Override
-    protected User delete(User resource, Map<String, Object> params) {
-        users.remove(resource);
-        return resource;
+    protected User delete(User entity, Map<String, Object> params) {
+        users.remove(entity);
+        return entity;
     }
 
     @Override
-    protected List<User> retrieve(EntityFilter filters, List<EntitySorter> orders, Map<String, Object> params) {
+    protected List<User> retrieve(EntityQuery query, Map<String, Object> params) {
         List<User> usersList = new ArrayList<User>(users.values());
         return usersList;
     }

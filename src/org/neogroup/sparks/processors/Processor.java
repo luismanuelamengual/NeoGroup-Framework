@@ -4,10 +4,7 @@ package org.neogroup.sparks.processors;
 import org.neogroup.sparks.ApplicationContext;
 import org.neogroup.sparks.commands.*;
 import org.neogroup.sparks.commands.crud.*;
-import org.neogroup.sparks.model.Entity;
-import org.neogroup.sparks.model.EntityFilter;
-import org.neogroup.sparks.model.EntitySorter;
-import org.neogroup.sparks.model.EntityPropertyFilter;
+import org.neogroup.sparks.model.*;
 import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.BundlesManager;
 import org.neogroup.util.Properties;
@@ -84,42 +81,27 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> entityClass, I id, Map<String, Object> params) {
-        if (params == null) {
-            params = new HashMap<>();
-        }
-        params.put(CRUDCommand.START_PARAMETER, 0);
-        params.put(CRUDCommand.LIMIT_PARAMETER, 1);
-        List<E> resources = retrieveEntities(entityClass, new EntityPropertyFilter("id", id), null, params);
-        E resource = null;
-        if (resources != null && !resources.isEmpty()) {
-            resource = resources.get(0);
-        }
-        return resource;
+        EntityQuery query = new EntityQuery();
+        query.addFilter("id", id);
+        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(entityClass, query);
+        command.setParameters(params);
+        return applicationContext.processCommand(command);
     }
 
     protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass) {
-        return retrieveEntities(entityClass, null);
+        return retrieveEntities(entityClass, new EntityQuery());
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters) {
-        return retrieveEntities(entityClass, filters, null);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityQuery query) {
+        return retrieveEntities(entityClass, query, null);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters) {
-        return retrieveEntities(entityClass, filters, sorters, null);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, Map<String, Object> params) {
+        return retrieveEntities(entityClass, new EntityQuery(), params);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters, int start, int limit) {
-        Map<String, Object> params = new HashMap<>();
-        params.put(CRUDCommand.START_PARAMETER, start);
-        params.put(CRUDCommand.LIMIT_PARAMETER, limit);
-        return retrieveEntities(entityClass, filters, sorters, params);
-    }
-
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters, Map<String, Object> params) {
-        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(entityClass);
-        command.setFilters(filters);
-        command.setOrders(sorters);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityQuery query, Map<String, Object> params) {
+        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(entityClass, query);
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }

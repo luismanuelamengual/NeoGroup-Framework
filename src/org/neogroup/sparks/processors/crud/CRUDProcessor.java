@@ -2,6 +2,7 @@
 package org.neogroup.sparks.processors.crud;
 
 import org.neogroup.sparks.commands.crud.*;
+import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorException;
 import org.neogroup.sparks.model.Entity;
@@ -38,11 +39,11 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
         List<E> result = null;
         if (command instanceof RetrieveEntitiesCommand) {
             RetrieveEntitiesCommand retrieveResourcesCommand = (RetrieveEntitiesCommand)command;
-            result = retrieve(retrieveResourcesCommand.getFilters(), retrieveResourcesCommand.getOrders(), retrieveResourcesCommand.getParameters());
+            result = retrieve(retrieveResourcesCommand.getQuery(), retrieveResourcesCommand.getParameters());
         }
         else if (command instanceof ModifyEntitiesCommand) {
             ModifyEntitiesCommand modifyResourcesCommand = (ModifyEntitiesCommand)command;
-            List<E> resources = modifyResourcesCommand.getResources();
+            List<E> resources = modifyResourcesCommand.getEntities();
             result = new ArrayList<E>();
             if (command instanceof CreateEntitiesCommand) {
                 for (E resource : resources) {
@@ -63,8 +64,8 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
         return result;
     }
 
-    protected abstract E create (E resource, Map<String,Object> params);
-    protected abstract E update (E resource, Map<String,Object> params);
-    protected abstract E delete (E resource, Map<String,Object> params);
-    protected abstract List<E> retrieve (EntityFilter filters, List<EntitySorter> orders, Map<String,Object> params);
+    protected abstract E create (E entity, Map<String,Object> params);
+    protected abstract E update (E entity, Map<String,Object> params);
+    protected abstract E delete (E entity, Map<String,Object> params);
+    protected abstract List<E> retrieve (EntityQuery query, Map<String,Object> params);
 }

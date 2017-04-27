@@ -2,33 +2,18 @@
 package org.neogroup.sparks.commands.crud;
 
 import org.neogroup.sparks.model.Entity;
-import org.neogroup.sparks.model.EntityFilter;
-import org.neogroup.sparks.model.EntitySorter;
-
-import java.util.List;
+import org.neogroup.sparks.model.EntityQuery;
 
 public class RetrieveEntitiesCommand<E extends Entity> extends CRUDCommand<E> {
 
-    private EntityFilter filters;
-    private List<EntitySorter> orders;
+    private final EntityQuery query;
 
-    public RetrieveEntitiesCommand(Class<? extends E> resourceClass) {
-        super(resourceClass);
+    public RetrieveEntitiesCommand(Class<? extends E> entityClass, EntityQuery query) {
+        super(entityClass);
+        this.query = query;
     }
 
-    public EntityFilter getFilters() {
-        return filters;
-    }
-
-    public void setFilters(EntityFilter filters) {
-        this.filters = filters;
-    }
-
-    public List<EntitySorter> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<EntitySorter> orders) {
-        this.orders = orders;
+    public EntityQuery getQuery() {
+        return query;
     }
 }

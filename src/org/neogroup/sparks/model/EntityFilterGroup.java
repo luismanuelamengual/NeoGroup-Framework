@@ -11,6 +11,7 @@ public class EntityFilterGroup extends EntityFilter {
 
     public EntityFilterGroup() {
         filters = new ArrayList<>();
+        connector = EntityFilterGroupConnector.AND;
     }
 
     public EntityFilterGroupConnector getConnector() {
@@ -23,6 +24,14 @@ public class EntityFilterGroup extends EntityFilter {
 
     public List<EntityFilter> getFilters() {
         return filters;
+    }
+
+    public int getSize() {
+        return filters.size();
+    }
+
+    public boolean isEmpty() {
+        return filters.isEmpty();
     }
 
     public void setFilters(List<EntityFilter> filters) {

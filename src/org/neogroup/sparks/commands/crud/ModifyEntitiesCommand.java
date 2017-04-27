@@ -8,20 +8,20 @@ import java.util.List;
 
 public abstract class ModifyEntitiesCommand<E extends Entity> extends CRUDCommand<E> {
 
-    private final List<E> resources;
+    private final List<E> entities;
 
-    public ModifyEntitiesCommand(Class<? extends E> resourceClass, E resource) {
-        super(resourceClass);
-        this.resources = new ArrayList<>();
-        this.resources.add(resource);
+    public ModifyEntitiesCommand(Class<? extends E> entityClass, E resource) {
+        super(entityClass);
+        this.entities = new ArrayList<>();
+        this.entities.add(resource);
     }
 
-    public ModifyEntitiesCommand(Class<? extends E> resourceClass, List<E> resources) {
-        super(resourceClass);
-        this.resources = resources;
+    public ModifyEntitiesCommand(Class<? extends E> entityClass, List<E> entities) {
+        super(entityClass);
+        this.entities = entities;
     }
 
-    public List<E> getResources() {
-        return resources;
+    public List<E> getEntities() {
+        return entities;
     }
 }
