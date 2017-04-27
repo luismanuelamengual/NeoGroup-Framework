@@ -2,14 +2,19 @@
 package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.ApplicationContext;
-import org.neogroup.sparks.commands.*;
-import org.neogroup.sparks.commands.crud.*;
-import org.neogroup.sparks.model.*;
+import org.neogroup.sparks.commands.Command;
+import org.neogroup.sparks.commands.crud.CreateEntitiesCommand;
+import org.neogroup.sparks.commands.crud.DeleteEntitiesCommand;
+import org.neogroup.sparks.commands.crud.RetrieveEntitiesCommand;
+import org.neogroup.sparks.commands.crud.UpdateEntitiesCommand;
+import org.neogroup.sparks.model.Entity;
+import org.neogroup.sparks.model.EntityQuery;
+import org.neogroup.sparks.model.annotations.Id;
 import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.BundlesManager;
 import org.neogroup.util.Properties;
 
-import java.util.HashMap;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -81,11 +86,22 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> entityClass, I id, Map<String, Object> params) {
+
+        String idProperty = null;
+        for (Field field : entityClass.getFields()) {
+            if (field.getAnnotation(Id.class) != null) {
+                idProperty = field.getName();
+                break;
+            }
+        }
+
         EntityQuery query = new EntityQuery();
-        query.addFilter("id", id);
+        query.addFilter(idProperty, id);
+        query.setLimit(1);
         RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(entityClass, query);
         command.setParameters(params);
-        return applicationContext.processCommand(command);
+        List<E> entities = applicationContext.processCommand(command);
+        return entities.get(0);
     }
 
     protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass) {

@@ -2,12 +2,10 @@
 package org.neogroup.sparks.processors.crud;
 
 import org.neogroup.sparks.commands.crud.*;
+import org.neogroup.sparks.model.Entity;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorException;
-import org.neogroup.sparks.model.Entity;
-import org.neogroup.sparks.model.EntityFilter;
-import org.neogroup.sparks.model.EntitySorter;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
