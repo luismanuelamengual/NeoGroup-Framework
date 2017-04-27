@@ -10,6 +10,7 @@ import org.neogroup.sparks.commands.crud.UpdateEntitiesCommand;
 import org.neogroup.sparks.model.Entity;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.model.annotations.Id;
+import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.util.BundlesManager;
 import org.neogroup.util.Properties;
@@ -35,20 +36,24 @@ public abstract class Processor <C extends Command, R extends Object> {
 
     public void onStop () {}
 
-    public Properties getProperties() {
+    protected Properties getProperties() {
         return applicationContext.getProperties();
     }
 
-    public Logger getLogger() {
+    protected Logger getLogger() {
         return applicationContext.getLogger();
     }
 
-    public BundlesManager getBundlesManager() {
+    protected BundlesManager getBundlesManager() {
         return applicationContext.getBundlesManager();
     }
 
-    public ViewsManager getViewsManager() {
+    protected ViewsManager getViewsManager() {
         return applicationContext.getViewsManager();
+    }
+
+    protected View createView (String viewName) {
+        return getViewsManager().createView(viewName);
     }
 
     protected <E extends Entity> E createEntity(E entity) {
