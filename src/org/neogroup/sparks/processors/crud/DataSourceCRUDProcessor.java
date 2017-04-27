@@ -198,7 +198,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
     }
 
     @Override
-    protected List<E> retrieve(EntityQuery query, Map<String, Object> params) {
+    protected Collection<E> retrieve(EntityQuery query, Map<String, Object> params) {
 
         List<E> resources = new ArrayList<>();
         try {

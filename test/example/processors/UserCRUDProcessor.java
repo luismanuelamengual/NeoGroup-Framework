@@ -2,15 +2,10 @@
 package example.processors;
 
 import example.models.User;
-import org.neogroup.sparks.model.EntityFilter;
 import org.neogroup.sparks.model.EntityQuery;
-import org.neogroup.sparks.model.EntitySorter;
 import org.neogroup.sparks.processors.crud.CRUDProcessor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UserCRUDProcessor extends CRUDProcessor<User> {
 
@@ -42,7 +37,7 @@ public class UserCRUDProcessor extends CRUDProcessor<User> {
     }
 
     @Override
-    protected List<User> retrieve(EntityQuery query, Map<String, Object> params) {
+    protected Collection<User> retrieve(EntityQuery query, Map<String, Object> params) {
         List<User> usersList = new ArrayList<User>(users.values());
         return usersList;
     }

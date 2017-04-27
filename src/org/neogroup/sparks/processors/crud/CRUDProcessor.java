@@ -10,10 +10,10 @@ import org.neogroup.sparks.processors.ProcessorException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 
-public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDCommand,List<E>> {
+public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDCommand,Collection<E>> {
 
     protected Class<? extends E> entityClass;
 
@@ -32,16 +32,16 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
     }
 
     @Override
-    public final List<E> process(CRUDCommand command) throws ProcessorException {
+    public final Collection<E> process(CRUDCommand command) throws ProcessorException {
 
-        List<E> result = null;
+        Collection<E> result = null;
         if (command instanceof RetrieveEntitiesCommand) {
             RetrieveEntitiesCommand retrieveResourcesCommand = (RetrieveEntitiesCommand)command;
             result = retrieve(retrieveResourcesCommand.getQuery(), retrieveResourcesCommand.getParameters());
         }
         else if (command instanceof ModifyEntitiesCommand) {
             ModifyEntitiesCommand modifyResourcesCommand = (ModifyEntitiesCommand)command;
-            List<E> resources = modifyResourcesCommand.getEntities();
+            Collection<E> resources = modifyResourcesCommand.getEntities();
             result = new ArrayList<E>();
             if (command instanceof CreateEntitiesCommand) {
                 for (E resource : resources) {
@@ -65,5 +65,5 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
     protected abstract E create (E entity, Map<String,Object> params);
     protected abstract E update (E entity, Map<String,Object> params);
     protected abstract E delete (E entity, Map<String,Object> params);
-    protected abstract List<E> retrieve (EntityQuery query, Map<String,Object> params);
+    protected abstract Collection<E> retrieve (EntityQuery query, Map<String,Object> params);
 }
