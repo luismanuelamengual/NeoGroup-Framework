@@ -10,20 +10,20 @@ import java.util.Map;
 
 public class EntityTableMetadata {
 
-    private final Class<? extends Entity> modelClass;
+    private final Class<? extends Entity> entityClass;
     private final String tableName;
     private final List<EntityColumnMetadata> columnMetadatas;
     private final Map<String, EntityColumnMetadata> columnMetadatasByPropertyName;
 
-    public EntityTableMetadata(Class<? extends Entity> modelClass, String tableName) {
-        this.modelClass = modelClass;
+    public EntityTableMetadata(Class<? extends Entity> entityClass, String tableName) {
+        this.entityClass = entityClass;
         this.tableName = tableName;
         columnMetadatas = new ArrayList<>();
         columnMetadatasByPropertyName = new HashMap<>();
     }
 
-    public Class<? extends Entity> getModelClass() {
-        return modelClass;
+    public Class<? extends Entity> getEntityClass() {
+        return entityClass;
     }
 
     public String getTableName() {

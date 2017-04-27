@@ -16,7 +16,7 @@ import java.util.Map;
 
 public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDCommand,List<E>> {
 
-    protected Class<? extends E> modelClass;
+    protected Class<? extends E> entityClass;
 
     public CRUDProcessor() {
 
@@ -24,12 +24,12 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
         if(type instanceof ParameterizedType) {
             ParameterizedType parameterizedType = (ParameterizedType) type;
             Type[] fieldArgTypes = parameterizedType.getActualTypeArguments();
-            modelClass = (Class<? extends E>) fieldArgTypes[0];
+            entityClass = (Class<? extends E>) fieldArgTypes[0];
         }
     }
 
-    public Class<? extends E> getModelClass() {
-        return modelClass;
+    public Class<? extends E> getEntityClass() {
+        return entityClass;
     }
 
     @Override

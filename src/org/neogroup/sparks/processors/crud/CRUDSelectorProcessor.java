@@ -25,12 +25,12 @@ public class CRUDSelectorProcessor extends SelectorProcessor<CRUDCommand, CRUDPr
 
     @Override
     public boolean registerProcessorCandidate(CRUDProcessor processor) {
-        processorsbyModel.put(processor.getModelClass(), processor);
+        processorsbyModel.put(processor.getEntityClass(), processor);
         return true;
     }
 
     @Override
     public CRUDProcessor getProcessor(CRUDCommand command) {
-        return processorsbyModel.get(command.getModelClass());
+        return processorsbyModel.get(command.getEntityClass());
     }
 }

@@ -79,17 +79,17 @@ public abstract class Processor <C extends Command, R extends Object> {
         return ((List<E>)applicationContext.processCommand(command)).get(0);
     }
 
-    protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> modelClass, I id) {
-        return retrieveEntity(modelClass, id, null);
+    protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> entityClass, I id) {
+        return retrieveEntity(entityClass, id, null);
     }
 
-    protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> modelClass, I id, Map<String, Object> params) {
+    protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> entityClass, I id, Map<String, Object> params) {
         if (params == null) {
             params = new HashMap<>();
         }
         params.put(CRUDCommand.START_PARAMETER, 0);
         params.put(CRUDCommand.LIMIT_PARAMETER, 1);
-        List<E> resources = retrieveEntities(modelClass, new EntityPropertyFilter("id", id), null, params);
+        List<E> resources = retrieveEntities(entityClass, new EntityPropertyFilter("id", id), null, params);
         E resource = null;
         if (resources != null && !resources.isEmpty()) {
             resource = resources.get(0);
@@ -97,27 +97,27 @@ public abstract class Processor <C extends Command, R extends Object> {
         return resource;
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> modelClass) {
-        return retrieveEntities(modelClass, null);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass) {
+        return retrieveEntities(entityClass, null);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> modelClass, EntityFilter filters) {
-        return retrieveEntities(modelClass, filters, null);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters) {
+        return retrieveEntities(entityClass, filters, null);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> modelClass, EntityFilter filters, List<EntitySorter> sorters) {
-        return retrieveEntities(modelClass, filters, sorters, null);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters) {
+        return retrieveEntities(entityClass, filters, sorters, null);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> modelClass, EntityFilter filters, List<EntitySorter> sorters, int start, int limit) {
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters, int start, int limit) {
         Map<String, Object> params = new HashMap<>();
         params.put(CRUDCommand.START_PARAMETER, start);
         params.put(CRUDCommand.LIMIT_PARAMETER, limit);
-        return retrieveEntities(modelClass, filters, sorters, params);
+        return retrieveEntities(entityClass, filters, sorters, params);
     }
 
-    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> modelClass, EntityFilter filters, List<EntitySorter> sorters, Map<String, Object> params) {
-        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(modelClass);
+    protected <E extends Entity> List<E> retrieveEntities(Class<? extends E> entityClass, EntityFilter filters, List<EntitySorter> sorters, Map<String, Object> params) {
+        RetrieveEntitiesCommand command = new RetrieveEntitiesCommand(entityClass);
         command.setFilters(filters);
         command.setOrders(sorters);
         command.setParameters(params);

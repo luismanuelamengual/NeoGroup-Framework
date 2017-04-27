@@ -16,7 +16,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
 
     public DataSourceCRUDProcessor() {
         this.source = createDataSource();
-        this.modelTableMetadata = getResourceTableMetadata (modelClass);
+        this.modelTableMetadata = getResourceTableMetadata (entityClass);
     }
 
     protected DataSource getDataSource () {

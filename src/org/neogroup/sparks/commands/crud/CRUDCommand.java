@@ -11,19 +11,19 @@ public abstract class CRUDCommand<E extends Entity> extends Command {
     public static final String START_PARAMETER = "start";
     public static final String LIMIT_PARAMETER = "limit";
 
-    private final Class<? extends E> modelClass;
+    private final Class<? extends E> entityClass;
     private Map<String,Object> parameters;
 
-    public CRUDCommand(Class<? extends E> modelClass) {
-        this.modelClass = modelClass;
+    public CRUDCommand(Class<? extends E> entityClass) {
+        this.entityClass = entityClass;
     }
 
     public Map<String, Object> getParameters() {
         return parameters;
     }
 
-    public Class<? extends E> getModelClass() {
-        return modelClass;
+    public Class<? extends E> getEntityClass() {
+        return entityClass;
     }
 
     public void setParameters(Map<String, Object> parameters) {
