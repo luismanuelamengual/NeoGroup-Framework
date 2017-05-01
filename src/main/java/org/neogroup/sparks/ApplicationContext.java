@@ -1,17 +1,17 @@
 
 package org.neogroup.sparks;
 
+import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.*;
 import org.neogroup.sparks.processors.crud.CRUDSelectorProcessor;
 import org.neogroup.sparks.views.ViewsManager;
-import org.neogroup.util.Properties;
-import org.neogroup.util.BundlesManager;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 public abstract class ApplicationContext {
 

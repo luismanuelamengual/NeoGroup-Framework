@@ -5,11 +5,11 @@ import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.httpserver.HttpResponseCode;
+import org.neogroup.httpserver.utils.MimeTypes;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.routing.RouteAction;
-import org.neogroup.util.MimeTypes;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

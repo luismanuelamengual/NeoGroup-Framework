@@ -1,11 +1,10 @@
 
 package org.neogroup.sparks;
 
+import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.views.ViewsManager;
 import org.neogroup.sparks.views.freemarker.FreeMarkerViewFactory;
 import org.neogroup.sparks.views.velocity.VelocityViewFactory;
-import org.neogroup.util.Properties;
-import org.neogroup.util.BundlesManager;
 
 import java.util.ArrayList;
 import java.util.List;

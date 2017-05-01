@@ -5,10 +5,10 @@ import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import example.models.User;
+import org.neogroup.httpserver.utils.MimeTypes;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
-import org.neogroup.util.MimeTypes;
 
 import java.util.List;
 

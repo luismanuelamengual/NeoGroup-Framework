@@ -1,11 +1,10 @@
 
 package org.neogroup.sparks;
 
+import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.views.ViewsManager;
-import org.neogroup.util.Properties;
-import org.neogroup.util.BundlesManager;
 
 import java.util.ArrayList;
 import java.util.Collection;

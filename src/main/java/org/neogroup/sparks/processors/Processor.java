@@ -2,6 +2,8 @@
 package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.ApplicationContext;
+import org.neogroup.sparks.Properties;
+import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.crud.CreateEntitiesCommand;
 import org.neogroup.sparks.commands.crud.DeleteEntitiesCommand;
@@ -12,8 +14,6 @@ import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.model.annotations.Id;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewsManager;
-import org.neogroup.util.BundlesManager;
-import org.neogroup.util.Properties;
 
 import java.lang.reflect.Field;
 import java.util.List;
