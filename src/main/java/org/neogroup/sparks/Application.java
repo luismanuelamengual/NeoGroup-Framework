@@ -1,10 +1,7 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.bundles.BundlesManager;
-import org.neogroup.sparks.views.ViewsManager;
-import org.neogroup.sparks.views.freemarker.FreeMarkerViewFactory;
-import org.neogroup.sparks.views.velocity.VelocityViewFactory;
+import org.neogroup.sparks.processors.crud.CRUDSelectorProcessor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +11,6 @@ public class Application extends ApplicationContext {
 
     private final static String LOGGER_NAME = "sparks_logger";
     private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
-    private final static String DEFAULT_BUNDLE_NAME_PROPERTY = "default_bundle_name";
-    private final static String BUNDLES_PATH_PROPERTY = "bundles_path";
 
     protected final List<Module> modules;
 
@@ -28,30 +23,13 @@ public class Application extends ApplicationContext {
         }
         catch (Exception ex) {}
 
-        //Traductor de la aplicación
-        bundlesManager = new BundlesManager();
-        String bundlesPath = properties.get(BUNDLES_PATH_PROPERTY);
-        if (bundlesPath != null) {
-            bundlesManager.setDefaultBundlesPath(bundlesPath);
-        }
-        String defaultBundleName = properties.get(DEFAULT_BUNDLE_NAME_PROPERTY);
-        if (defaultBundleName != null) {
-            bundlesManager.setDefaultBundleName(defaultBundleName);
-        }
-
         //Logger de la aplicación
         logger = Logger.getLogger(LOGGER_NAME);
 
-        //Manejador de templates
-        VelocityViewFactory velocityTemplateFactory = new VelocityViewFactory();
-        velocityTemplateFactory.setDebugMode(true);
-        FreeMarkerViewFactory freeMarkerTemplateFactory = new FreeMarkerViewFactory();
-        viewsManager = new ViewsManager();
-        viewsManager.addViewFactory(velocityTemplateFactory);
-        viewsManager.addViewFactory(freeMarkerTemplateFactory);
-
         //Modulos de la aplicación
         modules = new ArrayList<>();
+
+        processorsManager.registerProcessor(CRUDSelectorProcessor.class);
     }
 
     public final void addModule(Module module) {
@@ -62,25 +40,17 @@ public class Application extends ApplicationContext {
         modules.remove(module);
     }
 
-    public final void start() {
-        startContext();
-    }
-
-    public final void stop() {
-        stopContext();
-    }
-
     @Override
     protected void onStart() {
         for (Module module : modules) {
-            module.startContext();
+            module.start();
         }
     }
 
     @Override
     protected void onStop() {
         for (Module module : modules) {
-            module.stopContext();
+            module.stop();
         }
     }
 }

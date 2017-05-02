@@ -1,11 +1,8 @@
 
 package org.neogroup.sparks.processors;
 
-import org.neogroup.sparks.Application;
 import org.neogroup.sparks.ApplicationContext;
-import org.neogroup.sparks.Module;
 import org.neogroup.sparks.Properties;
-import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.crud.CreateEntitiesCommand;
 import org.neogroup.sparks.commands.crud.DeleteEntitiesCommand;
@@ -15,7 +12,6 @@ import org.neogroup.sparks.model.Entity;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.model.annotations.Id;
 import org.neogroup.sparks.views.View;
-import org.neogroup.sparks.views.ViewsManager;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -24,30 +20,15 @@ import java.util.logging.Logger;
 
 public abstract class Processor <C extends Command, R extends Object> {
 
-    private Application application;
     private ApplicationContext applicationContext;
 
-    public void setApplicationContext(ApplicationContext applicationContext) {
+    protected void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        if (applicationContext instanceof Application) {
-            application = (Application)applicationContext;
-        }
-        else if (applicationContext instanceof Module) {
-            application = ((Module)applicationContext).getApplication();
-        }
     }
 
-    public ApplicationContext getApplicationContext() {
+    protected ApplicationContext getApplicationContext() {
         return applicationContext;
     }
-
-    public Application getApplication() {
-        return application;
-    }
-
-    public void onStart () {}
-
-    public void onStop () {}
 
     protected Properties getProperties() {
         return applicationContext.getProperties();
@@ -57,16 +38,12 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext.getLogger();
     }
 
-    protected BundlesManager getBundlesManager() {
-        return applicationContext.getBundlesManager();
-    }
-
-    protected ViewsManager getViewsManager() {
-        return applicationContext.getViewsManager();
-    }
-
     protected View createView (String viewName) {
-        return getViewsManager().createView(viewName);
+        return applicationContext.createView(viewName);
+    }
+
+    public <R> R processCommand(Command command) {
+        return applicationContext.processCommand(command);
     }
 
     protected <E extends Entity> E createEntity(E entity) {
@@ -139,6 +116,10 @@ public abstract class Processor <C extends Command, R extends Object> {
         command.setParameters(params);
         return applicationContext.processCommand(command);
     }
+
+    public void onStart () {}
+
+    public void onStop () {}
 
     public abstract R process (C command) throws ProcessorException;
 }

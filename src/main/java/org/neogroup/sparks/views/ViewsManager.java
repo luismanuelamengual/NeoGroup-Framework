@@ -1,17 +1,21 @@
 
 package org.neogroup.sparks.views;
 
+import org.neogroup.sparks.ApplicationContext;
+import org.neogroup.sparks.Manager;
+
 import java.text.MessageFormat;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ViewsManager {
+public class ViewsManager extends Manager {
 
     private static final String VIEW_NOT_FOUND_ERROR = "View \"{0}\" not found !!";
 
     private final Set<ViewFactory> viewFactories;
 
-    public ViewsManager() {
+    public ViewsManager(ApplicationContext applicationContext) {
+        super(applicationContext);
         this.viewFactories = new HashSet<>();
     }
 

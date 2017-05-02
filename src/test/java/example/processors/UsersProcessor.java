@@ -25,7 +25,6 @@ public class UsersProcessor extends WebProcessor {
             user.setAge(Integer.parseInt(request.getParameter("age")));
         }
         createEntity(user);
-
         return showUsersAction(request);
     }
 

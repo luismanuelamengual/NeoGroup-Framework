@@ -4,15 +4,13 @@ package org.neogroup.sparks;
 import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorComponent;
-import org.neogroup.sparks.processors.ProcessorException;
-import org.neogroup.sparks.processors.ProcessorNotFoundException;
-import org.neogroup.sparks.processors.crud.CRUDSelectorProcessor;
+import org.neogroup.sparks.processors.ProcessorsManager;
+import org.neogroup.sparks.views.View;
+import org.neogroup.sparks.views.ViewException;
+import org.neogroup.sparks.views.ViewFactory;
 import org.neogroup.sparks.views.ViewsManager;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public abstract class ApplicationContext {
@@ -20,16 +18,15 @@ public abstract class ApplicationContext {
     protected boolean running;
     protected Properties properties;
     protected Logger logger;
-    protected BundlesManager bundlesManager;
-    protected ViewsManager viewsManager;
-    private final Map<Class<? extends Processor>, Processor> processors;
-    private final Map<Class<? extends Command>, Processor> processorsByCommand;
+    protected final BundlesManager bundlesManager;
+    protected final ViewsManager viewsManager;
+    protected final ProcessorsManager processorsManager;
 
     public ApplicationContext() {
         running = false;
-        this.processors = new HashMap<>();
-        this.processorsByCommand = new HashMap<>();
-        registerProcessor(CRUDSelectorProcessor.class);
+        bundlesManager = new BundlesManager(this);
+        viewsManager = new ViewsManager(this);
+        processorsManager = new ProcessorsManager(this);
     }
 
     public Properties getProperties() {
@@ -48,84 +45,52 @@ public abstract class ApplicationContext {
         this.logger = logger;
     }
 
-    public BundlesManager getBundlesManager() {
-        return bundlesManager;
-    }
-
-    public void setBundlesManager(BundlesManager bundlesManager) {
-        this.bundlesManager = bundlesManager;
-    }
-
-    public ViewsManager getViewsManager() {
-        return viewsManager;
-    }
-
-    public void setViewsManager(ViewsManager viewsManager) {
-        this.viewsManager = viewsManager;
-    }
-
-    public Collection<Processor> getRegisteredProcessors () {
-        return processors.values();
-    }
-
-    public Processor getProcessor (Class<? extends Command> commandClass) {
-        return processorsByCommand.get(commandClass);
-    }
-
-    public final void registerProcessor (Class<? extends Processor> processorClass) {
-        if (!processors.containsKey(processorClass)) {
-            try {
-                //Obtener una instancia del procesador
-                Processor processor = processorClass.newInstance();
-                processor.setApplicationContext(this);
-                processors.put(processorClass, processor);
-
-                //Asociar este procesador a los comandos especificados para este procesador
-                ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
-                if (processorAnnotation != null) {
-                    Class<? extends Command>[] commandClasses = processorAnnotation.commands();
-                    for (Class<? extends Command> commandClass : commandClasses) {
-                        processorsByCommand.put(commandClass, processor);
-                    }
-                }
-            } catch (Exception exception) {
-                throw new ProcessorException("Error registering processor", exception);
-            }
-        }
-    }
-
-    public final void registerProcessors (Class<? extends Processor> ... processorClasses) {
-        for (Class<? extends Processor> processorClass : processorClasses) {
-            registerProcessor(processorClass);
-        }
-    }
-
-    public final <R extends Object> R processCommand(Command command) {
-        Processor processor = getProcessor(command.getClass());
-        if (processor == null) {
-            throw new ProcessorNotFoundException("Processor not found for command \"" + command.toString() + "\" !!");
-        }
-        return (R) processor.process(command);
-    }
-
-    protected final void startContext () {
+    public final void start () {
         if (!running) {
-            for (Processor processor : processors.values()) {
-                processor.onStart();
-            }
+            bundlesManager.onStart();
+            viewsManager.onStart();
+            processorsManager.onStart();
             onStart();
             running = true;
         }
     }
 
-    protected final void stopContext () {
+    public final void stop () {
         if (running) {
-            for (Processor processor : processors.values()) {
-                processor.onStop();
-            }
+            bundlesManager.onStop();
+            viewsManager.onStop();
+            processorsManager.onStop();
             onStop();
             running = false;
         }
+    }
+
+    public void registerProcessor(Class<? extends Processor> processorClass) {
+        processorsManager.registerProcessor(processorClass);
+    }
+
+    public void registerProcessors(Class<? extends Processor> ... processorClasses) {
+        processorsManager.registerProcessors(processorClasses);
+    }
+
+    public Collection<Processor> getRegisteredProcessors() {
+        return processorsManager.getRegisteredProcessors();
+    }
+
+    public <R> R processCommand(Command command) {
+        return processorsManager.processCommand(command);
+    }
+
+    public void addViewFactory(ViewFactory viewFactory) {
+        viewsManager.addViewFactory(viewFactory);
+    }
+
+    public void removeViewFactory(ViewFactory viewFactory) {
+        viewsManager.removeViewFactory(viewFactory);
+    }
+
+    public View createView(String viewName) throws ViewException {
+        return viewsManager.createView(viewName);
     }
 
     protected abstract void onStart ();

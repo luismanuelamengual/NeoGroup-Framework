@@ -1,18 +1,22 @@
 package org.neogroup.sparks.bundles;
 
+import org.neogroup.sparks.ApplicationContext;
+import org.neogroup.sparks.Manager;
+
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class BundlesManager {
+public class BundlesManager extends Manager {
 
     private static final String BUNDLE_NAMESPACE_SEPARATOR = ".";
 
     private String defaultBundlesPath;
     private String defaultBundleName;
 
-    public BundlesManager() {
+    public BundlesManager(ApplicationContext applicationContext) {
+        super(applicationContext);
         this.defaultBundlesPath = "";
         this.defaultBundleName = "general";
     }
