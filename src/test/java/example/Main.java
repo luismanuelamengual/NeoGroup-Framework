@@ -4,6 +4,7 @@ package example;
 import example.processors.*;
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.console.ConsoleModule;
+import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 import org.neogroup.sparks.web.WebModule;
 
 public class Main {
@@ -29,6 +30,8 @@ public class Main {
                 UsersProcessor.class,
                 VaneProcessor.class
         );
+
+        application.addViewFactory(new VelocityViewFactory());
         application.start();
     }
 }
