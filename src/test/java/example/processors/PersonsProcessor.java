@@ -3,6 +3,7 @@ package example.processors;
 import example.models.Person;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
+import org.neogroup.sparks.model.EntityPropertyOperator;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
@@ -15,7 +16,6 @@ public class PersonsProcessor extends WebProcessor {
 
     @RouteAction(name="test")
     public HttpResponse testAction(HttpRequest request) {
-
 
         Person person = new Person();
         person.setId(1);
@@ -37,14 +37,15 @@ public class PersonsProcessor extends WebProcessor {
         person.setAge(33);
         updateEntity(person);
 
-
         person = new Person();
         person.setId(30);
         deleteEntity(person);
 
         EntityQuery query = new EntityQuery();
         query.addSorter("id");
+        query.addFilter("age", EntityPropertyOperator.LESS_THAN, 50);
         List<Person> persons = retrieveEntities(Person.class, query);
+
         StringBuilder personsString = new StringBuilder();
         for (Person p : persons) {
             personsString.append(p);
