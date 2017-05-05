@@ -7,6 +7,7 @@ import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewNotFoundException;
 
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -55,5 +56,14 @@ public abstract class Module extends ApplicationContext {
             view = application.createView(viewName);
         }
         return view;
+    }
+
+    @Override
+    public DataSource getDataSource(String name) {
+        DataSource dataSource = super.getDataSource(name);
+        if (dataSource == null) {
+            dataSource = application.getDataSource(name);
+        }
+        return dataSource;
     }
 }

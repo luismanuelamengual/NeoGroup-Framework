@@ -3,6 +3,7 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.bundles.BundlesManager;
 import org.neogroup.sparks.commands.Command;
+import org.neogroup.sparks.data.DataSourcesManager;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorsManager;
 import org.neogroup.sparks.views.View;
@@ -10,6 +11,7 @@ import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewFactory;
 import org.neogroup.sparks.views.ViewsManager;
 
+import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -21,12 +23,14 @@ public abstract class ApplicationContext {
     protected final BundlesManager bundlesManager;
     protected final ViewsManager viewsManager;
     protected final ProcessorsManager processorsManager;
+    protected final DataSourcesManager dataSourcesManager;
 
     public ApplicationContext() {
         running = false;
         bundlesManager = new BundlesManager(this);
         viewsManager = new ViewsManager(this);
         processorsManager = new ProcessorsManager(this);
+        dataSourcesManager = new DataSourcesManager(this);
     }
 
     public Properties getProperties() {
@@ -91,6 +95,22 @@ public abstract class ApplicationContext {
 
     public View createView(String viewName) throws ViewException {
         return viewsManager.createView(viewName);
+    }
+
+    public void addDataSource(String name, DataSource dataSource) {
+        dataSourcesManager.addDataSource(name, dataSource);
+    }
+
+    public void removeDataSource(String name) {
+        dataSourcesManager.removeDataSource(name);
+    }
+
+    public DataSource getDataSource() {
+        return dataSourcesManager.getDataSource();
+    }
+
+    public DataSource getDataSource(String name) {
+        return dataSourcesManager.getDataSource(name);
     }
 
     protected abstract void onStart ();

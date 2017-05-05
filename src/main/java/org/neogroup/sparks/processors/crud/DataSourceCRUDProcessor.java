@@ -14,14 +14,12 @@ import java.util.*;
 
 public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProcessor<E> {
 
-    private final DataSource source;
-
-    public DataSourceCRUDProcessor() {
-        this.source = createDataSource();
+    protected DataSource getDataSource (String name) {
+        return getApplicationContext().getDataSource(name);
     }
 
     protected DataSource getDataSource () {
-        return source;
+        return getApplicationContext().getDataSource();
     }
 
     @Override
@@ -33,10 +31,10 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             List<Object> sqlParameters = new ArrayList<>();
 
             StringBuilder fieldsStatement = new StringBuilder();
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null && field.getAnnotation(GeneratedValue.class) == null) {
-                    if (fieldsStatement.length() > 1) {
+                    if (fieldsStatement.length() > 0) {
                         fieldsStatement.append(",");
                     }
                     fieldsStatement.append(columnAnnotation.name());
@@ -44,13 +42,15 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             }
 
             StringBuilder valuesStatement = new StringBuilder();
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
+
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null && field.getAnnotation(GeneratedValue.class) == null) {
-                    if (valuesStatement.length() > 1) {
+                    if (valuesStatement.length() > 0) {
                         valuesStatement.append(",");
                     }
                     valuesStatement.append("?");
+                    field.setAccessible(true);
                     sqlParameters.add(field.get(entity));
                 }
             }
@@ -74,14 +74,14 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             int affectedRows = statement.executeUpdate();
 
             if (affectedRows != 0) {
-                parameterIndex = 1;
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                    for (Field field : entityClass.getFields()) {
-                        if (field.getAnnotation(GeneratedValue.class) != null) {
-                            if (generatedKeys.next()) {
-                                field.set(entity, generatedKeys.getObject(parameterIndex++));
-                            } else {
-                                throw new SQLException("Expecting generated value");
+                    while (generatedKeys.next()) {
+
+                        for (Field field : entityClass.getDeclaredFields()) {
+                            if (field.getAnnotation(GeneratedValue.class) != null) {
+                                Column columnAnnotation = field.getAnnotation(Column.class);
+                                field.setAccessible(true);
+                                field.set(entity, generatedKeys.getObject(columnAnnotation.name()));
                             }
                         }
                     }
@@ -103,7 +103,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             List<Object> sqlParameters = new ArrayList<>();
 
             StringBuilder setStatement = new StringBuilder();
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null && field.getAnnotation(Id.class) == null) {
                     if (setStatement.length() > 0) {
@@ -117,7 +117,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             }
 
             StringBuilder whereStatement = new StringBuilder();
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null && field.getAnnotation(Id.class) != null) {
                     if (whereStatement.length() > 0) {
@@ -163,7 +163,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             List<Object> sqlParameters = new ArrayList<>();
 
             StringBuilder whereStatement = new StringBuilder();
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
                 Column columnAnnotation = field.getAnnotation(Column.class);
                 if (columnAnnotation != null && field.getAnnotation(Id.class) != null) {
                     if (whereStatement.length() > 0) {
@@ -221,7 +221,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
                 Iterator<EntitySorter> orderIterator = query.getSorters().iterator();
                 while (orderIterator.hasNext()) {
                     EntitySorter order = orderIterator.next();
-                    for (Field field : entityClass.getFields()) {
+                    for (Field field : entityClass.getDeclaredFields()) {
                         if (field.getName().equals(order.getProperty())) {
                             Column columnAnnotation = field.getAnnotation(Column.class);
                             if (columnAnnotation != null) {
@@ -299,7 +299,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         }
         else if (filter instanceof EntityPropertyFilter) {
             EntityPropertyFilter resourcePropertyFilter = (EntityPropertyFilter)filter;
-            for (Field field : entityClass.getFields()) {
+            for (Field field : entityClass.getDeclaredFields()) {
                 if (field.getName().equals(resourcePropertyFilter.getProperty())) {
                     Column columnAnnotation = field.getAnnotation(Column.class);
                     if (columnAnnotation != null) {
@@ -395,8 +395,13 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
     }
 
     protected E createEntityFromResultSet(ResultSet resultSet) {
-        return null;
-    }
 
-    protected abstract DataSource createDataSource();
+        try {
+            E entity = entityClass.newInstance();
+            return entity;
+        }
+        catch (Exception ex) {
+            throw new RuntimeException ("Error creating entity from resultSet", ex);
+        }
+    }
 }

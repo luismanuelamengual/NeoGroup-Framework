@@ -3,9 +3,9 @@ package example;
 
 import example.processors.*;
 import org.neogroup.sparks.Application;
-import org.neogroup.sparks.console.ConsoleModule;
 import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 import org.neogroup.sparks.web.WebModule;
+import org.postgresql.ds.PGPoolingDataSource;
 
 public class Main {
 
@@ -13,25 +13,29 @@ public class Main {
 
         Application application = new Application();
 
-        WebModule pepeModule = new WebModule(application, 1408);
-        pepeModule.registerProcessor(PepeProcessor.class);
-        application.addModule(pepeModule);
+        //Load web module
+        application.addModule(new WebModule(application, 1408));
 
-        WebModule ramaModule = new WebModule(application, 1409);
-        ramaModule.registerProcessor(RamaProcessor.class);
-        application.addModule(ramaModule);
+        //Add view factories
+        application.addViewFactory(new VelocityViewFactory());
 
-        ConsoleModule consoleModule = new ConsoleModule(application);
-        application.addModule(consoleModule);
+        //Add data sources
+        PGPoolingDataSource postgreDataSource = new PGPoolingDataSource();
+        postgreDataSource.setServerName("localhost");
+        postgreDataSource.setDatabaseName("testdb");
+        postgreDataSource.setUser("postgres");
+        postgreDataSource.setPassword("postgres");
+        application.addDataSource("main", postgreDataSource);
 
+        //Register processors
         application.registerProcessors(
                 TestProcessor.class,
                 UserCRUDProcessor.class,
                 UsersProcessor.class,
+                PersonCRUDProcessor.class,
+                PersonsProcessor.class,
                 VaneProcessor.class
         );
-
-        application.addViewFactory(new VelocityViewFactory());
         application.start();
     }
 }
