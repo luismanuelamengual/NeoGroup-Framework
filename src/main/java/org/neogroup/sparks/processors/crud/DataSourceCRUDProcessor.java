@@ -111,6 +111,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
                     setStatement.append(columnAnnotation.name());
                     setStatement.append("=");
                     setStatement.append("?");
+                    field.setAccessible(true);
                     sqlParameters.add(field.get(entity));
                 }
             }
@@ -125,13 +126,14 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
                     whereStatement.append(columnAnnotation.name());
                     whereStatement.append("=");
                     whereStatement.append("?");
+                    field.setAccessible(true);
                     sqlParameters.add(field.get(entity));
                 }
             }
 
             StringBuilder sql = new StringBuilder();
             sql.append("UPDATE ");
-            sql.append(entityClass.getAnnotation(Column.class).name());
+            sql.append(entityClass.getAnnotation(Table.class).name());
             sql.append(" SET ");
             sql.append(setStatement);
             sql.append(" WHERE ");
@@ -171,13 +173,14 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
                     whereStatement.append(columnAnnotation.name());
                     whereStatement.append("=");
                     whereStatement.append("?");
+                    field.setAccessible(true);
                     sqlParameters.add(field.get(entity));
                 }
             }
 
             StringBuilder sql = new StringBuilder();
             sql.append("DELETE FROM ");
-            sql.append(entityClass.getAnnotation(Column.class).name());
+            sql.append(entityClass.getAnnotation(Table.class).name());
             sql.append(" WHERE ");
             sql.append(whereStatement);
 

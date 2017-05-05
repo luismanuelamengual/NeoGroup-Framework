@@ -3,6 +3,7 @@ package example.processors;
 import example.models.Person;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
+import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
@@ -22,7 +23,27 @@ public class PersonsProcessor extends WebProcessor {
         person.setAge(52);
         createEntity(person);
 
-        List<Person> persons = retrieveEntities(Person.class);
+        person = new Person();
+        person.setId(23);
+        person.setName("Canduli");
+        person.setAge(19);
+        updateEntity(person);
+
+        person = new Person();
+        person.setId(26);
+        person.setName("Vane");
+        person.setLastName("Vane");
+        person.setAge(33);
+        updateEntity(person);
+
+
+        person = new Person();
+        person.setId(30);
+        deleteEntity(person);
+
+        EntityQuery query = new EntityQuery();
+        query.addSorter("id");
+        List<Person> persons = retrieveEntities(Person.class, query);
         StringBuilder personsString = new StringBuilder();
         for (Person p : persons) {
             personsString.append(p);
@@ -31,8 +52,6 @@ public class PersonsProcessor extends WebProcessor {
 
         return createResponse(personsString.toString());
     }
-
-
 
     @RouteAction(name="createPerson")
     public HttpResponse createPersonAction(HttpRequest request) {
