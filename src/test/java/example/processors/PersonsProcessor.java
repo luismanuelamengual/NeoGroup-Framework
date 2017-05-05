@@ -16,6 +16,7 @@ public class PersonsProcessor extends WebProcessor {
     @RouteAction(name="test")
     public HttpResponse testAction(HttpRequest request) {
 
+
         Person person = new Person();
         person.setId(1);
         person.setName("Ramon");

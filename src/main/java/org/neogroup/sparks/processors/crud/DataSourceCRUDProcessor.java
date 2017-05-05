@@ -146,7 +146,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
                 statement.setObject(parameterIndex++, sqlParameter);
             }
 
-            int affectedRows = statement.executeUpdate();
+            statement.executeUpdate();
         }
         catch (Exception ex) {
             throw new RuntimeException("Error updating entity", ex);

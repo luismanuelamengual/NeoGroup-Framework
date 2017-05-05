@@ -83,7 +83,7 @@ public abstract class Processor <C extends Command, R extends Object> {
     protected <I extends Object, E extends Entity<I>> E retrieveEntity(Class<? extends E> entityClass, I id, Map<String, Object> params) {
 
         String idProperty = null;
-        for (Field field : entityClass.getFields()) {
+        for (Field field : entityClass.getDeclaredFields()) {
             if (field.getAnnotation(Id.class) != null) {
                 idProperty = field.getName();
                 break;
