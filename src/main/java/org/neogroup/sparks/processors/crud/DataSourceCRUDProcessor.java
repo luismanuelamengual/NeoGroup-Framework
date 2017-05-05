@@ -76,7 +76,6 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
             if (affectedRows != 0) {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     while (generatedKeys.next()) {
-
                         for (Field field : entityClass.getDeclaredFields()) {
                             if (field.getAnnotation(GeneratedValue.class) != null) {
                                 Column columnAnnotation = field.getAnnotation(Column.class);
@@ -209,7 +208,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
 
             StringBuilder sql = new StringBuilder();
             sql.append("SELECT * FROM ");
-            sql.append(entityClass.getAnnotation(Column.class).name());
+            sql.append(entityClass.getAnnotation(Table.class).name());
 
             if (!query.getFilters().isEmpty()) {
                 sql.append(" WHERE ");
@@ -398,6 +397,13 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
 
         try {
             E entity = entityClass.newInstance();
+            for (Field field : entityClass.getDeclaredFields()) {
+                Column columnAnnotation = field.getAnnotation(Column.class);
+                if (columnAnnotation != null) {
+                    field.setAccessible(true);
+                    field.set(entity, resultSet.getObject(columnAnnotation.name()));
+                }
+            }
             return entity;
         }
         catch (Exception ex) {
