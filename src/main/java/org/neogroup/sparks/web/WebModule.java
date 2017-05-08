@@ -3,12 +3,12 @@ package org.neogroup.sparks.web;
 
 import org.neogroup.httpserver.*;
 import org.neogroup.httpserver.contexts.HttpContext;
-import org.neogroup.httpserver.utils.MimeTypes;
 import org.neogroup.sparks.Application;
 import org.neogroup.sparks.Module;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.processors.WebSelectorProcessor;
+import org.neogroup.util.MimeUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -67,7 +67,7 @@ public class WebModule extends Module {
     protected HttpResponse onContextNotFound (WebCommand command) {
         HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.HTTP_NOT_FOUND);
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeUtils.TEXT_PLAIN);
         response.setBody("No processor found for path \"" + command.getWebRoute() + "\" !!");
         return response;
     }
@@ -79,7 +79,7 @@ public class WebModule extends Module {
         byte[] body = out.toByteArray();
         HttpResponse response = new HttpResponse();
         response.setResponseCode(HttpResponseCode.HTTP_INTERNAL_ERROR);
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_PLAIN);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeUtils.TEXT_PLAIN);
         response.setBody(body);
         return response;
     }
