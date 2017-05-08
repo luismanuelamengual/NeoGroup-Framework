@@ -5,11 +5,11 @@ import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.httpserver.HttpResponseCode;
-import org.neogroup.httpserver.utils.MimeTypes;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.web.commands.WebCommand;
 import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.util.MimeUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -69,11 +69,11 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
         PrintStream printer = new PrintStream(out);
         throwable.printStackTrace(printer);
         byte[] body = out.toByteArray();
-        return createResponse(HttpResponseCode.HTTP_INTERNAL_ERROR, MimeTypes.TEXT_PLAIN, body);
+        return createResponse(HttpResponseCode.HTTP_INTERNAL_ERROR, MimeUtils.TEXT_PLAIN, body);
     }
 
     protected HttpResponse onActionNotFound (String action, HttpRequest request) {
-        return createResponse(HttpResponseCode.HTTP_NOT_FOUND, MimeTypes.TEXT_PLAIN, "Action \"" + action + "\" found in controller \"" + this + "\" !!");
+        return createResponse(HttpResponseCode.HTTP_NOT_FOUND, MimeUtils.TEXT_PLAIN, "Action \"" + action + "\" found in controller \"" + this + "\" !!");
     }
 
     protected HttpResponse createResponse (String body) {
@@ -85,7 +85,7 @@ public abstract class WebProcessor extends Processor<WebCommand, HttpResponse> {
     }
 
     protected HttpResponse createResponse (int responseCode, String body) {
-        return createResponse(responseCode, MimeTypes.TEXT_HTML, body);
+        return createResponse(responseCode, MimeUtils.TEXT_HTML, body);
     }
 
     protected HttpResponse createResponse (int responseCode, String responseType, String body) {

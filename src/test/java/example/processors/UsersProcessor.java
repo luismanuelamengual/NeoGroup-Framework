@@ -5,10 +5,10 @@ import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import example.models.User;
-import org.neogroup.httpserver.utils.MimeTypes;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.util.MimeUtils;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class UsersProcessor extends WebProcessor {
         }
 
         HttpResponse response = new HttpResponse();
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_HTML);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeUtils.TEXT_HTML);
         response.setBody(str.toString());
         return response;
     }
@@ -52,7 +52,7 @@ public class UsersProcessor extends WebProcessor {
     public HttpResponse showUserAction(HttpRequest request) {
         User user = retrieveEntity(User.class, 1);
         HttpResponse response = new HttpResponse();
-        response.addHeader(HttpHeader.CONTENT_TYPE, MimeTypes.TEXT_HTML);
+        response.addHeader(HttpHeader.CONTENT_TYPE, MimeUtils.TEXT_HTML);
         response.setBody(user.getName());
         return response;
     }
