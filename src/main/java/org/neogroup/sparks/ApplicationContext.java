@@ -6,6 +6,7 @@ import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.data.DataSourcesManager;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorsManager;
+import org.neogroup.sparks.properties.Properties;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewFactory;

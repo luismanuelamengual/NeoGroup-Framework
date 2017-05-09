@@ -3,33 +3,30 @@ package org.neogroup.sparks;
 
 import org.neogroup.sparks.processors.crud.CRUDSelectorProcessor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class Application extends ApplicationContext {
 
     private final static String LOGGER_NAME = "sparks_logger";
-    private final static String PROPERTIES_RESOURCE_NAME = "app.properties";
+    private final static String PROPERTIES_FILENAME = "app.properties";
 
     protected final List<Module> modules;
 
     public Application () {
 
-        //Propiedades de la aplicación
-        properties = new Properties();
+        properties = new org.neogroup.sparks.properties.Properties();
         try {
-            properties.loadFromFile(PROPERTIES_RESOURCE_NAME);
+            properties.loadFromFile(PROPERTIES_FILENAME);
         }
         catch (Exception ex) {}
 
         //Logger de la aplicación
         logger = Logger.getLogger(LOGGER_NAME);
 
-        //Modulos de la aplicación
         modules = new ArrayList<>();
 
-        processorsManager.registerProcessor(CRUDSelectorProcessor.class);
+        registerProcessor(CRUDSelectorProcessor.class);
     }
 
     public final void addModule(Module module) {

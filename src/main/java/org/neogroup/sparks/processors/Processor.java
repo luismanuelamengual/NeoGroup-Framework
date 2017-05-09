@@ -2,7 +2,7 @@
 package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.ApplicationContext;
-import org.neogroup.sparks.Properties;
+import org.neogroup.sparks.properties.Properties;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.crud.CreateEntitiesCommand;
 import org.neogroup.sparks.commands.crud.DeleteEntitiesCommand;
