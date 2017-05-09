@@ -85,20 +85,24 @@ public abstract class ApplicationContext {
         return processorsManager.processCommand(command);
     }
 
-    public void addViewFactory(ViewFactory viewFactory) {
-        viewsManager.addViewFactory(viewFactory);
+    public void addViewFactory(String viewFactoryName, ViewFactory viewFactory) {
+        viewsManager.addViewFactory(viewFactoryName, viewFactory);
     }
 
-    public void removeViewFactory(ViewFactory viewFactory) {
-        viewsManager.removeViewFactory(viewFactory);
+    public void removeViewFactory(String viewFactoryName) {
+        viewsManager.removeViewFactory(viewFactoryName);
     }
 
     public View createView(String viewName) throws ViewException {
         return viewsManager.createView(viewName);
     }
 
-    public void addDataSource(String name, DataSource dataSource) {
-        dataSourcesManager.addDataSource(name, dataSource);
+    public View createView(String viewFactoryName, String viewName) throws ViewException {
+        return viewsManager.createView(viewFactoryName, viewName);
+    }
+
+    public void addDataSource(String dataSourceName, DataSource dataSource) {
+        dataSourcesManager.addDataSource(dataSourceName, dataSource);
     }
 
     public void removeDataSource(String name) {

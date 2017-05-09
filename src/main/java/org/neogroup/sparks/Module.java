@@ -5,6 +5,7 @@ import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
 import org.neogroup.sparks.views.View;
+import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewNotFoundException;
 
 import javax.sql.DataSource;
@@ -47,13 +48,25 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public View createView(String viewName) {
+    public View createView(String viewName) throws ViewException {
         View view = null;
         try {
             view = super.createView(viewName);
         }
         catch (ViewNotFoundException notFoundExeption) {
             view = application.createView(viewName);
+        }
+        return view;
+    }
+
+    @Override
+    public View createView(String viewFactoryName, String viewName) throws ViewException {
+        View view = null;
+        try {
+            view = super.createView(viewFactoryName, viewName);
+        }
+        catch (ViewNotFoundException notFoundExeption) {
+            view = application.createView(viewFactoryName, viewName);
         }
         return view;
     }

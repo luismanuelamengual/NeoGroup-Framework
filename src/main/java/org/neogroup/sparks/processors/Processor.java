@@ -38,6 +38,10 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext.getLogger();
     }
 
+    protected View createView (String viewFactoryName, String viewName) {
+        return applicationContext.createView(viewName);
+    }
+
     protected View createView (String viewName) {
         return applicationContext.createView(viewName);
     }

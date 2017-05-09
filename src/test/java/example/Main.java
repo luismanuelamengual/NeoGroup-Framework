@@ -17,7 +17,7 @@ public class Main {
         application.addModule(new WebModule(application, 1408));
 
         //Add view factories
-        application.addViewFactory(new VelocityViewFactory());
+        application.addViewFactory("velocity", new VelocityViewFactory());
 
         //Add data sources
         PGPoolingDataSource postgreDataSource = new PGPoolingDataSource();
