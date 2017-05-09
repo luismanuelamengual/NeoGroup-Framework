@@ -72,6 +72,15 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
+    public DataSource getDataSource() {
+        DataSource dataSource = super.getDataSource();
+        if (dataSource == null) {
+            dataSource = application.getDataSource();
+        }
+        return dataSource;
+    }
+
+    @Override
     public DataSource getDataSource(String name) {
         DataSource dataSource = super.getDataSource(name);
         if (dataSource == null) {

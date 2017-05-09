@@ -55,6 +55,7 @@ public abstract class ApplicationContext {
             bundlesManager.onStart();
             viewsManager.onStart();
             processorsManager.onStart();
+            dataSourcesManager.onStart();
             onStart();
             running = true;
         }
@@ -65,6 +66,7 @@ public abstract class ApplicationContext {
             bundlesManager.onStop();
             viewsManager.onStop();
             processorsManager.onStop();
+            dataSourcesManager.onStop();
             onStop();
             running = false;
         }
