@@ -104,14 +104,14 @@ public abstract class ApplicationContext {
 
     public View createView(String viewName) throws ViewException {
 
-        View view = null;
+        String viewFactoryName = null;
         if (viewFactories.size() == 1) {
-            view = createView(viewFactories.keySet().iterator().next(), viewName);
+            viewFactoryName = viewFactories.keySet().iterator().next();
         }
         else if (getProperties().contains(DEFAULT_VIEW_FACTORY_PROPERTY)) {
-            view = createView(getProperties().get(DEFAULT_VIEW_FACTORY_PROPERTY), viewName);
+            viewFactoryName = getProperties().get(DEFAULT_VIEW_FACTORY_PROPERTY);
         }
-        return view;
+        return createView(viewFactoryName, viewName);
     }
 
     public View createView(String viewFactoryName, String viewName) throws ViewException {
@@ -127,27 +127,27 @@ public abstract class ApplicationContext {
         return view;
     }
 
-    public void addDataSource (String name, DataSource dataSource) {
-        this.dataSources.put(name, dataSource);
+    public void addDataSource (String dataSourceName, DataSource dataSource) {
+        this.dataSources.put(dataSourceName, dataSource);
     }
 
-    public void removeDataSource (String name) {
-        this.dataSources.remove(name);
+    public void removeDataSource (String dataSourceName) {
+        this.dataSources.remove(dataSourceName);
     }
 
     public DataSource getDataSource () {
-        DataSource source = null;
+        String dataSourceName = null;
         if (dataSources.size() == 1) {
-            source = dataSources.values().iterator().next();
+            dataSourceName = dataSources.keySet().iterator().next();
         }
         else if (getProperties().contains(DEFAULT_DATA_SOURCE_PROPERTY)) {
-            source = dataSources.get(getProperties().get(DEFAULT_DATA_SOURCE_PROPERTY));
+            dataSourceName = getProperties().get(DEFAULT_DATA_SOURCE_PROPERTY);
         }
-        return source;
+        return getDataSource(dataSourceName);
     }
 
-    public DataSource getDataSource (String name) {
-        return dataSources.get(name);
+    public DataSource getDataSource (String dataSourceName) {
+        return dataSources.get(dataSourceName);
     }
 
     private void startProcessors () {

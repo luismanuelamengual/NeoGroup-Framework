@@ -49,18 +49,6 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public View createView(String viewName) throws ViewException {
-        View view = null;
-        try {
-            view = super.createView(viewName);
-        }
-        catch (ViewNotFoundException notFoundExeption) {
-            view = application.createView(viewName);
-        }
-        return view;
-    }
-
-    @Override
     public View createView(String viewFactoryName, String viewName) throws ViewException {
         View view = null;
         try {
@@ -73,19 +61,10 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public DataSource getDataSource() {
-        DataSource dataSource = super.getDataSource();
+    public DataSource getDataSource(String dataSourceName) {
+        DataSource dataSource = super.getDataSource(dataSourceName);
         if (dataSource == null) {
-            dataSource = application.getDataSource();
-        }
-        return dataSource;
-    }
-
-    @Override
-    public DataSource getDataSource(String name) {
-        DataSource dataSource = super.getDataSource(name);
-        if (dataSource == null) {
-            dataSource = application.getDataSource(name);
+            dataSource = application.getDataSource(dataSourceName);
         }
         return dataSource;
     }
