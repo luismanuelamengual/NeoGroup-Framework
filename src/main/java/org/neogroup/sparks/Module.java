@@ -28,11 +28,12 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public Collection<Processor> getRegisteredProcessors() {
-        List<Processor> processors = new ArrayList<>();
-        processors.addAll(application.getRegisteredProcessors());
-        processors.addAll(super.getRegisteredProcessors());
-        return processors;
+    public Processor getProcessorInstance(Class<? extends Processor> processorClass) {
+        Processor processor = super.getProcessorInstance(processorClass);
+        if (processor == null) {
+            processor = application.getProcessorInstance(processorClass);
+        }
+        return processor;
     }
 
     @Override

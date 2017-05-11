@@ -13,8 +13,15 @@ public class Main {
 
         Application application = new Application();
 
+        WebModule module1 = new WebModule(application, 1408);
+        module1.registerProcessor(RamaProcessor.class);
+
+        WebModule module2 = new WebModule(application, 1409);
+        module2.registerProcessor(PepeProcessor.class);
+
         //Load web module
-        application.addModule(new WebModule(application, 1408));
+        application.addModule(module1);
+        application.addModule(module2);
 
         //Add view factories
         application.addViewFactory("velocity", new VelocityViewFactory());

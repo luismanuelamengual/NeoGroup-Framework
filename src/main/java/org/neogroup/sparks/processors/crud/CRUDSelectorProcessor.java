@@ -6,6 +6,8 @@ import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.processors.SelectorProcessor;
 import org.neogroup.sparks.model.Entity;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,20 +19,28 @@ import java.util.Map;
 })
 public class CRUDSelectorProcessor extends SelectorProcessor<CRUDCommand, CRUDProcessor> {
 
-    private Map<Class<? extends Entity>, CRUDProcessor> processorsbyModel;
+    private Map<Class<? extends Entity>, Class<? extends CRUDProcessor>> processorsbyModel;
 
     public CRUDSelectorProcessor() {
         this.processorsbyModel = new HashMap<>();
     }
 
     @Override
-    public boolean registerProcessorCandidate(CRUDProcessor processor) {
-        processorsbyModel.put(processor.getEntityClass(), processor);
-        return true;
+    protected boolean registerProcessorClass(Class<? extends CRUDProcessor> processorClass) {
+        boolean registered = false;
+        Type type = processorClass.getGenericSuperclass();
+        if(type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            Type[] fieldArgTypes = parameterizedType.getActualTypeArguments();
+            Class<? extends Entity> entityClass = (Class<? extends Entity>) fieldArgTypes[0];
+            processorsbyModel.put(entityClass, processorClass);
+            registered = true;
+        }
+        return registered;
     }
 
     @Override
-    public CRUDProcessor getProcessor(CRUDCommand command) {
+    protected Class<? extends CRUDProcessor> getProcessorClass(CRUDCommand command) {
         return processorsbyModel.get(command.getEntityClass());
     }
 }

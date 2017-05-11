@@ -22,11 +22,11 @@ public abstract class Processor <C extends Command, R extends Object> {
 
     private ApplicationContext applicationContext;
 
-    protected void setApplicationContext(ApplicationContext applicationContext) {
+    public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
-    protected ApplicationContext getApplicationContext() {
+    public ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
@@ -121,9 +121,7 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext.processCommand(command);
     }
 
-    public void onStart () {}
-
-    public void onStop () {}
+    public void initialize () {}
 
     public abstract R process (C command) throws ProcessorException;
 }

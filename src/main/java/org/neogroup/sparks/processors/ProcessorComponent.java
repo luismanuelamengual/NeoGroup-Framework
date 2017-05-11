@@ -13,5 +13,6 @@ import java.lang.annotation.Target;
 public @interface ProcessorComponent {
 
     public Class<? extends Command>[] commands() default {};
+    public boolean singleInstance() default true;
 }
 
