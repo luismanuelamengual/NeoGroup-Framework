@@ -21,8 +21,9 @@ import java.util.logging.Logger;
 
 public abstract class ApplicationContext {
 
-    private static final String DEFAULT_VIEW_FACTORY_PROPERTY = "defaultViewFactory";
-    private static final String DEFAULT_DATA_SOURCE_PROPERTY = "defaultDataSource";
+    private static final String DEFAULT_BUNDLE_NAME_PROPERTY_NAME = "defaultBundleName";
+    private static final String DEFAULT_VIEW_FACTORY_PROPERTY_NAME = "defaultViewFactory";
+    private static final String DEFAULT_DATA_SOURCE_PROPERTY_NAME = "defaultDataSource";
 
     protected boolean running;
     protected final Properties properties;
@@ -74,6 +75,23 @@ public abstract class ApplicationContext {
         try (FileInputStream in = new FileInputStream(filename)) {
             this.properties.load(in);
         }
+    }
+
+    public String getString (Locale locale, String key, Object... args) {
+        String value = null;
+        if (hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
+            value = getBundleString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
+        }
+        return value;
+    }
+
+    public String getBundleString (String bundleName, Locale locale, String key, Object... args) {
+        String value = null;
+        ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
+        if (bundle != null && bundle.containsKey(key)) {
+            value = MessageFormat.format(bundle.getString(key), args);
+        }
+        return value;
     }
 
     public final void registerProcessors (Class<? extends Processor> ... processorClasses) {
@@ -128,8 +146,8 @@ public abstract class ApplicationContext {
         if (viewFactories.size() == 1) {
             viewFactoryName = viewFactories.keySet().iterator().next();
         }
-        else if (hasProperty(DEFAULT_VIEW_FACTORY_PROPERTY)) {
-            viewFactoryName = (String)getProperty(DEFAULT_VIEW_FACTORY_PROPERTY);
+        else if (hasProperty(DEFAULT_VIEW_FACTORY_PROPERTY_NAME)) {
+            viewFactoryName = (String)getProperty(DEFAULT_VIEW_FACTORY_PROPERTY_NAME);
         }
         return createView(viewFactoryName, viewName);
     }
@@ -160,8 +178,8 @@ public abstract class ApplicationContext {
         if (dataSources.size() == 1) {
             dataSourceName = dataSources.keySet().iterator().next();
         }
-        else if (hasProperty(DEFAULT_DATA_SOURCE_PROPERTY)) {
-            dataSourceName = (String)getProperty(DEFAULT_DATA_SOURCE_PROPERTY);
+        else if (hasProperty(DEFAULT_DATA_SOURCE_PROPERTY_NAME)) {
+            dataSourceName = (String)getProperty(DEFAULT_DATA_SOURCE_PROPERTY_NAME);
         }
         return getDataSource(dataSourceName);
     }

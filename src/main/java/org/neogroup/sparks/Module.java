@@ -9,6 +9,7 @@ import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewNotFoundException;
 
 import javax.sql.DataSource;
+import java.util.Locale;
 
 public abstract class Module extends ApplicationContext {
 
@@ -20,6 +21,15 @@ public abstract class Module extends ApplicationContext {
 
     public Application getApplication() {
         return application;
+    }
+
+    @Override
+    public String getBundleString(String bundleName, Locale locale, String key, Object... args) {
+        String value = super.getBundleString(bundleName, locale, key, args);
+        if (value == null) {
+            value = application.getBundleString(bundleName, locale, key, args);
+        }
+        return value;
     }
 
     @Override

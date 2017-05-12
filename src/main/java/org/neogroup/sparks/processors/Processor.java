@@ -14,6 +14,7 @@ import org.neogroup.sparks.views.View;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -39,6 +40,14 @@ public abstract class Processor <C extends Command, R extends Object> {
 
     protected Logger getLogger() {
         return applicationContext.getLogger();
+    }
+
+    public String getString(Locale locale, String key, Object... args) {
+        return applicationContext.getString(locale, key, args);
+    }
+
+    public String getBundleString(String bundleName, Locale locale, String key, Object... args) {
+        return applicationContext.getBundleString(bundleName, locale, key, args);
     }
 
     protected View createView (String viewFactoryName, String viewName) {
