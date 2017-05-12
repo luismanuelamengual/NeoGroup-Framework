@@ -52,8 +52,8 @@ public abstract class ApplicationContext {
         return properties;
     }
 
-    public Object getProperty(String property) {
-        return this.properties.get(property);
+    public <R> R getProperty(String property) {
+        return (R)this.properties.get(property);
     }
 
     public boolean hasProperty(String property) {

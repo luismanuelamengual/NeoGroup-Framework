@@ -23,12 +23,12 @@ public abstract class Module extends ApplicationContext {
     }
 
     @Override
-    public Object getProperty(String property) {
+    public <R> R getProperty(String property) {
         Object value = super.getProperty(property);
         if (value == null) {
             value = application.getProperty(property);
         }
-        return value;
+        return (R)value;
     }
 
     @Override
