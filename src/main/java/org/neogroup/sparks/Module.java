@@ -9,9 +9,6 @@ import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewNotFoundException;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 public abstract class Module extends ApplicationContext {
 
@@ -19,12 +16,28 @@ public abstract class Module extends ApplicationContext {
 
     public Module(Application application) {
         this.application = application;
-        this.properties = application.getProperties();
-        this.logger = application.getLogger();
     }
 
     public Application getApplication() {
         return application;
+    }
+
+    @Override
+    public Object getProperty(String property) {
+        Object value = super.getProperty(property);
+        if (value == null) {
+            value = application.getProperty(property);
+        }
+        return value;
+    }
+
+    @Override
+    public boolean hasProperty(String property) {
+        boolean hasProperty = super.hasProperty(property);
+        if (!hasProperty) {
+            hasProperty = application.hasProperty(property);
+        }
+        return hasProperty;
     }
 
     @Override

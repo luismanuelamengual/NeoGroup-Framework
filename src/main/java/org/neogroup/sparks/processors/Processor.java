@@ -2,7 +2,6 @@
 package org.neogroup.sparks.processors;
 
 import org.neogroup.sparks.ApplicationContext;
-import org.neogroup.sparks.properties.Properties;
 import org.neogroup.sparks.commands.Command;
 import org.neogroup.sparks.commands.crud.CreateEntitiesCommand;
 import org.neogroup.sparks.commands.crud.DeleteEntitiesCommand;
@@ -30,8 +29,12 @@ public abstract class Processor <C extends Command, R extends Object> {
         return applicationContext;
     }
 
-    protected Properties getProperties() {
-        return applicationContext.getProperties();
+    public Object getProperty(String property) {
+        return applicationContext.getProperty(property);
+    }
+
+    public boolean hasProperty(String property) {
+        return applicationContext.hasProperty(property);
     }
 
     protected Logger getLogger() {

@@ -25,7 +25,7 @@ public class TestProcessor extends WebProcessor {
     @RouteAction (name="properties")
     public HttpResponse propertiesAction (HttpRequest request) {
         String property = request.getParameter("property");
-        String value = getProperties().get(property);
+        String value = (String)getProperty(property);
         return createResponse("El valor de la propiedad \"" + property + "\" es: " + value);
     }
 }

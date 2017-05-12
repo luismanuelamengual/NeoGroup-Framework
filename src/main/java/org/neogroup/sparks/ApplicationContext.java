@@ -6,13 +6,15 @@ import org.neogroup.sparks.processors.Processor;
 import org.neogroup.sparks.processors.ProcessorComponent;
 import org.neogroup.sparks.processors.ProcessorException;
 import org.neogroup.sparks.processors.ProcessorNotFoundException;
-import org.neogroup.sparks.properties.Properties;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewFactory;
 import org.neogroup.sparks.views.ViewNotFoundException;
 
 import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -23,8 +25,8 @@ public abstract class ApplicationContext {
     private static final String DEFAULT_DATA_SOURCE_PROPERTY = "defaultDataSource";
 
     protected boolean running;
-    protected Properties properties;
-    protected Logger logger;
+    protected final Properties properties;
+    protected final Logger logger;
     protected final Map<String, DataSource> dataSources;
     protected final Map<String, ViewFactory> viewFactories;
     protected final Set<Class<? extends Processor>> registeredProcessors;
@@ -33,6 +35,8 @@ public abstract class ApplicationContext {
 
     public ApplicationContext() {
         running = false;
+        this.properties = new Properties();
+        this.logger = Logger.getGlobal();
         this.dataSources = new HashMap<>();
         this.viewFactories = new HashMap<>();
         this.registeredProcessors = new HashSet<>();
@@ -40,20 +44,36 @@ public abstract class ApplicationContext {
         this.singleInstanceProcessors = new HashMap<>();
     }
 
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
-
     public Logger getLogger() {
         return logger;
     }
 
-    public void setLogger(Logger logger) {
-        this.logger = logger;
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public Object getProperty(String property) {
+        return this.properties.get(property);
+    }
+
+    public boolean hasProperty(String property) {
+        return this.properties.containsKey(property);
+    }
+
+    public void setProperty(String property, Object value) {
+        this.properties.put(property, value);
+    }
+
+    public void loadPropertiesFromResource (String resourceName) throws IOException {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName)) {
+            this.properties.load(in);
+        }
+    }
+
+    public void loadPropertiesFromFile (String filename) throws IOException {
+        try (FileInputStream in = new FileInputStream(filename)) {
+            this.properties.load(in);
+        }
     }
 
     public final void registerProcessors (Class<? extends Processor> ... processorClasses) {
@@ -108,8 +128,8 @@ public abstract class ApplicationContext {
         if (viewFactories.size() == 1) {
             viewFactoryName = viewFactories.keySet().iterator().next();
         }
-        else if (getProperties().contains(DEFAULT_VIEW_FACTORY_PROPERTY)) {
-            viewFactoryName = getProperties().get(DEFAULT_VIEW_FACTORY_PROPERTY);
+        else if (hasProperty(DEFAULT_VIEW_FACTORY_PROPERTY)) {
+            viewFactoryName = (String)getProperty(DEFAULT_VIEW_FACTORY_PROPERTY);
         }
         return createView(viewFactoryName, viewName);
     }
@@ -140,8 +160,8 @@ public abstract class ApplicationContext {
         if (dataSources.size() == 1) {
             dataSourceName = dataSources.keySet().iterator().next();
         }
-        else if (getProperties().contains(DEFAULT_DATA_SOURCE_PROPERTY)) {
-            dataSourceName = getProperties().get(DEFAULT_DATA_SOURCE_PROPERTY);
+        else if (hasProperty(DEFAULT_DATA_SOURCE_PROPERTY)) {
+            dataSourceName = (String)getProperty(DEFAULT_DATA_SOURCE_PROPERTY);
         }
         return getDataSource(dataSourceName);
     }

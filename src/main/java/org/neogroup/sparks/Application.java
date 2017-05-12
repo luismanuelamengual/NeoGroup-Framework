@@ -8,24 +8,10 @@ import java.util.logging.Logger;
 
 public class Application extends ApplicationContext {
 
-    private final static String LOGGER_NAME = "sparks_logger";
-    private final static String PROPERTIES_FILENAME = "app.properties";
-
     protected final List<Module> modules;
 
     public Application () {
-
-        properties = new org.neogroup.sparks.properties.Properties();
-        try {
-            properties.loadFromFile(PROPERTIES_FILENAME);
-        }
-        catch (Exception ex) {}
-
-        //Logger de la aplicación
-        logger = Logger.getLogger(LOGGER_NAME);
-
         modules = new ArrayList<>();
-
         registerProcessor(CRUDSelectorProcessor.class);
     }
 
