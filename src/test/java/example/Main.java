@@ -12,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
 
         Application application = new Application();
+        application.setProperty("defaultBundleName", "localization.messages");
 
         WebModule module1 = new WebModule(application, 1408);
         module1.registerProcessor(RamaProcessor.class);

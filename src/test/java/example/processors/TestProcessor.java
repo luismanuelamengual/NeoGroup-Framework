@@ -7,6 +7,8 @@ import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
 
+import java.util.Locale;
+
 @Route(path="/test/")
 public class TestProcessor extends WebProcessor {
 
@@ -27,5 +29,10 @@ public class TestProcessor extends WebProcessor {
         String property = request.getParameter("property");
         String value = (String)getProperty(property);
         return createResponse("El valor de la propiedad \"" + property + "\" es: " + value);
+    }
+
+    @RouteAction (name="bundles")
+    public HttpResponse bundlesAction (HttpRequest request) {
+        return createResponse(getString(Locale.ENGLISH, "welcome_phrase", "Luis"));
     }
 }
