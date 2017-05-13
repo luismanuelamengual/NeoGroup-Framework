@@ -14,12 +14,25 @@ import java.util.*;
 
 public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProcessor<E> {
 
-    protected DataSource getDataSource (String name) {
-        return getApplicationContext().getDataSource(name);
+    protected DataSource dataSource;
+
+    @Override
+    public void initialize() {
+        String dataSourceName = getDataSourceName();
+        if (dataSourceName != null) {
+            dataSource = getApplicationContext().getDataSource(dataSourceName);
+        }
+        else {
+            dataSource = getApplicationContext().getDataSource();
+        }
+    }
+
+    protected String getDataSourceName () {
+        return null;
     }
 
     protected DataSource getDataSource () {
-        return getApplicationContext().getDataSource();
+        return dataSource;
     }
 
     @Override
