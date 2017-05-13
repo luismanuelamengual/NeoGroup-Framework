@@ -2,10 +2,7 @@
 package org.neogroup.sparks;
 
 import org.neogroup.sparks.commands.Command;
-import org.neogroup.sparks.processors.Processor;
-import org.neogroup.sparks.processors.ProcessorComponent;
-import org.neogroup.sparks.processors.ProcessorException;
-import org.neogroup.sparks.processors.ProcessorNotFoundException;
+import org.neogroup.sparks.processors.*;
 import org.neogroup.sparks.views.View;
 import org.neogroup.sparks.views.ViewException;
 import org.neogroup.sparks.views.ViewFactory;
@@ -192,21 +189,21 @@ public abstract class ApplicationContext {
         for (Class<? extends Processor> processorClass : registeredProcessors) {
             ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
             if (processorAnnotation != null) {
-
-                if (processorAnnotation.singleInstance()) {
-                    try {
-                        Processor processor = processorClass.newInstance();
-                        processor.setApplicationContext(this);
-                        processor.initialize();
-                        singleInstanceProcessors.put(processorClass, processor);
-                    } catch (Exception exception) {
-                        throw new ProcessorException("Error instanciating processor", exception);
-                    }
-                }
-
                 Class<? extends Command>[] commandClasses = processorAnnotation.commands();
                 for (Class<? extends Command> commandClass : commandClasses) {
                     processorsByCommand.put(commandClass, processorClass);
+                }
+            }
+
+            MultiInstanceProcessor multiInstanceProcessorAnnotation = processorClass.getAnnotation(MultiInstanceProcessor.class);
+            if (multiInstanceProcessorAnnotation == null) {
+                try {
+                    Processor processor = processorClass.newInstance();
+                    processor.setApplicationContext(this);
+                    processor.initialize();
+                    singleInstanceProcessors.put(processorClass, processor);
+                } catch (Exception exception) {
+                    throw new ProcessorException("Error instanciating processor", exception);
                 }
             }
         }
