@@ -16,6 +16,9 @@ import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * Application context
+ */
 public abstract class ApplicationContext {
 
     private static final String DEFAULT_BUNDLE_NAME_PROPERTY_NAME = "defaultBundleName";
@@ -31,6 +34,9 @@ public abstract class ApplicationContext {
     protected final Map<Class<? extends Command>, Class<? extends Processor>> processorsByCommand;
     protected final Map<Class<? extends Processor>, Processor> singleInstanceProcessors;
 
+    /**
+     * Default constructor for the application context
+     */
     public ApplicationContext() {
         running = false;
         this.properties = new Properties();
@@ -42,38 +48,79 @@ public abstract class ApplicationContext {
         this.singleInstanceProcessors = new HashMap<>();
     }
 
+    /**
+     * Get the context logger
+     * @return Logger
+     */
     public Logger getLogger() {
         return logger;
     }
 
+    /**
+     * Get the properties of the context
+     * @return
+     */
     public Properties getProperties() {
         return properties;
     }
 
+    /**
+     * Get a property value
+     * @param property name of the property
+     * @param <R> casted type of response
+     * @return value of the property
+     */
     public <R> R getProperty(String property) {
         return (R)this.properties.get(property);
     }
 
+    /**
+     * Indicates if a property exists
+     * @param property name of the property
+     * @return boolean
+     */
     public boolean hasProperty(String property) {
         return this.properties.containsKey(property);
     }
 
+    /**
+     * Set a property value
+     * @param property name of the property
+     * @param value value of the property
+     */
     public void setProperty(String property, Object value) {
         this.properties.put(property, value);
     }
 
+    /**
+     * Load properties from a classpath resource
+     * @param resourceName name of the resource
+     * @throws IOException
+     */
     public void loadPropertiesFromResource (String resourceName) throws IOException {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName)) {
             this.properties.load(in);
         }
     }
 
+    /**
+     * Load properties from a file
+     * @param filename name of the file
+     * @throws IOException
+     */
     public void loadPropertiesFromFile (String filename) throws IOException {
         try (FileInputStream in = new FileInputStream(filename)) {
             this.properties.load(in);
         }
     }
 
+    /**
+     * Get a bundle string
+     * @param locale Locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
     public String getString (Locale locale, String key, Object... args) {
         String value = null;
         if (hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
@@ -82,6 +129,14 @@ public abstract class ApplicationContext {
         return value;
     }
 
+    /**
+     * Get a bundle string
+     * @param bundleName name of bundle
+     * @param locale Locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
     public String getBundleString (String bundleName, Locale locale, String key, Object... args) {
         String value = null;
         ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
@@ -91,20 +146,37 @@ public abstract class ApplicationContext {
         return value;
     }
 
+    /**
+     * Register processor classes
+     * @param processorClasses processor classes
+     */
     public final void registerProcessors (Class<? extends Processor> ... processorClasses) {
         for (Class<? extends Processor> processorClass : processorClasses) {
             registerProcessor(processorClass);
         }
     }
 
+    /**
+     * Register a processor class
+     * @param processorClass processor class
+     */
     public final void registerProcessor (Class<? extends Processor> processorClass) {
         registeredProcessors.add(processorClass);
     }
 
+    /**
+     * Get the classes of the registered processors
+     * @return set of registered processor classes
+     */
     public Set<Class<? extends Processor>> getRegisteredProcessors() {
         return registeredProcessors;
     }
 
+    /**
+     * Get an instance of a processor class
+     * @param processorClass processor class
+     * @return Processor
+     */
     public Processor getProcessorInstance (Class<? extends Processor> processorClass) {
         Processor processor = singleInstanceProcessors.get(processorClass);
         if (processor == null) {
@@ -121,6 +193,12 @@ public abstract class ApplicationContext {
         return processor;
     }
 
+    /**
+     * Process a command in this context
+     * @param command command to process
+     * @param <R> casted response
+     * @return R response
+     */
     public <R> R processCommand(Command command) {
         Class<? extends Processor> processorClass = processorsByCommand.get(command.getClass());
         if (processorClass == null) {
@@ -129,14 +207,29 @@ public abstract class ApplicationContext {
         return (R) getProcessorInstance(processorClass).process(command);
     }
 
+    /**
+     * Add a new view factory to the context
+     * @param viewFactoryName name of the view factory
+     * @param viewFactory view factory
+     */
     public void addViewFactory(String viewFactoryName, ViewFactory viewFactory) {
         viewFactories.put(viewFactoryName, viewFactory);
     }
 
+    /**
+     * Remove a view factory from the context
+     * @param viewFactoryName name of the view factory
+     */
     public void removeViewFactory(String viewFactoryName) {
         viewFactories.remove(viewFactoryName);
     }
 
+    /**
+     * Creates a view from a view name
+     * @param viewName name of the view
+     * @return View created view
+     * @throws ViewException
+     */
     public View createView(String viewName) throws ViewException {
 
         String viewFactoryName = null;
@@ -149,6 +242,13 @@ public abstract class ApplicationContext {
         return createView(viewFactoryName, viewName);
     }
 
+    /**
+     * Creates a view from a view name
+     * @param viewFactoryName name of a view factory
+     * @param viewName name of the view
+     * @return View created view
+     * @throws ViewException
+     */
     public View createView(String viewFactoryName, String viewName) throws ViewException {
 
         View view = null;
@@ -162,14 +262,27 @@ public abstract class ApplicationContext {
         return view;
     }
 
+    /**
+     * Adds a new data source
+     * @param dataSourceName name of the data source
+     * @param dataSource data source
+     */
     public void addDataSource (String dataSourceName, DataSource dataSource) {
         this.dataSources.put(dataSourceName, dataSource);
     }
 
+    /**
+     * Removes a data source
+     * @param dataSourceName name of the data source
+     */
     public void removeDataSource (String dataSourceName) {
         this.dataSources.remove(dataSourceName);
     }
 
+    /**
+     * Get the default data source.
+     * @return DataSource Data source
+     */
     public DataSource getDataSource () {
         String dataSourceName = null;
         if (dataSources.size() == 1) {
@@ -181,10 +294,18 @@ public abstract class ApplicationContext {
         return getDataSource(dataSourceName);
     }
 
+    /**
+     * Get a data source
+     * @param dataSourceName name of the data source
+     * @return DataSource Data source
+     */
     public DataSource getDataSource (String dataSourceName) {
         return dataSources.get(dataSourceName);
     }
 
+    /**
+     * Start the registered processors
+     */
     private void startProcessors () {
         for (Class<? extends Processor> processorClass : registeredProcessors) {
             ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
@@ -209,11 +330,17 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * Stops the registered processors
+     */
     private void stopProcessors () {
         singleInstanceProcessors.clear();
         processorsByCommand.clear();
     }
 
+    /**
+     * Start the context
+     */
     public final void start () {
         if (!running) {
             startProcessors();
@@ -222,6 +349,9 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * Stops the context
+     */
     public final void stop () {
         if (running) {
             stopProcessors();
@@ -230,6 +360,13 @@ public abstract class ApplicationContext {
         }
     }
 
+    /**
+     * Method that is executed when the context starts
+     */
     protected abstract void onStart ();
+
+    /**
+     * Method that is executed when the context stops
+     */
     protected abstract void onStop ();
 }

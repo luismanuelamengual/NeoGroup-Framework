@@ -11,18 +11,37 @@ import org.neogroup.sparks.views.ViewNotFoundException;
 import javax.sql.DataSource;
 import java.util.Locale;
 
+/**
+ * Module of a sparks
+ */
 public abstract class Module extends ApplicationContext {
 
     protected final Application application;
 
+    /**
+     * Default constructor of a module
+     * @param application
+     */
     public Module(Application application) {
         this.application = application;
     }
 
+    /**
+     * Get the application of the module
+     * @return Application
+     */
     public Application getApplication() {
         return application;
     }
 
+    /**
+     * Get a bundle string
+     * @param bundleName name of bundle
+     * @param locale Locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String bundle string
+     */
     @Override
     public String getBundleString(String bundleName, Locale locale, String key, Object... args) {
         String value = super.getBundleString(bundleName, locale, key, args);
@@ -32,6 +51,12 @@ public abstract class Module extends ApplicationContext {
         return value;
     }
 
+    /**
+     * Get a property value
+     * @param property name of the property
+     * @param <R> casted response
+     * @return R property value
+     */
     @Override
     public <R> R getProperty(String property) {
         Object value = super.getProperty(property);
@@ -41,6 +66,11 @@ public abstract class Module extends ApplicationContext {
         return (R)value;
     }
 
+    /**
+     * Indicates if a property exists
+     * @param property name of the property
+     * @return boolean
+     */
     @Override
     public boolean hasProperty(String property) {
         boolean hasProperty = super.hasProperty(property);
@@ -50,6 +80,11 @@ public abstract class Module extends ApplicationContext {
         return hasProperty;
     }
 
+    /**
+     * Get a processor instance
+     * @param processorClass processor class
+     * @return Processor
+     */
     @Override
     public Processor getProcessorInstance(Class<? extends Processor> processorClass) {
         Processor processor = super.getProcessorInstance(processorClass);
@@ -59,6 +94,12 @@ public abstract class Module extends ApplicationContext {
         return processor;
     }
 
+    /**
+     * Process a command
+     * @param command command to process
+     * @param <R> casted response
+     * @return R response
+     */
     @Override
     public <R> R processCommand(Command command) {
         R response = null;
@@ -71,6 +112,13 @@ public abstract class Module extends ApplicationContext {
         return response;
     }
 
+    /**
+     * Creates a view with a given name
+     * @param viewFactoryName name of a view factory
+     * @param viewName name of the view
+     * @return View created view
+     * @throws ViewException
+     */
     @Override
     public View createView(String viewFactoryName, String viewName) throws ViewException {
         View view = null;
@@ -83,6 +131,11 @@ public abstract class Module extends ApplicationContext {
         return view;
     }
 
+    /**
+     * Get a data source
+     * @param dataSourceName name of the data source
+     * @return DataSource data source
+     */
     @Override
     public DataSource getDataSource(String dataSourceName) {
         DataSource dataSource = super.getDataSource(dataSourceName);
