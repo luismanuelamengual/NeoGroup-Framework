@@ -5,13 +5,27 @@ import org.neogroup.sparks.model.Entity;
 
 import java.util.List;
 
+/**
+ * Command to create entities
+ * @param <E> Type of entity
+ */
 public class CreateEntitiesCommand<E extends Entity> extends ModifyEntitiesCommand<E> {
 
-    public CreateEntitiesCommand(Class<? extends E> entityClass, E resource) {
-        super(entityClass, resource);
+    /**
+     * Constructor of the command
+     * @param entityClass entity class
+     * @param entity entity
+     */
+    public CreateEntitiesCommand(Class<? extends E> entityClass, E entity) {
+        super(entityClass, entity);
     }
 
-    public CreateEntitiesCommand(Class<? extends E> entityClass, List<E> resources) {
-        super(entityClass, resources);
+    /**
+     * Constructor of the command
+     * @param entityClass entity class
+     * @param entities entity
+     */
+    public CreateEntitiesCommand(Class<? extends E> entityClass, List<E> entities) {
+        super(entityClass, entities);
     }
 }
