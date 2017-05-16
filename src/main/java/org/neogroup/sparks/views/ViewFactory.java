@@ -1,7 +1,17 @@
 
 package org.neogroup.sparks.views;
 
-public abstract class ViewFactory<T extends View> {
+/**
+ * Represents a view factory, responsible of creating views
+ * @param <V> type of views the factory creates
+ */
+public abstract class ViewFactory<V extends View> {
 
-    public abstract T createView(String viewName) throws ViewException;
+    /**
+     * Creates a view
+     * @param viewName name of the view
+     * @return create view
+     * @throws ViewException
+     */
+    public abstract V createView(String viewName) throws ViewException;
 }
