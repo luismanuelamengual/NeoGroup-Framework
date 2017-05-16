@@ -11,6 +11,9 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Selector for crud processors
+ */
 @ProcessorComponent(commands = {
         CreateEntitiesCommand.class,
         RetrieveEntitiesCommand.class,
@@ -21,10 +24,18 @@ public class CRUDSelectorProcessor extends SelectorProcessor<CRUDCommand, CRUDPr
 
     private Map<Class<? extends Entity>, Class<? extends CRUDProcessor>> processorsbyModel;
 
+    /**
+     * Constructor for the crud selector
+     */
     public CRUDSelectorProcessor() {
         this.processorsbyModel = new HashMap<>();
     }
 
+    /**
+     * Registers a crud processor class
+     * @param processorClass processor class
+     * @return boolean
+     */
     @Override
     protected boolean registerProcessorClass(Class<? extends CRUDProcessor> processorClass) {
         boolean registered = false;
@@ -39,6 +50,11 @@ public class CRUDSelectorProcessor extends SelectorProcessor<CRUDCommand, CRUDPr
         return registered;
     }
 
+    /**
+     * Get a crud processor class for a given crud command
+     * @param command crud command
+     * @return class of a crud processor
+     */
     @Override
     protected Class<? extends CRUDProcessor> getProcessorClass(CRUDCommand command) {
         return processorsbyModel.get(command.getEntityClass());

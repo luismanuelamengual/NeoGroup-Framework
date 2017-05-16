@@ -12,10 +12,17 @@ import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
 
+/**
+ * Crud processor that uses a data source for the crud operations
+ * @param <E> Entity type
+ */
 public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProcessor<E> {
 
     protected DataSource dataSource;
 
+    /**
+     * Initializes the processor
+     */
     @Override
     public void initialize() {
         String dataSourceName = getDataSourceName();
@@ -27,14 +34,28 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         }
     }
 
+    /**
+     * Get the data source name this processor works with
+     * @return data source name
+     */
     protected String getDataSourceName () {
         return null;
     }
 
+    /**
+     * Get the data source for this processor
+     * @return DataSource data source
+     */
     protected DataSource getDataSource () {
         return dataSource;
     }
 
+    /**
+     * Creates an entity
+     * @param entity entity to create
+     * @param params parameters
+     * @return created entity
+     */
     @Override
     protected E create(E entity, Map<String, Object> params) {
 
@@ -106,6 +127,12 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         return entity;
     }
 
+    /**
+     * Updates an entity
+     * @param entity entity to update
+     * @param params parameters
+     * @return updated entity
+     */
     @Override
     protected E update(E entity, Map<String, Object> params) {
 
@@ -168,6 +195,12 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         return entity;
     }
 
+    /**
+     * Deletes an entity
+     * @param entity entity to delete
+     * @param params parameters
+     * @return deleted entity
+     */
     @Override
     protected E delete(E entity, Map<String, Object> params) {
 
@@ -212,6 +245,12 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         return entity;
     }
 
+    /**
+     * Retrieve entities with a query and params
+     * @param query query of entities
+     * @param params parameters
+     * @return collection of entities
+     */
     @Override
     protected Collection<E> retrieve(EntityQuery query, Map<String, Object> params) {
 
@@ -289,6 +328,12 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         return resources;
     }
 
+    /**
+     * Builds a where statement with entity filters
+     * @param filter Entity filters
+     * @param sql sql builded
+     * @param sqlParameters sql parameters
+     */
     private void buildFilterSQL(EntityFilter filter, StringBuilder sql, List<Object> sqlParameters) {
 
         if (filter instanceof EntityFilterGroup) {
@@ -409,6 +454,11 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
         }
     }
 
+    /**
+     * Creates an entity from a result set
+     * @param resultSet result set
+     * @return entity created
+     */
     protected E createEntityFromResultSet(ResultSet resultSet) {
 
         try {

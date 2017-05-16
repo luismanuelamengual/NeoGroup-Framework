@@ -6,8 +6,16 @@ import org.neogroup.sparks.commands.Command;
 
 import java.util.*;
 
+/**
+ * Processor that works as a proxy for other registered processors to be executed
+ * @param <C> Command type
+ * @param <P> Processors type
+ */
 public abstract class SelectorProcessor<C extends Command, P extends Processor>  extends Processor<C,Object> {
 
+    /**
+     * Initializes the processor
+     */
     @Override
     public void initialize() {
 
@@ -29,6 +37,12 @@ public abstract class SelectorProcessor<C extends Command, P extends Processor> 
         }
     }
 
+    /**
+     * Processes a command
+     * @param command command to process
+     * @return Objecte processor response
+     * @throws ProcessorException
+     */
     @Override
     public Object process(C command) throws ProcessorException {
         Class<? extends P> processorClass = getProcessorClass(command);
@@ -38,6 +52,18 @@ public abstract class SelectorProcessor<C extends Command, P extends Processor> 
         return getApplicationContext().getProcessorInstance(processorClass).process(command);
     }
 
+    /**
+     * Method that is executed for all the processor registered that
+     * match the processor class type
+     * @param processorClass processor class
+     * @return boolean should indicate if the processor was registered or not
+     */
     protected abstract boolean registerProcessorClass (Class<? extends P> processorClass);
+
+    /**
+     * Get a processor class for a command
+     * @param command command
+     * @return class of a registered processor
+     */
     protected abstract Class<? extends P> getProcessorClass (C command);
 }
