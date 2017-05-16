@@ -1,6 +1,9 @@
 
 package org.neogroup.sparks.model;
 
+/**
+ * Operator for property filters
+ */
 public abstract class EntityPropertyOperator {
 
     public static final String EQUALS = "eq";
