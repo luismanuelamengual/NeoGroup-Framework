@@ -73,7 +73,7 @@ public class HelloWorldProcessor extends WebProcessor {
     }
 }
 ```
-The route annotation tells the framework how to access the processor. In this case to access the processor to the default action you should enter the url http://localhost/helloworld/. The RouteAction indicates with method should be called inside the controller. If the user enters the url http://localhost/helloworld/sayHello then the method with the RouteAction with name "sayHello" will be executed
+The route annotation tells the framework how to access the processor. In this case, to access the processor to the default action you should enter the url http://localhost/helloworld/. The RouteAction indicates with method should be called inside the processor. If the user enters the url http://localhost/helloworld/sayHello then the method with the RouteAction with name "sayHello" will be executed
 
 Example 2 - Working with View Factories
 ---------
