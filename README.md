@@ -189,7 +189,7 @@ public class User extends Entity<Integer> {
     public void setAge(int age) { this.age = age; }
 }
 ```
-3) Create a CRUDProcessor the will manage the "User" entity persistance
+3) Create a CRUDProcessor that will manage the "User" entity persistance
 
 ```java
 package example.processors;
