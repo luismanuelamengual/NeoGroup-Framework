@@ -284,8 +284,8 @@ public class TestProcessor extends WebProcessor {
     }
 }
 ```
-Processor can have access to entities through the methods "createEntity", "updateEntity", "deleteEntity" and "retrieveEntities". 
-If the user wants to retrieve entities with filters or sorted by a certain criteria, the class EntityQuery should be user. This is an example of how the EntityQuery is used:
+Processors can have access to entities through the methods "createEntity", "updateEntity", "deleteEntity" and "retrieveEntities". 
+If the user wants to retrieve entities with filters or sorted by a certain property, the class EntityQuery should be used. This is an example of how the EntityQuery is used:
 
 ```java
 EntityQuery query = new EntityQuery();
