@@ -45,6 +45,7 @@
     </distributionManagement>
 
     <build>
+        <defaultGoal>compile</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
