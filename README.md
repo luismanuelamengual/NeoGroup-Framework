@@ -1,3 +1,7 @@
+![](https://img.shields.io/travis/luismanuelamengual/NeoGroup-Sparks.svg) 
+![](https://img.shields.io/github/license/luismanuelamengual/NeoGroup-Sparks.svg)
+![](https://img.shields.io/maven-central/v/com.github.luismanuelamengual/NeoGroup-Sparks.svg)
+
 # NeoGroup-Sparks
 
 NeoGroup-Sparks is an open source, easy to use framework for java. Its MVC oriented and supports applications modules to expand the framework capabilities
