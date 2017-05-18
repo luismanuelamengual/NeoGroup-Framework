@@ -38,6 +38,7 @@ package example;
 
 import example.processors.*;
 import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.WebModule;
 
 public class Main {
     public static void main(String[] args) {
@@ -104,6 +105,8 @@ package example;
 
 import example.processors.*;
 import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.WebModule;
+import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 
 public class Main {
     public static void main(String[] args) {
@@ -152,6 +155,7 @@ package example;
 
 import example.processors.*;
 import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.WebModule;
 
 public class Main {
     public static void main(String[] args) {
@@ -177,16 +181,30 @@ public class User extends Entity<Integer> {
     private Integer id;
     private String name;
     private String lastName;
-    private int age;
 
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-    public String getLastName() { return lastName; } 
-    public void setLastName(String lastName) { this.lastName = lastName; } 
-    public int getAge() { return age; }
-    public void setAge(int age) { this.age = age; }
+    public Integer getId() { 
+        return id; 
+    }
+    
+    public void setId(Integer id) { 
+        this.id = id; 
+    }
+    
+    public String getName() { 
+        return name; 
+    }
+    
+    public void setName(String name) { 
+        this.name = name; 
+    }
+    
+    public String getLastName() { 
+        return lastName; 
+    }
+    
+    public void setLastName(String lastName) { 
+        this.lastName = lastName; 
+    } 
 }
 ```
 3) Create a CRUDProcessor that will manage the "User" entity persistance
@@ -258,7 +276,6 @@ public class TestProcessor extends WebProcessor {
         User user = new User();
         user.setName(request.getParameter("name"));
         user.setLastName(request.getParameter("lastName"));
-        user.setAge(Integer.parseInt(request.getParameter("age")));
         createEntity(user);
         return showUsersAction(request);
     }
@@ -272,8 +289,6 @@ public class TestProcessor extends WebProcessor {
             str.append("Name: ").append(user.getName());
             str.append("|");
             str.append("LastName: ").append(user.getLastName());
-            str.append("|");
-            str.append("age: ").append(user.getAge());
             str.append("<br>");
         }
 
@@ -292,4 +307,107 @@ EntityQuery query = new EntityQuery();
 query.addSorter("id");
 query.addFilter("age", EntityPropertyOperator.LESS_THAN, 50);
 List<User> users = retrieveEntities(User.class, query);
+```
+Example 4 - Working with Entities (postgresql datasource storage)
+---------
+This example will be the same as example 3 but we are going to use a postgresql datasource as a persitance method for entity "User"
+
+1. In the application configuration we add a postgresql data source
+```java
+package example;
+
+import example.processors.*;
+import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.WebModule;
+import org.postgresql.ds.PGPoolingDataSource;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        //Create a postgresql data source
+        PGPoolingDataSource postgreDataSource = new PGPoolingDataSource();
+        postgreDataSource.setServerName("localhost");
+        postgreDataSource.setDatabaseName("testdb");
+        postgreDataSource.setUser("postgres");
+        postgreDataSource.setPassword("postgres");
+        
+        //Create a sparks application
+        Application application = new Application();
+        application.addModule(new WebModule(application, 80);
+        application.addDataSource("main", postgreDataSource);
+        application.registerProcessors(
+            UserCRUDProcessor.class
+            TestProcessor.class
+        );
+        application.start();
+    }
+}
+```
+2. Create entity "User" with annotations to link the entity to the data source
+```java
+package example.models;
+
+import org.neogroup.sparks.model.Entity;
+import org.neogroup.sparks.model.annotations.Column;
+import org.neogroup.sparks.model.annotations.GeneratedValue;
+import org.neogroup.sparks.model.annotations.Id;
+import org.neogroup.sparks.model.annotations.Table;
+
+@Table(name = "user")
+public class User extends Entity<Integer> {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "userid")
+    private Integer id;
+    
+    @Column(name = "name")
+    private String name;
+    
+    @Column(name = "lastname")
+    private String lastName;
+
+    public Integer getId() { 
+        return id; 
+    }
+    
+    public void setId(Integer id) { 
+        this.id = id; 
+    }
+    
+    public String getName() { 
+        return name; 
+    }
+    
+    public void setName(String name) { 
+        this.name = name; 
+    }
+    
+    public String getLastName() { 
+        return lastName; 
+    }
+    
+    public void setLastName(String lastName) { 
+        this.lastName = lastName; 
+    } 
+}
+```
+Here we are using the following annotations:
+
+- Table: Indicates the name of a table in the datasource
+- Column: Indicates the property matches a column in a datasource table
+- Id: Indicates the property is an Id
+- GeneratedValue: Indicates the property is genereated by the datasource
+
+3. Create a DataSourceCRUDProcessor for the entity User
+```java
+package example.processors;
+
+import example.models.User;
+import org.neogroup.sparks.processors.crud.DataSourceCRUDProcessor;
+
+public class UserCRUDProcessor extends DataSourceCRUDProcessor<User> {
+    
+    //The user is encouraged to override any of the crud operations by default
+}
 ```
