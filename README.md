@@ -4,7 +4,7 @@
 
 # NeoGroup-Sparks
 
-NeoGroup-Sparks is an open source, easy to use framework for java. Its MVC oriented and supports applications modules to expand the framework capabilities
+NeoGroup-Sparks is an open source, easy to use framework for java. Its MVC oriented and supports application modules to expand the framework capabilities
 
 Getting started
 ---------------
@@ -415,3 +415,43 @@ public class UserCRUDProcessor extends DataSourceCRUDProcessor<User> {
     //The user is encouraged to override any of the crud operations by default
 }
 ```
+Example 5 - Working with Modules
+---------
+Modules in sparks lets you work in an isolated context that is not shared by other modules in the application. In this example we are going to create an application with 2 web modules and assign processors to each of the modules to demonstrate how processors added in 1 module are not visible in the other one
+
+1. Create an application with 2 modules
+```java
+package example;
+
+import example.processors.*;
+import org.neogroup.sparks.Application;
+import org.neogroup.sparks.web.WebModule;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Application application = new Application();
+        
+        //Add a web module listening at port 1408
+        WebModule module1 = new WebModule(application, 1408);
+        module1.registerProcessor(AAAProcessor.class);
+        application.addModule(module1);
+
+        //Add a web module listening at port 1409
+        WebModule module2 = new WebModule(application, 1409);
+        module2.registerProcessor(BBBProcessor.class);
+        application.addModule(module2);
+
+        application.registerProcessor(CCCProcessor.class);
+        application.start();
+    }
+}
+```
+In this example we have 3 processors ...
+
+- the "AAAProcessor" was registered to the module 1
+- the "BBBProcessor" was registered to the module 2
+- the "CCCProcessor" was registered to the application
+
+so CCCProcessor will be accesible to all modules but AAAProcessor will only be accesible in module 1 and BBBProcessor will only be accesible in module 2. The same can be applied to bundles, properties, view factories, data sources, processors, etc.
