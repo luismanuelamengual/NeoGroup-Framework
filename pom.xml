@@ -45,7 +45,6 @@
     </distributionManagement>
 
     <build>
-        <defaultGoal>deploy</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
