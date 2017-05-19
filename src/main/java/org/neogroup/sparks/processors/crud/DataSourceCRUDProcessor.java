@@ -18,19 +18,19 @@ import java.util.*;
  */
 public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProcessor<E> {
 
-    protected DataSource dataSource;
+    protected DataSource entityDataSource;
 
     /**
      * Initializes the processor
      */
     @Override
     public void initialize() {
-        String dataSourceName = getDataSourceName();
-        if (dataSourceName != null) {
-            dataSource = getApplicationContext().getDataSource(dataSourceName);
+        String entityDataSourceName = getEntityDatasourceName();
+        if (entityDataSourceName != null) {
+            entityDataSource = getDataSource(entityDataSourceName);
         }
         else {
-            dataSource = getApplicationContext().getDataSource();
+            entityDataSource = getDataSource();
         }
     }
 
@@ -38,7 +38,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
      * Get the data source name this processor works with
      * @return data source name
      */
-    protected String getDataSourceName () {
+    protected String getEntityDatasourceName() {
         return null;
     }
 
@@ -46,8 +46,8 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
      * Get the data source for this processor
      * @return DataSource data source
      */
-    protected DataSource getDataSource () {
-        return dataSource;
+    protected DataSource getEntityDataSource () {
+        return entityDataSource;
     }
 
     /**
@@ -60,7 +60,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
     protected E create(E entity, Map<String, Object> params) {
 
         try {
-            DataSource source = getDataSource();
+            DataSource source = getEntityDataSource();
             Connection connection = source.getConnection();
             List<Object> sqlParameters = new ArrayList<>();
 
@@ -137,7 +137,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
     protected E update(E entity, Map<String, Object> params) {
 
         try {
-            DataSource source = getDataSource();
+            DataSource source = getEntityDataSource();
             Connection connection = source.getConnection();
             List<Object> sqlParameters = new ArrayList<>();
 
@@ -205,7 +205,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
     protected E delete(E entity, Map<String, Object> params) {
 
         try {
-            DataSource source = getDataSource();
+            DataSource source = getEntityDataSource();
             Connection connection = source.getConnection();
             List<Object> sqlParameters = new ArrayList<>();
 
@@ -256,7 +256,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
 
         List<E> resources = new ArrayList<>();
         try {
-            DataSource source = getDataSource();
+            DataSource source = getEntityDataSource();
             Connection connection = source.getConnection();
 
             List<Object> sqlParameters = new ArrayList<>();

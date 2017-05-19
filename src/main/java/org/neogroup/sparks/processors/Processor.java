@@ -12,6 +12,7 @@ import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.model.annotations.Id;
 import org.neogroup.sparks.views.View;
 
+import javax.sql.DataSource;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +49,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param property name of property
      * @return value of the property
      */
-    public Object getProperty(String property) {
+    protected Object getProperty(String property) {
         return applicationContext.getProperty(property);
     }
 
@@ -57,7 +58,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param property name of property
      * @return boolean
      */
-    public boolean hasProperty(String property) {
+    protected boolean hasProperty(String property) {
         return applicationContext.hasProperty(property);
     }
 
@@ -75,7 +76,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getString(String key, Object... args) {
+    protected String getString(String key, Object... args) {
         return applicationContext.getString(key, args);
     }
 
@@ -86,7 +87,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getString(Locale locale, String key, Object... args) {
+    protected String getString(Locale locale, String key, Object... args) {
         return applicationContext.getString(locale, key, args);
     }
 
@@ -97,7 +98,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getString(String bundleName, String key, Object... args) {
+    protected String getString(String bundleName, String key, Object... args) {
         return applicationContext.getString(bundleName, key, args);
     }
 
@@ -109,8 +110,25 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getString(String bundleName, Locale locale, String key, Object... args) {
+    protected String getString(String bundleName, Locale locale, String key, Object... args) {
         return applicationContext.getString(bundleName, locale, key, args);
+    }
+
+    /**
+     * Get the default data source.
+     * @return DataSource Data source
+     */
+    protected DataSource getDataSource() {
+        return applicationContext.getDataSource();
+    }
+
+    /**
+     * Get a data source
+     * @param dataSourceName name of the data source
+     * @return DataSource Data source
+     */
+    protected DataSource getDataSource(String dataSourceName) {
+        return applicationContext.getDataSource(dataSourceName);
     }
 
     /**
@@ -138,7 +156,7 @@ public abstract class Processor <C extends Command, R extends Object> {
      * @param <R> Response type
      * @return casted response
      */
-    public <R> R processCommand(Command command) {
+    protected <R> R processCommand(Command command) {
         return applicationContext.processCommand(command);
     }
 
