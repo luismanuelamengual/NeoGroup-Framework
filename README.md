@@ -51,7 +51,7 @@ import org.neogroup.sparks.web.WebModule;
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
-        application.addModule(new WebModule(application, 80);
+        application.addModule(new WebModule(application, 80));
         application.registerProcessor(HelloWorldProcessor.class);
         application.start();
     }
@@ -67,8 +67,6 @@ import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
-
-import java.util.Locale;
 
 @Route(path="/helloworld/")
 public class HelloWorldProcessor extends WebProcessor {
@@ -119,7 +117,7 @@ import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
-        application.addModule(new WebModule(application, 80);
+        application.addModule(new WebModule(application, 80));
         application.addViewFactory("velocity", new VelocityViewFactory());
         application.registerProcessor(ViewFactoriesProcessor.class);
         application.start();
@@ -168,7 +166,7 @@ import org.neogroup.sparks.web.WebModule;
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
-        application.addModule(new WebModule(application, 80);
+        application.addModule(new WebModule(application, 80));
         application.registerProcessors(
             UserCRUDProcessor.class
             TestProcessor.class
@@ -341,7 +339,7 @@ public class Main {
         
         //Create a sparks application
         Application application = new Application();
-        application.addModule(new WebModule(application, 80);
+        application.addModule(new WebModule(application, 80));
         application.addDataSource("main", postgreDataSource);
         application.registerProcessors(
             UserCRUDProcessor.class
