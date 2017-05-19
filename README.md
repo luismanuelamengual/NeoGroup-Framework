@@ -68,8 +68,6 @@ import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Route;
 import org.neogroup.sparks.web.routing.RouteAction;
 
-import java.util.Locale;
-
 @Route(path="/helloworld/")
 public class HelloWorldProcessor extends WebProcessor {
 
