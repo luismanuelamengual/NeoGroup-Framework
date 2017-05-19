@@ -121,6 +121,16 @@ public abstract class ApplicationContext {
     }
 
     /**
+     * Get a bundle string with the default locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
+    public String getString (String key, Object... args) {
+        return getString(Locale.getDefault(), key, args);
+    }
+
+    /**
      * Get a bundle string
      * @param locale Locale
      * @param key key of the bundle
@@ -129,10 +139,21 @@ public abstract class ApplicationContext {
      */
     public String getString (Locale locale, String key, Object... args) {
         String value = null;
-        if (hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
-            value = getBundleString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
+        if (!hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
+            throw new RuntimeException("Property \"" + DEFAULT_BUNDLE_NAME_PROPERTY_NAME + "\" was not set !!");
         }
-        return value;
+        return getBundleString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
+    }
+
+    /**
+     * Get a bundle string
+     * @param bundleName name of bundle
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
+    public String getBundleString (String bundleName, String key, Object... args) {
+        return getBundleString(bundleName, Locale.getDefault(), key, args);
     }
 
     /**
