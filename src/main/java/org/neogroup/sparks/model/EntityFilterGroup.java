@@ -10,7 +10,7 @@ import java.util.List;
 public class EntityFilterGroup extends EntityFilter {
 
     private EntityFilterGroupConnector connector;
-    private List<EntityFilter> filters;
+    private final List<EntityFilter> filters;
 
     /**
      * Constructor for the group of filters
@@ -58,14 +58,6 @@ public class EntityFilterGroup extends EntityFilter {
      */
     public boolean isEmpty() {
         return filters.isEmpty();
-    }
-
-    /**
-     * Set the filters of this group
-     * @param filters
-     */
-    public void setFilters(List<EntityFilter> filters) {
-        this.filters = filters;
     }
 
     /**
