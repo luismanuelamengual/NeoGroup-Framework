@@ -97,9 +97,12 @@ public abstract class ApplicationContext {
      * @param resourceName name of the resource
      * @throws IOException
      */
-    public void loadPropertiesFromResource (String resourceName) throws IOException {
+    public void loadPropertiesFromResource (String resourceName) {
         try (InputStream in = getClass().getClassLoader().getResourceAsStream(resourceName)) {
             this.properties.load(in);
+        }
+        catch (IOException exception) {
+            throw new RuntimeException("Error reading properties resource file", exception);
         }
     }
 
@@ -108,9 +111,12 @@ public abstract class ApplicationContext {
      * @param filename name of the file
      * @throws IOException
      */
-    public void loadPropertiesFromFile (String filename) throws IOException {
+    public void loadPropertiesFromFile (String filename) {
         try (FileInputStream in = new FileInputStream(filename)) {
             this.properties.load(in);
+        }
+        catch (IOException exception) {
+            throw new RuntimeException("Error reading properties file", exception);
         }
     }
 

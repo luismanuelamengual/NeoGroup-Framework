@@ -12,7 +12,7 @@
 
     <groupId>com.github.luismanuelamengual</groupId>
     <artifactId>NeoGroup-Sparks</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>NeoGroup-Sparks</name>
     <description>Simple java development framework</description>
@@ -31,6 +31,36 @@
     </licenses>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.luismanuelamengual</groupId>
+            <artifactId>NeoGroup-Sparks-WebModule</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.luismanuelamengual</groupId>
+            <artifactId>NeoGroup-Sparks-ConsoleModule</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.luismanuelamengual</groupId>
+            <artifactId>NeoGroup-Sparks-VelocityViewFactory</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.luismanuelamengual</groupId>
+            <artifactId>NeoGroup-Sparks-FreemarkerViewFactory</artifactId>
+            <version>1.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.4.1211</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <scm>
