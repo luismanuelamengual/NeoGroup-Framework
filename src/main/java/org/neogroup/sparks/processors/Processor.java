@@ -70,11 +70,21 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     /**
+     * Get a bundle string with the default locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
+    public String getString(String key, Object... args) {
+        return applicationContext.getString(key, args);
+    }
+
+    /**
      * Get a bundle string
-     * @param locale locale
-     * @param key key of bundle
-     * @param args value arguments
-     * @return string value of bundle
+     * @param locale Locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
      */
     public String getString(Locale locale, String key, Object... args) {
         return applicationContext.getString(locale, key, args);
@@ -82,14 +92,25 @@ public abstract class Processor <C extends Command, R extends Object> {
 
     /**
      * Get a bundle string
-     * @param bundleName name of the bundle
-     * @param locale locale
-     * @param key key of bundle
-     * @param args value arguments
-     * @return string value of bundle
+     * @param bundleName name of bundle
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
      */
-    public String getBundleString(String bundleName, Locale locale, String key, Object... args) {
-        return applicationContext.getBundleString(bundleName, locale, key, args);
+    public String getString(String bundleName, String key, Object... args) {
+        return applicationContext.getString(bundleName, key, args);
+    }
+
+    /**
+     * Get a bundle string
+     * @param bundleName name of bundle
+     * @param locale Locale
+     * @param key key of the bundle
+     * @param args replacement arguments
+     * @return String value of the bundle
+     */
+    public String getString(String bundleName, Locale locale, String key, Object... args) {
+        return applicationContext.getString(bundleName, locale, key, args);
     }
 
     /**

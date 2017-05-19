@@ -43,10 +43,10 @@ public abstract class Module extends ApplicationContext {
      * @return String bundle string
      */
     @Override
-    public String getBundleString(String bundleName, Locale locale, String key, Object... args) {
-        String value = super.getBundleString(bundleName, locale, key, args);
+    public String getString(String bundleName, Locale locale, String key, Object... args) {
+        String value = super.getString(bundleName, locale, key, args);
         if (value == null) {
-            value = application.getBundleString(bundleName, locale, key, args);
+            value = application.getString(bundleName, locale, key, args);
         }
         return value;
     }

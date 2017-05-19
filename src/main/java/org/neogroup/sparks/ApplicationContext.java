@@ -142,7 +142,7 @@ public abstract class ApplicationContext {
         if (!hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
             throw new RuntimeException("Property \"" + DEFAULT_BUNDLE_NAME_PROPERTY_NAME + "\" was not set !!");
         }
-        return getBundleString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
+        return getString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
     }
 
     /**
@@ -152,8 +152,8 @@ public abstract class ApplicationContext {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getBundleString (String bundleName, String key, Object... args) {
-        return getBundleString(bundleName, Locale.getDefault(), key, args);
+    public String getString (String bundleName, String key, Object... args) {
+        return getString(bundleName, Locale.getDefault(), key, args);
     }
 
     /**
@@ -164,7 +164,7 @@ public abstract class ApplicationContext {
      * @param args replacement arguments
      * @return String value of the bundle
      */
-    public String getBundleString (String bundleName, Locale locale, String key, Object... args) {
+    public String getString (String bundleName, Locale locale, String key, Object... args) {
         String value = null;
         ResourceBundle bundle = ResourceBundle.getBundle(bundleName, locale);
         if (bundle != null && bundle.containsKey(key)) {
