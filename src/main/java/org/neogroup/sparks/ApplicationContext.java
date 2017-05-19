@@ -139,10 +139,10 @@ public abstract class ApplicationContext {
      */
     public String getString (Locale locale, String key, Object... args) {
         String value = null;
-        if (!hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
-            throw new RuntimeException("Property \"" + DEFAULT_BUNDLE_NAME_PROPERTY_NAME + "\" was not set !!");
+        if (hasProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME)) {
+            value = getString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
         }
-        return getString(getProperty(DEFAULT_BUNDLE_NAME_PROPERTY_NAME), locale, key, args);
+        return value;
     }
 
     /**
