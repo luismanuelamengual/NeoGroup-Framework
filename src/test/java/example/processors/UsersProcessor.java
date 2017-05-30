@@ -32,6 +32,8 @@ public class UsersProcessor extends WebProcessor {
     public HttpResponse showUsersAction(HttpRequest request) {
 
         StringBuilder str = new StringBuilder();
+        str.append("USERS<br>");
+        str.append("=============<br>");
         List<User> users = retrieveEntities(User.class);
         for (User user : users) {
             str.append("Name: ").append(user.getName());

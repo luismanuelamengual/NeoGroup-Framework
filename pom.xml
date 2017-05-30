@@ -12,7 +12,7 @@
 
     <groupId>com.github.luismanuelamengual</groupId>
     <artifactId>NeoGroup-Sparks</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>NeoGroup-Sparks</name>
     <description>Simple java development framework</description>
