@@ -1,4 +1,4 @@
-package app.persons;
+package app.tests;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
