@@ -33,4 +33,14 @@ public class TestProcessor extends WebProcessor {
     public HttpResponse bundlesAction (HttpRequest request) {
         return createResponse(getString(Locale.ENGLISH, "welcome_phrase", "Luis"));
     }
+
+    @Get("/dimpler/*")
+    public HttpResponse dimplerAction (HttpRequest request) {
+        return createResponse ("Dimpler generic !!");
+    }
+
+    @Get("/test/*")
+    public HttpResponse testAction (HttpRequest request) {
+        return createResponse ("Test generic !!");
+    }
 }
