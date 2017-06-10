@@ -260,6 +260,10 @@ public abstract class Processor <C extends Command, R extends Object> {
             }
         }
 
+        if (idProperty == null) {
+            throw new ProcessorException("Entity \"" + entityClass.getSimpleName() + "\" must have the @Id annotation in one of its properties");
+        }
+
         EntityQuery query = new EntityQuery();
         query.addFilter(idProperty, id);
         query.setLimit(1);

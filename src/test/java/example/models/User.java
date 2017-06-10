@@ -2,9 +2,11 @@
 package example.models;
 
 import org.neogroup.sparks.model.Entity;
+import org.neogroup.sparks.model.annotations.Id;
 
 public class User extends Entity<Integer> {
 
+    @Id
     private int id;
 
     private String name;

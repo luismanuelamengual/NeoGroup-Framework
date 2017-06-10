@@ -6,15 +6,13 @@ import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.model.EntityPropertyOperator;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.sparks.web.routing.Get;
 
 import java.util.List;
 
-@Route(path="/person/")
 public class PersonsProcessor extends WebProcessor {
 
-    @RouteAction(name="test")
+    @Get("/persons/test")
     public HttpResponse testAction(HttpRequest request) {
 
         Person person = new Person();
@@ -55,7 +53,7 @@ public class PersonsProcessor extends WebProcessor {
         return createResponse(personsString.toString());
     }
 
-    @RouteAction(name="createPerson")
+    @Get("/persons/create")
     public HttpResponse createPersonAction(HttpRequest request) {
 
         Person person = new Person();

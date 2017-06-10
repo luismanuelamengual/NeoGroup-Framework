@@ -6,16 +6,14 @@ import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import example.models.User;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.sparks.web.routing.Get;
 import org.neogroup.util.MimeUtils;
 
 import java.util.List;
 
-@Route(path="/users/")
 public class UsersProcessor extends WebProcessor {
 
-    @RouteAction(name="createUser")
+    @Get("/users/create")
     public HttpResponse createUserAction(HttpRequest request) {
 
         User user = new User();
@@ -28,7 +26,7 @@ public class UsersProcessor extends WebProcessor {
         return showUsersAction(request);
     }
 
-    @RouteAction(name="showUsers")
+    @Get("/users/list")
     public HttpResponse showUsersAction(HttpRequest request) {
 
         StringBuilder str = new StringBuilder();
@@ -50,9 +48,10 @@ public class UsersProcessor extends WebProcessor {
         return response;
     }
 
-    @RouteAction(name="showUser")
+    @Get("/users/show/:id")
     public HttpResponse showUserAction(HttpRequest request) {
-        User user = retrieveEntity(User.class, 1);
+        int userId = Integer.parseInt(request.getParameter("id"));
+        User user = retrieveEntity(User.class, userId);
         HttpResponse response = new HttpResponse();
         response.addHeader(HttpHeader.CONTENT_TYPE, MimeUtils.TEXT_HTML);
         response.setBody(user.getName());
