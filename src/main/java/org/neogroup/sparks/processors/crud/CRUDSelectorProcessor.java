@@ -2,7 +2,7 @@
 package org.neogroup.sparks.processors.crud;
 
 import org.neogroup.sparks.commands.crud.*;
-import org.neogroup.sparks.processors.ProcessorComponent;
+import org.neogroup.sparks.processors.ProcessorCommands;
 import org.neogroup.sparks.processors.SelectorProcessor;
 import org.neogroup.sparks.model.Entity;
 
@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Selector for crud processors
  */
-@ProcessorComponent(commands = {
+@ProcessorCommands({
         CreateEntitiesCommand.class,
         RetrieveEntitiesCommand.class,
         UpdateEntitiesCommand.class,

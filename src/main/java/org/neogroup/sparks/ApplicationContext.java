@@ -335,9 +335,9 @@ public abstract class ApplicationContext {
      */
     private void startProcessors () {
         for (Class<? extends Processor> processorClass : registeredProcessors) {
-            ProcessorComponent processorAnnotation = processorClass.getAnnotation(ProcessorComponent.class);
+            ProcessorCommands processorAnnotation = processorClass.getAnnotation(ProcessorCommands.class);
             if (processorAnnotation != null) {
-                Class<? extends Command>[] commandClasses = processorAnnotation.commands();
+                Class<? extends Command>[] commandClasses = processorAnnotation.value();
                 for (Class<? extends Command> commandClass : commandClasses) {
                     processorsByCommand.put(commandClass, processorClass);
                 }

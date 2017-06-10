@@ -14,12 +14,12 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface ProcessorComponent {
+public @interface ProcessorCommands {
 
     /**
      * List of commands associated to the processor
      * @return array of command classes
      */
-    public Class<? extends Command>[] commands() default {};
+    public Class<? extends Command>[] value() default {};
 }
 

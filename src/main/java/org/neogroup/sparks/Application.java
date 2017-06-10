@@ -38,6 +38,14 @@ public class Application extends ApplicationContext {
     }
 
     /**
+     * Get registered modules for the application
+     * @return list of modules
+     */
+    public final List<Module> getModules () {
+        return modules;
+    }
+
+    /**
      * Method that is executed when the application is started
      * All modules are started
      */

@@ -1,6 +1,7 @@
 
 package org.neogroup.sparks.processors;
 
+import org.neogroup.sparks.Application;
 import org.neogroup.sparks.Module;
 import org.neogroup.sparks.commands.Command;
 
@@ -25,6 +26,12 @@ public abstract class SelectorProcessor<C extends Command, P extends Processor> 
         if (getApplicationContext() instanceof Module) {
             Module module = (Module)getApplicationContext();
             registeredProcessors.addAll(module.getApplication().getRegisteredProcessors());
+        }
+        else if (getApplicationContext() instanceof Application) {
+            Application application = (Application)getApplicationContext();
+            for (Module module : application.getModules()) {
+                registeredProcessors.addAll(module.getRegisteredProcessors());
+            }
         }
 
         //Register processor class candidates
