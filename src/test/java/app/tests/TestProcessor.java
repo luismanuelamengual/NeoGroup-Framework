@@ -1,5 +1,5 @@
 
-package example.processors;
+package app.tests;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;

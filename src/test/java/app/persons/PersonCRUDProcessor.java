@@ -1,6 +1,6 @@
-package example.processors;
+package app.persons;
 
-import example.models.Person;
+import app.persons.Person;
 import org.neogroup.sparks.processors.crud.DataSourceCRUDProcessor;
 
 public class PersonCRUDProcessor extends DataSourceCRUDProcessor<Person> {

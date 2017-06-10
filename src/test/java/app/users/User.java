@@ -1,5 +1,5 @@
 
-package example.models;
+package app.users;
 
 import org.neogroup.sparks.model.Entity;
 import org.neogroup.sparks.model.annotations.Id;

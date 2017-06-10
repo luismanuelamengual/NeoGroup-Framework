@@ -1,7 +1,7 @@
 
-package example.processors;
+package app.users;
 
-import example.models.User;
+import app.users.User;
 import org.neogroup.sparks.model.EntityQuery;
 import org.neogroup.sparks.processors.crud.CRUDProcessor;
 

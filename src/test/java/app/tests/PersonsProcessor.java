@@ -1,6 +1,6 @@
-package example.processors;
+package app.tests;
 
-import example.models.Person;
+import app.persons.Person;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.model.EntityPropertyOperator;

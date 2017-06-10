@@ -1,5 +1,5 @@
 
-package example.models;
+package app.persons;
 
 import org.neogroup.sparks.model.Entity;
 import org.neogroup.sparks.model.annotations.Column;

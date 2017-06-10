@@ -1,4 +1,4 @@
-package example.processors;
+package app.tests;
 
 import org.neogroup.sparks.console.Command;
 import org.neogroup.sparks.console.Console;

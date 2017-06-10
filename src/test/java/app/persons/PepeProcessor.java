@@ -1,4 +1,4 @@
-package example.processors;
+package app.persons;
 
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;

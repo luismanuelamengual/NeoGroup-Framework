@@ -1,10 +1,10 @@
 
-package example.processors;
+package app.users;
 
 import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
-import example.models.User;
+import app.users.User;
 import org.neogroup.sparks.web.processors.WebProcessor;
 import org.neogroup.sparks.web.routing.Get;
 import org.neogroup.util.MimeUtils;
