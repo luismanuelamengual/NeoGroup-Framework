@@ -39,8 +39,13 @@ public class TestProcessor extends WebProcessor {
         return createResponse ("Dimpler generic !!");
     }
 
-    @Get("/test/*")
+    @Get("test/*")
     public HttpResponse testAction (HttpRequest request) {
         return createResponse ("Test generic !!");
+    }
+
+    @Get("*")
+    public HttpResponse defaultAction (HttpRequest request) {
+        return createResponse ("Testing default response !!");
     }
 }
