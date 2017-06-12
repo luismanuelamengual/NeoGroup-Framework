@@ -4,9 +4,8 @@ package app.tests;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.After;
-import org.neogroup.sparks.web.routing.Before;
-import org.neogroup.sparks.web.routing.Get;
+import org.neogroup.sparks.web.routing.*;
+import org.neogroup.sparks.web.routing.Error;
 
 import java.util.Locale;
 
@@ -41,6 +40,12 @@ public class TestProcessor extends WebProcessor {
         return createResponse ("Name: " + request.getParameter("name") + "; LastName: " + request.getParameter("lastname") + " !!");
     }
 
+    @Get("error")
+    public HttpResponse errorAction (HttpRequest request) {
+        int a = 10 / 0;
+        return createResponse ("Error !!");
+    }
+
     @Get("/dimpler/*")
     public HttpResponse dimplerAction (HttpRequest request) {
         return createResponse ("Dimpler generic !!");
@@ -66,5 +71,10 @@ public class TestProcessor extends WebProcessor {
     public HttpResponse afterAction (HttpRequest request, HttpResponse response) {
         System.out.println ("after action");
         return response;
+    }
+
+    @Error("*")
+    public HttpResponse afterAction (HttpRequest request, Throwable throwable) {
+        return createResponse("sipi, estamos en un error " + throwable.getMessage() +  " !!!");
     }
 }
