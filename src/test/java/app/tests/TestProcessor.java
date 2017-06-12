@@ -73,8 +73,14 @@ public class TestProcessor extends WebProcessor {
         return response;
     }
 
+    @Get({"multiple", "/test/mul/:name"})
+    @Post("postMultiple")
+    public HttpResponse multiAction (HttpRequest request) {
+        return createResponse("Multiple Action !!");
+    }
+
     @Error("*")
-    public HttpResponse afterAction (HttpRequest request, Throwable throwable) {
-        return createResponse("sipi, estamos en un error " + throwable.getMessage() +  " !!!");
+    public HttpResponse errorAction (HttpRequest request, Throwable throwable) {
+        return createResponse("sipi, estamos en un error " + throwable.getMessage() + " !!!");
     }
 }
