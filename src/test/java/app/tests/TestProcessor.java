@@ -4,6 +4,8 @@ package app.tests;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
+import org.neogroup.sparks.web.routing.After;
+import org.neogroup.sparks.web.routing.Before;
 import org.neogroup.sparks.web.routing.Get;
 
 import java.util.Locale;
@@ -52,5 +54,17 @@ public class TestProcessor extends WebProcessor {
     @Get("*")
     public HttpResponse defaultAction (HttpRequest request) {
         return createResponse ("Testing default response !!");
+    }
+
+    @Before("/dimpler/*")
+    public HttpResponse beforeAction (HttpRequest request) {
+        System.out.println ("before action");
+        return null;
+    }
+
+    @After("/dimpler/*")
+    public HttpResponse afterAction (HttpRequest request, HttpResponse response) {
+        System.out.println ("after action");
+        return response;
     }
 }
