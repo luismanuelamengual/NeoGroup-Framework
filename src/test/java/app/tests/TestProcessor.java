@@ -34,6 +34,11 @@ public class TestProcessor extends WebProcessor {
         return createResponse(getString(Locale.ENGLISH, "welcome_phrase", "Luis"));
     }
 
+    @Get("/test/vars/:name/:lastname")
+    public HttpResponse varsAction (HttpRequest request) {
+        return createResponse ("Name: " + request.getParameter("name") + "; LastName: " + request.getParameter("lastname") + " !!");
+    }
+
     @Get("/dimpler/*")
     public HttpResponse dimplerAction (HttpRequest request) {
         return createResponse ("Dimpler generic !!");
