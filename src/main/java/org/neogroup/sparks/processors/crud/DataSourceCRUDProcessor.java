@@ -24,7 +24,7 @@ public abstract class DataSourceCRUDProcessor<E extends Entity> extends CRUDProc
      * Initializes the processor
      */
     @Override
-    public void initialize() {
+    public void start() {
         String entityDataSourceName = getEntityDatasourceName();
         if (entityDataSourceName != null) {
             entityDataSource = getDataSource(entityDataSourceName);

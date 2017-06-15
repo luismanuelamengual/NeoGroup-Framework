@@ -80,19 +80,7 @@ public abstract class Module extends ApplicationContext {
         return hasProperty;
     }
 
-    /**
-     * Get a processor instance
-     * @param processorClass processor class
-     * @return Processor
-     */
-    @Override
-    public Processor getProcessorInstance(Class<? extends Processor> processorClass) {
-        Processor processor = super.getProcessorInstance(processorClass);
-        if (processor == null) {
-            processor = application.getProcessorInstance(processorClass);
-        }
-        return processor;
-    }
+
 
     /**
      * Process a command

@@ -1,9 +1,11 @@
 
 package org.neogroup.sparks;
 
-import org.neogroup.sparks.processors.crud.CRUDSelectorProcessor;
+import org.neogroup.sparks.processors.Processor;
+import org.neogroup.sparks.processors.crud.CRUDCommandProcessor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ public class Application extends ApplicationContext {
      */
     public Application () {
         modules = new ArrayList<>();
-        registerProcessor(CRUDSelectorProcessor.class);
+        registerProcessor(CRUDCommandProcessor.class);
     }
 
     /**

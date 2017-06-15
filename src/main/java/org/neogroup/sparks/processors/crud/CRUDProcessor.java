@@ -17,7 +17,7 @@ import java.util.Map;
  * Processor that manages the crud of an entity
  * @param <E> Entity type
  */
-public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDCommand,Collection<E>> {
+public abstract class CRUDProcessor<E extends Entity> extends Processor {
 
     protected Class<? extends E> entityClass;
 
@@ -40,43 +40,6 @@ public abstract class CRUDProcessor<E extends Entity> extends Processor<CRUDComm
      */
     public Class<? extends E> getEntityClass() {
         return entityClass;
-    }
-
-    /**
-     * Processes a crud command
-     * @param command command to process
-     * @return collection of affected entities
-     * @throws ProcessorException
-     */
-    @Override
-    public final Collection<E> process(CRUDCommand command) throws ProcessorException {
-
-        Collection<E> result = null;
-        if (command instanceof RetrieveEntitiesCommand) {
-            RetrieveEntitiesCommand retrieveResourcesCommand = (RetrieveEntitiesCommand)command;
-            result = retrieve(retrieveResourcesCommand.getQuery(), retrieveResourcesCommand.getParameters());
-        }
-        else if (command instanceof ModifyEntitiesCommand) {
-            ModifyEntitiesCommand modifyResourcesCommand = (ModifyEntitiesCommand)command;
-            Collection<E> resources = modifyResourcesCommand.getEntities();
-            result = new ArrayList<E>();
-            if (command instanceof CreateEntitiesCommand) {
-                for (E resource : resources) {
-                    result.add((E)create(resource, modifyResourcesCommand.getParameters()));
-                }
-            }
-            else if (command instanceof UpdateEntitiesCommand) {
-                for (E resource : resources) {
-                    result.add((E)update(resource, modifyResourcesCommand.getParameters()));
-                }
-            }
-            else if (command instanceof DeleteEntitiesCommand) {
-                for (E resource : resources) {
-                    result.add((E)delete(resource, modifyResourcesCommand.getParameters()));
-                }
-            }
-        }
-        return result;
     }
 
     /**

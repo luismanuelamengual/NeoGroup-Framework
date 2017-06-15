@@ -20,11 +20,9 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 /**
- * Processor of commands for the sparks framework
- * @param <C> Command type
- * @param <R> Response type
+ * Processor for the sparks framework
  */
-public abstract class Processor <C extends Command, R extends Object> {
+public abstract class Processor {
 
     private ApplicationContext applicationContext;
 
@@ -320,16 +318,12 @@ public abstract class Processor <C extends Command, R extends Object> {
     }
 
     /**
-     * Method that is executed when the processor is created
-     * and an application context is assigned to it
+     * Method that is executed when the processor is started
      */
-    public void initialize () {}
+    public void start () {}
 
     /**
-     * Processes a command
-     * @param command command to process
-     * @return R casted response
-     * @throws ProcessorException
+     * Method that is executed when the processor is stopped
      */
-    public abstract R process (C command) throws ProcessorException;
+    public void stop () {}
 }

@@ -1,14 +1,14 @@
+
 package app.tests;
 
-import org.neogroup.sparks.console.Command;
 import org.neogroup.sparks.console.Console;
 import org.neogroup.sparks.console.processors.ConsoleProcessor;
-import org.neogroup.sparks.console.processors.ProcessCommands;
+import org.neogroup.sparks.console.ConsoleCommand;
 
-@ProcessCommands({"vane", "infour"})
 public class VaneProcessor extends ConsoleProcessor {
-    @Override
-    protected void processCommand(Console console, Command command) {
+
+    @ConsoleCommand("vane")
+    protected void processCommand(Console console, ConsoleCommand command) {
         console.println ("SipisssssTTT !!!. El comando entrado es: " + command);
     }
 }

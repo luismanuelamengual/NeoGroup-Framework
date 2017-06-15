@@ -30,9 +30,8 @@ public abstract class ApplicationContext {
     protected final Logger logger;
     protected final Map<String, DataSource> dataSources;
     protected final Map<String, ViewFactory> viewFactories;
-    protected final Set<Class<? extends Processor>> registeredProcessors;
-    protected final Map<Class<? extends Command>, Class<? extends Processor>> processorsByCommand;
-    protected final Map<Class<? extends Processor>, Processor> singleInstanceProcessors;
+    protected final Map<Class<? extends Processor>, Processor> processors;
+    protected final Map<Class<? extends Command>, CommandProcessor> processorsByCommand;
 
     /**
      * Default constructor for the application context
@@ -40,12 +39,11 @@ public abstract class ApplicationContext {
     public ApplicationContext() {
         running = false;
         this.properties = new Properties();
-        this.logger = Logger.getGlobal();
+        this.logger = Logger.getAnonymousLogger();
         this.dataSources = new HashMap<>();
         this.viewFactories = new HashMap<>();
-        this.registeredProcessors = new HashSet<>();
         this.processorsByCommand = new HashMap<>();
-        this.singleInstanceProcessors = new HashMap<>();
+        this.processors = new HashMap<>();
     }
 
     /**
@@ -188,36 +186,33 @@ public abstract class ApplicationContext {
      * @param processorClass processor class
      */
     public final void registerProcessor (Class<? extends Processor> processorClass) {
-        registeredProcessors.add(processorClass);
+
+        try {
+            Processor processor = processorClass.newInstance();
+            processor.setApplicationContext(this);
+            processors.put(processorClass, processor);
+
+            if (processor instanceof CommandProcessor) {
+                ProcessorCommands processorAnnotation = processorClass.getAnnotation(ProcessorCommands.class);
+                if (processorAnnotation != null) {
+                    Class<? extends Command>[] commandClasses = processorAnnotation.value();
+                    for (Class<? extends Command> commandClass : commandClasses) {
+                        processorsByCommand.put(commandClass, (CommandProcessor)processor);
+                    }
+                }
+            }
+
+        } catch (Exception exception) {
+            throw new ProcessorException("Error instanciating processor", exception);
+        }
     }
 
     /**
      * Get the classes of the registered processors
      * @return set of registered processor classes
      */
-    public Set<Class<? extends Processor>> getRegisteredProcessors() {
-        return registeredProcessors;
-    }
-
-    /**
-     * Get an instance of a processor class
-     * @param processorClass processor class
-     * @return Processor
-     */
-    public Processor getProcessorInstance (Class<? extends Processor> processorClass) {
-        Processor processor = singleInstanceProcessors.get(processorClass);
-        if (processor == null) {
-            if (registeredProcessors.contains(processorClass)) {
-                try {
-                    processor = processorClass.newInstance();
-                    processor.setApplicationContext(this);
-                    processor.initialize();
-                } catch (Exception exception) {
-                    throw new ProcessorException("Error instanciating processor", exception);
-                }
-            }
-        }
-        return processor;
+    public Collection<Processor> getRegisteredProcessors() {
+        return processors.values();
     }
 
     /**
@@ -227,11 +222,11 @@ public abstract class ApplicationContext {
      * @return R response
      */
     public <R> R processCommand(Command command) {
-        Class<? extends Processor> processorClass = processorsByCommand.get(command.getClass());
-        if (processorClass == null) {
+        CommandProcessor processor = processorsByCommand.get(command.getClass());
+        if (processor == null) {
             throw new ProcessorNotFoundException("Processor not found for command \"" + command.toString() + "\" !!");
         }
-        return (R) getProcessorInstance(processorClass).process(command);
+        return (R) processor.process(command);
     }
 
     /**
@@ -331,46 +326,13 @@ public abstract class ApplicationContext {
     }
 
     /**
-     * Start the registered processors
-     */
-    private void startProcessors () {
-        for (Class<? extends Processor> processorClass : registeredProcessors) {
-            ProcessorCommands processorAnnotation = processorClass.getAnnotation(ProcessorCommands.class);
-            if (processorAnnotation != null) {
-                Class<? extends Command>[] commandClasses = processorAnnotation.value();
-                for (Class<? extends Command> commandClass : commandClasses) {
-                    processorsByCommand.put(commandClass, processorClass);
-                }
-            }
-
-            MultiInstanceProcessor multiInstanceProcessorAnnotation = processorClass.getAnnotation(MultiInstanceProcessor.class);
-            if (multiInstanceProcessorAnnotation == null) {
-                try {
-                    Processor processor = processorClass.newInstance();
-                    processor.setApplicationContext(this);
-                    processor.initialize();
-                    singleInstanceProcessors.put(processorClass, processor);
-                } catch (Exception exception) {
-                    throw new ProcessorException("Error instanciating processor", exception);
-                }
-            }
-        }
-    }
-
-    /**
-     * Stops the registered processors
-     */
-    private void stopProcessors () {
-        singleInstanceProcessors.clear();
-        processorsByCommand.clear();
-    }
-
-    /**
      * Start the context
      */
     public final void start () {
         if (!running) {
-            startProcessors();
+            for (Processor processor : processors.values()) {
+                processor.start();
+            }
             onStart();
             running = true;
         }
@@ -381,7 +343,9 @@ public abstract class ApplicationContext {
      */
     public final void stop () {
         if (running) {
-            stopProcessors();
+            for (Processor processor : processors.values()) {
+                processor.stop();
+            }
             onStop();
             running = false;
         }
