@@ -6,6 +6,7 @@ import app.persons.PersonCRUDProcessor;
 import app.tests.*;
 import app.users.UserCRUDProcessor;
 import app.users.UsersProcessor;
+import org.neogroup.sparks.console.ConsoleModule;
 import org.neogroup.sparks.views.velocity.VelocityViewFactory;
 import org.neogroup.sparks.web.WebModule;
 import org.postgresql.ds.PGPoolingDataSource;
@@ -29,6 +30,7 @@ public class Application extends org.neogroup.sparks.Application {
         WebModule module2 = new WebModule(this, 1409);
         module2.registerProcessor(PepeProcessor.class);
         addModule(module2);
+        addModule(new ConsoleModule(this));
 
         //Add view factories
         addViewFactory("velocity", new VelocityViewFactory());
