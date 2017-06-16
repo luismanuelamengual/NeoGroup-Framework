@@ -42,12 +42,6 @@ For more information check https://github.com/luismanuelamengual/NeoGroup-Sparks
 1) First we must create a sparks application with a web module listening at port 80 and register a new processor named HelloWorldProcessor.class
 
 ```java
-package example;
-
-import example.processors.*;
-import org.neogroup.sparks.Application;
-import org.neogroup.sparks.web.WebModule;
-
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
@@ -60,13 +54,6 @@ public class Main {
 2) Creating the *HelloWorldProcessor* ..
 
 ```java
-package example.processors;
-
-import org.neogroup.httpserver.HttpRequest;
-import org.neogroup.httpserver.HttpResponse;
-import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Get;
-
 public class HelloWorldProcessor extends WebProcessor {
 
     @Get("/test/helloworld")
@@ -146,13 +133,6 @@ Actually there are 2 supported View Factory implementations: VelocityViewFactory
 1) In the application we should register a view factory with a name ...
 
 ```java
-package example;
-
-import example.processors.*;
-import org.neogroup.sparks.Application;
-import org.neogroup.sparks.web.WebModule;
-import org.neogroup.sparks.views.velocity.VelocityViewFactory;
-
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
@@ -166,13 +146,6 @@ public class Main {
 2) Create a processor that uses the view factory
 
 ```java
-package example.processors;
-
-import org.neogroup.httpserver.HttpRequest;
-import org.neogroup.httpserver.HttpResponse;
-import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Get;
-
 public class ViewFactoriesProcessor extends WebProcessor {
     
     @Get ("/test/viewFactories")
@@ -195,12 +168,6 @@ In this example we are going to create an entity named "User" and 2 processors: 
 1) Create an application registering the 2 processors
 
 ```java
-package example;
-
-import example.processors.*;
-import org.neogroup.sparks.Application;
-import org.neogroup.sparks.web.WebModule;
-
 public class Main {
     public static void main(String[] args) {
         Application application = new Application();
@@ -216,10 +183,6 @@ public class Main {
 2) Create the "User" entity
 
 ```java
-package example.models;
-
-import org.neogroup.sparks.model.Entity;
-
 public class User extends Entity<Integer> {
 
     private Integer id;
@@ -254,13 +217,6 @@ public class User extends Entity<Integer> {
 3) Create a CRUDProcessor that will manage the "User" entity persistance
 
 ```java
-package example.processors;
-
-import example.models.User;
-import org.neogroup.sparks.model.EntityQuery;
-import org.neogroup.sparks.processors.crud.CRUDProcessor;
-import java.util.*;
-
 public class UserCRUDProcessor extends CRUDProcessor<User> {
 
     private Map<Integer, User> users;
@@ -299,17 +255,6 @@ public class UserCRUDProcessor extends CRUDProcessor<User> {
 ```
 4) Create a web processor that makes crud operations over the entity "User"
 ```java
-package example.processors;
-
-import example.models.User;
-import org.neogroup.httpserver.HttpHeader;
-import org.neogroup.httpserver.HttpRequest;
-import org.neogroup.httpserver.HttpResponse;
-import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Get;
-import org.neogroup.util.MimeUtils;
-import java.util.List;
-
 public class TestProcessor extends WebProcessor {
 
     @Get("/test/createUser")
@@ -356,13 +301,6 @@ This example will be the same as example 3 but we are going to use a postgresql 
 
 1. In the application configuration we add a postgresql data source
 ```java
-package example;
-
-import example.processors.*;
-import org.neogroup.sparks.Application;
-import org.neogroup.sparks.web.WebModule;
-import org.postgresql.ds.PGPoolingDataSource;
-
 public class Main {
     public static void main(String[] args) {
         
@@ -387,14 +325,6 @@ public class Main {
 ```
 2. Create entity "User" with annotations to link the entity to the data source
 ```java
-package example.models;
-
-import org.neogroup.sparks.model.Entity;
-import org.neogroup.sparks.model.annotations.Column;
-import org.neogroup.sparks.model.annotations.GeneratedValue;
-import org.neogroup.sparks.model.annotations.Id;
-import org.neogroup.sparks.model.annotations.Table;
-
 @Table(name = "user")
 public class User extends Entity<Integer> {
 
@@ -443,11 +373,6 @@ Here we are using the following annotations:
 
 3. Create a DataSourceCRUDProcessor for the entity User
 ```java
-package example.processors;
-
-import example.models.User;
-import org.neogroup.sparks.processors.crud.DataSourceCRUDProcessor;
-
 public class UserCRUDProcessor extends DataSourceCRUDProcessor<User> {
     
     //The user is encouraged to override any of the crud operations by default
@@ -459,12 +384,6 @@ Modules in sparks lets you work in an isolated context that is not shared by oth
 
 1. Create an application with 2 modules
 ```java
-package example;
-
-import example.processors.*;
-import org.neogroup.sparks.Application;
-import org.neogroup.sparks.web.WebModule;
-
 public class Main {
 
     public static void main(String[] args) {
