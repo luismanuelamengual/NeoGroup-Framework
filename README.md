@@ -174,7 +174,7 @@ public class Main {
         application.addModule(new WebModule(application, 80));
         application.registerProcessors(
             UserCRUDProcessor.class
-            TestProcessor.class
+            UserProcessor.class
         );
         application.start();
     }
@@ -255,9 +255,9 @@ public class UserCRUDProcessor extends CRUDProcessor<User> {
 ```
 4) Create a web processor that makes crud operations over the entity "User"
 ```java
-public class TestProcessor extends WebProcessor {
+public class UserProcessor extends WebProcessor {
 
-    @Get("/test/createUser")
+    @Put("/user/:name/:lastName/")
     public HttpResponse createUserAction(HttpRequest request) {
 
         User user = new User();
@@ -267,7 +267,7 @@ public class TestProcessor extends WebProcessor {
         return showUsersAction(request);
     }
 
-    @Get("/test/showUsers")
+    @Get("/user/")
     public HttpResponse showUsersAction(HttpRequest request) {
 
         StringBuilder str = new StringBuilder();
