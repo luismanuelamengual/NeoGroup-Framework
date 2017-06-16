@@ -65,24 +65,63 @@ package example.processors;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.sparks.web.routing.Get;
 
-@Route(path="/helloworld/")
 public class HelloWorldProcessor extends WebProcessor {
 
-    @RouteAction
-    public HttpResponse indexAction (HttpRequest request) {
+    @Get("/test/helloworld")
+    public HttpResponse showHelloWorld (HttpRequest request) {
         return createResponse("Hello world !!");
     }
     
-    @RouteAction(name="sayHello")
-    public HttpResponse sayHelloAction (HttpRequest request) {
+    @Get("/test/sayhello/:name/")
+    public HttpResponse sayHello (HttpRequest request) {
         return createResponse("Hello " + request.getParameter("name") + " !!");
     }
 }
 ```
-The route annotation tells the framework how to access the processor. In this case, to access the processor to the default action you should enter the url http://localhost/helloworld/. The RouteAction indicates with method should be called inside the processor. If the user enters the url http://localhost/helloworld/sayHello then the method with the RouteAction with name "sayHello" will be executed
+The @Get annotation tells the framework how to access the processor methods. In this case, to access the method *showHelloWorld* you should enter the url http://localhost/test/helloworld but only with the http *GET* method. If the user enters the url http://localhost/test/sayHello/luis then the method *sayHello* will be matched and executed. 
+
+#### Understanding routing annotations
+
+There are several routing annotations to indicate how to access web processor methods, for example, the annotations @Get, @Put, @Post, @Delete, @Options, etc. If the method sould be accessed with any http method then @Route should be used. The routing annotations receives a path or an array of paths as argument.
+
+```
+@Get("/")                      //Matches the root context with GET http method
+@Get("/test/")                 //Matches the context /test/ with GET http method
+@Get({"/alpha", "/beta"})      //Matches the contexts alpha or beta with GET http method
+@Post("/users/update")         //Matches the context /users/update with POST http method
+@Route("/customer")            //Matches the context /customer with **any** http method
+```
+
+Its possible to add wildcards "*" to indicate that any path matching the * can access the processor method
+
+```
+@Get("*")                      //Matches every path with GET http method
+@Get("/person/*)               //Matches every path starting with /person with GET http method   
+```
+
+Its also possible to assign http request parameter values from the path with the : prefix
+
+```
+@Get("/users/:userId")         //Matches /users/ path adding parameter *UserId* to the request
+@Put("/cars/:name/:lastName")  //Matches /cars path adding 2 extra parameters
+```
+
+Http methods can be matched and executed *before* or *after* certain path is executed
+
+```
+@Before("/users/create")       //Executes the method before the path /users/create is executed
+@After("/users/*")             //Executes method after any path starting with /users/ is executed
+```
+
+Also its possible to create http methods to handle errors and routes not found
+
+```
+@NotFound("*")                 //Handles when a route is not found
+@Error("*")                    //Handles an exception
+@Error("/users/*")             //Handles an exception in the context /user
+```
 
 Example 2 - Working with View Factories
 ---------
@@ -132,12 +171,11 @@ package example.processors;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.sparks.web.routing.Get;
 
-@Route(path="/viewfactories/")
 public class ViewFactoriesProcessor extends WebProcessor {
-    @RouteAction ()
+    
+    @Get ("/test/viewFactories")
     public HttpResponse templateAction (HttpRequest request) {
         ViewHttpResponse response  = createViewResponse("example.tutorial");
         response.setParameter("name", request.getParameter("name"));
@@ -268,15 +306,13 @@ import org.neogroup.httpserver.HttpHeader;
 import org.neogroup.httpserver.HttpRequest;
 import org.neogroup.httpserver.HttpResponse;
 import org.neogroup.sparks.web.processors.WebProcessor;
-import org.neogroup.sparks.web.routing.Route;
-import org.neogroup.sparks.web.routing.RouteAction;
+import org.neogroup.sparks.web.routing.Get;
 import org.neogroup.util.MimeUtils;
 import java.util.List;
 
-@Route(path="/test/")
 public class TestProcessor extends WebProcessor {
 
-    @RouteAction(name="createUser")
+    @Get("/test/createUser")
     public HttpResponse createUserAction(HttpRequest request) {
 
         User user = new User();
@@ -286,7 +322,7 @@ public class TestProcessor extends WebProcessor {
         return showUsersAction(request);
     }
 
-    @RouteAction(name="showUsers")
+    @Get("/test/showUsers")
     public HttpResponse showUsersAction(HttpRequest request) {
 
         StringBuilder str = new StringBuilder();
